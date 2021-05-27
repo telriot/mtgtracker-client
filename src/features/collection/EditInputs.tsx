@@ -1,5 +1,7 @@
 //  ======================================== IMPORTS
 
+import Checkbox from "common/components/Checkbox";
+
 //  ======================================== SUBCOMPONENT
 export interface EditorNumInputProps {
 	children: string;
@@ -39,12 +41,8 @@ export const EditorCheckInput = ({
 	return (
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>
-			<input
-				id={children}
-				type='checkbox'
-				checked={checked}
-				onChange={(e) => setValue(e.target.checked)}
-			/>
+
+			<Checkbox id={children} checked={checked} setValue={setValue}/>
 		</div>
 	);
 };
