@@ -8,57 +8,73 @@ import {
 	EditorNumInput,
 	EditorCheckInput
 } from 'features/collection/EditInputs';
-import AsyncSelect from 'react-select/async'
-
+import AsyncSelect from 'react-select/async';
+import { getCardsByNameViaScf } from 'api';
+import debounce from 'debounce-promise';
+import { ThemeContext } from 'index';
 //  ======================================== COMPONENT
 const CreateModalContent = () => {
-//  ======================================== HOOKS
-const dispatch = useDispatch();
+	//  ======================================== HOOKS
+	const dispatch = useDispatch();
+	//  ======================================== STATE
+	const [owned, setOwned] = React.useState('');
+	const [buyPrice, setBuyPrice] = React.useState('');
+	const [targetPrice, setTargetPrice] = React.useState('');
+	const [isFoil, setIsFoil] = React.useState(false);
+	const { colors } = React.useContext(ThemeContext);
+	const customSelectStyles = {
+		control: () => ({
+			border: `solid 2px ${colors['secondary-light']}`,
+			display: 'flex',
+			borderRadius: '4px'
+		})
+	};
+	//  ======================================== HANDLERS
+	const handleCancel = () => dispatch(statusSet('idle'));
+	const handleDelete = () => console.log('handle deletion');
+	const optionSearch = (value: string) => getCardsByNameViaScf(value);
+	const debouncedSearch = debounce(optionSearch, 300, { leading: true });
 
-//  ======================================== STATE
-const [owned, setOwned] = React.useState('');
-const [buyPrice, setBuyPrice] = React.useState('');
-const [targetPrice, setTargetPrice] = React.useState('');
-const [isFoil, setIsFoil] = React.useState(false);
-//  ======================================== HANDLERS
-const onCancel = () => dispatch(statusSet('idle'));
-const onDelete = () => console.log('handle deletion');
+	//  ======================================== EFFECTS
+	//  ======================================== JSX
+	return (
+		<div className='flex flex-col'>
+			<AsyncSelect
+				loadOptions={debouncedSearch}
+				getOptionLabel={({ name, set }) =>
+					`${name} (${set.toUpperCase()})`
+				}
+				getOptionValue={({ name, set }) => `${name}-${set}`}
+				className='mb-6'
+				styles={customSelectStyles}
+			/>
+			<div className='mb-6'>
+				<EditorNumInput value={owned} setValue={setOwned}>
+					Copies Owned
+				</EditorNumInput>
+				<EditorNumInput value={buyPrice} setValue={setBuyPrice}>
+					Buy Price
+				</EditorNumInput>
+				<EditorNumInput value={targetPrice} setValue={setTargetPrice}>
+					Target Price
+				</EditorNumInput>
+				<EditorCheckInput checked={isFoil} setValue={setIsFoil}>
+					Is Foil
+				</EditorCheckInput>
+			</div>
 
-//  ======================================== EFFECTS
-//  ======================================== JSX
-return (
-    <div className='flex flex-col'>
+			<ModalButtonDiv>
+				<Button variant='danger' onClick={handleCancel}>
+					Cancel
+				</Button>
+				<Button variant='primary' onClick={handleDelete}>
+					Save
+				</Button>
+			</ModalButtonDiv>
+		</div>
+	);
+};
 
-    <AsyncSelect 
-        onInputChange={onInputChange}
-    />
-        <div className='mb-6'>
-            <EditorNumInput value={owned} setValue={setOwned}>
-                Copies Owned
-            </EditorNumInput>
-            <EditorNumInput value={buyPrice} setValue={setBuyPrice}>
-                Buy Price
-            </EditorNumInput>
-            <EditorNumInput value={targetPrice} setValue={setTargetPrice}>
-                Target Price
-            </EditorNumInput>
-            <EditorCheckInput checked={isFoil} setValue={setIsFoil}>
-                Is Foil
-            </EditorCheckInput>
-        </div>
-
-        <ModalButtonDiv>
-            <Button variant='danger' onClick={onCancel}>
-                Cancel
-            </Button>
-            <Button variant='primary' onClick={onDelete}>
-                Save
-            </Button>
-        </ModalButtonDiv>
-    </div>
-);
-}
- 
 //  ======================================== EXPORTS
-export default CreateModalContent
+export default CreateModalContent;
 //  ========================================
