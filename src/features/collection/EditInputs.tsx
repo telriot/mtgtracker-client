@@ -1,6 +1,7 @@
 //  ======================================== IMPORTS
 
-import Checkbox from "common/components/Checkbox";
+import Checkbox from 'common/components/Checkbox';
+import React from 'react';
 
 //  ======================================== SUBCOMPONENT
 export interface EditorNumInputProps {
@@ -13,6 +14,11 @@ export const EditorNumInput = ({
 	value,
 	setValue
 }: EditorNumInputProps) => {
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = event.target;
+		const parsed = parseFloat(value) > 0 ? value :'0' as string;
+		setValue(parsed);
+	};
 	return (
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>
@@ -21,7 +27,7 @@ export const EditorNumInput = ({
 				type='number'
 				step='any'
 				value={value.toString()}
-				onChange={(e) => setValue(e.target.value)}
+				onChange={handleChange}
 				className='py-1 px-1 border-2 border-gray-300 rounded w-20 text-right'
 			/>
 		</div>
@@ -42,7 +48,7 @@ export const EditorCheckInput = ({
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>
 
-			<Checkbox id={children} checked={checked} setValue={setValue}/>
+			<Checkbox id={children} checked={checked} setValue={setValue} />
 		</div>
 	);
 };

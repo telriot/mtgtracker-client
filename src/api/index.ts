@@ -1,7 +1,7 @@
 import axios from 'axios';
 import mockTimeout from 'common/utils/timers/mockTimeout'
 import collection from 'mocks/Collection'
-import { CardUpdate, CollectionItem, MagicCard } from 'types';
+import { CardUpdate } from 'types';
 
 const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
 
