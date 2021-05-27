@@ -1,22 +1,24 @@
 //  ======================================== IMPORTS
 import { useDispatch, useSelector } from 'react-redux';
-import { statusSet } from 'features/collection/collectionSlice';
+import { selectTargetObject, statusSet } from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
+import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const DeleteModalContent = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
+	const targetItem = useSelector(selectTargetObject)
 	//  ======================================== HANDLERS
-	const handleCancel = () => dispatch(statusSet('idle'));
+	const handleCancel = () => dispatch(statusSet({status:'idle'}));
 	const handleDelete = () => console.log('handle deletion');
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
 		<div className='flex flex-col'>
 			<ModalTitle>
-				Confirm deleting SOMECARD from your collection?
+				Confirm deleting {parseItemName(targetItem)} from your collection?
 			</ModalTitle>
 			<ModalButtonDiv>
 				<Button variant='danger' onClick={handleCancel}>

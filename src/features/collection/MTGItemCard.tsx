@@ -47,10 +47,12 @@ interface MTGItemCardProps {
 }
 
 //  ======================================== COMPONENT
-const MTGItemCard = ({
-	card: {
+const MTGItemCard = ({card}: MTGItemCardProps) => {
+	//  ======================================== HOOKS
+	const dispatch = useDispatch()
+	const {
 		cardName,
-		expansion,
+		set,
 		language,
 		foil,
 		minPrice,
@@ -58,14 +60,11 @@ const MTGItemCard = ({
 		buyPrice,
 		targetPrice,
 		quantity
-	}
-}: MTGItemCardProps) => {
-	//  ======================================== HOOKS
-	const dispatch = useDispatch()
+	} = card
 	//  ======================================== STATE
 	//  ======================================== HANDLERS
-    const handleDelete = () => dispatch(statusSet('deleting'))
-    const handleEdit = () => dispatch(statusSet('editing'))
+    const handleDelete = () => dispatch(statusSet({status:'deleting', target:card}))
+    const handleEdit = () => dispatch(statusSet({status:'editing', target:card}))
 	
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
@@ -73,7 +72,7 @@ const MTGItemCard = ({
 		<div className='grid grid-cols-12 rounded border-2 border-gray-300 px-4 py-2 mb-2'>
 			<CardTextBlock header='Name' text={cardName} span={3} position='start'/>
 			<CardTextBlock header='Qty' text={quantity} />
-			<CardTextBlock header='Expansion' text={expansion} />
+			<CardTextBlock header='Expansion' text={set} />
 			<CardTextBlock header='Language' text={language} />
 			<CardTextBlock header='Foil' text={foil ? 'Yes' : 'No'} />
 			<CardTextBlock header='Min' text={minPrice} />

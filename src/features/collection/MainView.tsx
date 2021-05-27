@@ -25,8 +25,8 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	//  ======================================== HANDLERS
-	const handleAdd = () => dispatch(statusSet('creating'));
-	const handleCloseModal = () => dispatch(statusSet('idle'));
+	const handleAdd = () => dispatch(statusSet({status:'creating'}));
+	const handleCloseModal = () => dispatch(statusSet({status:'idle'}));
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
@@ -37,9 +37,9 @@ const CollectionView = () => {
 					<Button onClick={handleAdd}>Add</Button>
 				</div>
 				<div>
-					{collection.map((card, index) => (
+					{collection.map((card) => (
 						<MTGItemCard
-							key={`${card.cardName}-${index}`}
+							key={card.id}
 							card={card}
 						/>
 					))}

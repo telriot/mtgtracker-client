@@ -5,7 +5,7 @@ import Checkbox from "common/components/Checkbox";
 //  ======================================== SUBCOMPONENT
 export interface EditorNumInputProps {
 	children: string;
-	value: string;
+	value: string | number;
 	setValue: (value: string) => void;
 }
 export const EditorNumInput = ({
@@ -20,7 +20,7 @@ export const EditorNumInput = ({
 				id={children}
 				type='number'
 				step='any'
-				value={value}
+				value={value.toString()}
 				onChange={(e) => setValue(e.target.value)}
 				className='py-1 px-1 border-2 border-gray-300 rounded w-20 text-right'
 			/>

@@ -1,13 +1,14 @@
 //  ======================================== IMPORTS
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from 'reducers';
-import { ActionStatus, CollectionState, ReducerPayload } from 'types';
+import { ActionStatus, CollectionItem, CollectionState, ReducerPayload } from 'types';
 //  ======================================== INITIAL STATE
 
 const initialState = {
 	currentPage: 1,
 	status: 'idle',
-	pages: 10
+	pages: 10,
+	targetObject: null
 } as CollectionState;
 
 //  ======================================== SLICES
@@ -21,9 +22,10 @@ const collection = createSlice({
 		pagesSet: (state, { payload }: ReducerPayload<number>) => {
 			state.pages = payload;
 		},
-		statusSet:(state, { payload }: ReducerPayload<ActionStatus>) => {
-			state.status = payload;
-		}
+		statusSet:(state, { payload }: ReducerPayload<{status: ActionStatus, target?:CollectionItem<any> | null}>) => {
+			state.status = payload.status;
+			state.targetObject = payload.target || null
+		},
 	}
 });
 
@@ -38,6 +40,7 @@ export const selectCurrentPage = ({ Collection }: RootState) =>
 	Collection.currentPage;
 export const selectPages = ({ Collection }: RootState) => Collection.pages;
 export const selectStatus = ({ Collection }: RootState) => Collection.status;
+export const selectTargetObject = ({ Collection }: RootState) => Collection.targetObject;
 //  ======================================== EXPORT DEFAULT
 export default collection.reducer;
 //  ========================================

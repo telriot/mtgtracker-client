@@ -12,6 +12,7 @@ import AsyncSelect from 'react-select/async';
 import { getCardsByNameViaScf } from 'api';
 import debounce from 'debounce-promise';
 import { ThemeContext } from 'index';
+import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const CreateModalContent = () => {
 	//  ======================================== HOOKS
@@ -31,7 +32,7 @@ const CreateModalContent = () => {
 		})
 	};
 	//  ======================================== HANDLERS
-	const handleCancel = () => dispatch(statusSet('idle'));
+	const handleCancel = () => dispatch(statusSet({status:'idle'}));
 	const handleDelete = () => console.log('handle deletion');
     const handleSelectChange = (card:Record<string, string>) => setSelectedCard({name:card.name, set:card.set})
 	const optionSearch = (value: string) => getCardsByNameViaScf(value);
@@ -44,8 +45,8 @@ const CreateModalContent = () => {
             <ModalTitle>Add a card</ModalTitle>
 			<AsyncSelect
 				loadOptions={debouncedSearch}
-				getOptionLabel={({ name, set }) =>
-					`${name} (${set.toUpperCase()})`
+				getOptionLabel={(card) =>
+					parseItemName({...card, cardName: card.name})
 				}
 				getOptionValue={({ name, set }) => `${name}-${set}`}
                 onChange={handleSelectChange}

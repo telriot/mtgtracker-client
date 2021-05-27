@@ -2,31 +2,33 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'common/components/Button';
-import { statusSet } from 'features/collection/collectionSlice';
+import { selectTargetObject, statusSet } from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
 	EditorNumInput,
 	EditorCheckInput
 } from 'features/collection/EditInputs';
+import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const EditModalContent = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 
 	//  ======================================== STATE
-	const [owned, setOwned] = React.useState('');
-	const [buyPrice, setBuyPrice] = React.useState('');
-	const [targetPrice, setTargetPrice] = React.useState('');
-	const [isFoil, setIsFoil] = React.useState(false);
+	const initialValues = useSelector(selectTargetObject)
+	const [owned, setOwned] = React.useState<number | string>(initialValues.quantity);
+	const [buyPrice, setBuyPrice] = React.useState<number | string>(initialValues.buyPrice);
+	const [targetPrice, setTargetPrice] = React.useState<number | string>(initialValues.targetPrice);
+	const [isFoil, setIsFoil] = React.useState(initialValues.foil);
 	//  ======================================== HANDLERS
-	const handleCancel = () => dispatch(statusSet('idle'));
+	const handleCancel = () => dispatch(statusSet({status:'idle'}));
 	const handleDelete = () => console.log('handle deletion');
 
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
 		<div className='flex flex-col'>
-			<ModalTitle>Some Card Name</ModalTitle>
+			<ModalTitle>{parseItemName(initialValues)}</ModalTitle>
 			<div className='mb-6'>
 				<EditorNumInput value={owned} setValue={setOwned}>
 					Copies Owned

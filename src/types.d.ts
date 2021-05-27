@@ -3,12 +3,13 @@ export type MagicCard =
 {
     cardName: string
     //TODO: download list and parse it
-    expansion: string
+    set: string
     language: LangVariant
     foil: boolean,
 }
 export type CollectionItem<T> = T &
 {
+    id: string
     minPrice: number,
     medianPrice: number,
     buyPrice: number,
@@ -31,4 +32,5 @@ export interface CollectionState
     currentPage: number
     pages: number
     status: ActionStatus
+    targetObject: CollectionItem<MagicCard> | null
 }

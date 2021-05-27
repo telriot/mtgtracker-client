@@ -3,47 +3,53 @@ const Collection : CollectionItem<MagicCard>[] =
 [
     {
         cardName: 'Snapcaster Mage',
-        expansion: 'ISD',
+        set: 'ISD',
         language: 'EN',
         foil: false,
         minPrice: 25.20,
         medianPrice: 33.60,
         buyPrice: 20,
         targetPrice: 40,
-        quantity: 1
+        quantity: 1,
+        id:'12345678'
     },
     {
         cardName: 'Shivan Dragon',
-        expansion: '3ED',
+        set: '3ED',
         language: 'EN',
         foil: false,
         minPrice: 15.20,
         medianPrice: 23.60,
         buyPrice: 2,
         targetPrice: 30,
-        quantity: 4
+        quantity: 4,
+        id:'22345678'
+
     },
     {
         cardName: 'Sinkhole',
-        expansion: '2ED',
+        set: '2ED',
         language: 'EN',
         foil: false,
         minPrice: 25.20,
         medianPrice: 100.60,
         buyPrice: 20,
         targetPrice: 200,
-        quantity: 3
+        quantity: 3,
+        id:'32345678'
+
     },
     {
         cardName: 'Counterspell',
-        expansion: 'MMQ',
+        set: 'MMQ',
         language: 'JP',
         foil: true,
         minPrice: 55.20,
         medianPrice: 200.60,
         buyPrice: 30,
         targetPrice: 220,
-        quantity: 2
+        quantity: 2,
+        id:'42345678'
     }
 ]
 
