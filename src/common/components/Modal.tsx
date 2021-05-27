@@ -9,9 +9,10 @@ export const ModalButtonDiv = ({ children }: { children: React.ReactNode }) => {
 //  ======================================== COMPONENT
 interface ModalProps {
 	children: React.ReactNode;
+	isOpen: boolean;
 	onClose: () => void;
 }
-const Modal = ({ children, onClose }: ModalProps) => {
+const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	//  ======================================== HANDLERS
@@ -20,11 +21,11 @@ const Modal = ({ children, onClose }: ModalProps) => {
 	//  ======================================== JSX
 	return (
 		<div
-			className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-700 bg-opacity-30'
+			className={`fixed top-0 left-0 w-screen h-screen flex items-center justify-center transition-color duration-200 ${isOpen? 'bg-gray-700 bg-opacity-30':'opacity-0 pointer-events-none'}`}
 			onClick={onClose}>
 			<div
 				onClick={onModalClick}
-				className='bg-white rounded w-96 px-12 py-8'>
+				className={`rounded w-96 px-12 py-8 ${isOpen? 'bg-white bg-opacity-100':'bg-transparent bg-opacity-0'}`}>
 				{children}
 			</div>
 		</div>

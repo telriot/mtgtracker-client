@@ -55,17 +55,15 @@ const CollectionView = () => {
 					/>
 				</div>
 			</div>
-			{status !== 'idle' && (
-				<Modal onClose={onCloseModal}>
-					{status === 'creating' ? (
-						<CreateModalContent />
-					) : status === 'deleting' ? (
-						<DeleteModalContent />
-					) : status === 'editing' ? (
-						<EditModalContent />
-					) : null}
-				</Modal>
-			)}
+			<Modal onClose={onCloseModal} isOpen={status !== 'idle'}>
+				{status === 'creating' ? (
+					<CreateModalContent />
+				) : status === 'deleting' ? (
+					<DeleteModalContent />
+				) : status === 'editing' ? (
+					<EditModalContent />
+				) : null}
+			</Modal>
 		</>
 	);
 };
