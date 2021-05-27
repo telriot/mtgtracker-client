@@ -1,6 +1,6 @@
 //  ======================================== IMPORTS
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCollectionItem, selectTargetObject, statusSet } from 'features/collection/collectionSlice';
+import { deleteCollectionItem, selectAsyncStatus, selectTargetObject, statusSet } from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import parseItemName from 'common/utils/parsing/parseItemName';
@@ -9,6 +9,7 @@ const DeleteModalContent = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
+	const asyncStatus = useSelector(selectAsyncStatus)
 	const targetItem = useSelector(selectTargetObject)
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({status:'idle'}));
@@ -21,10 +22,10 @@ const DeleteModalContent = () => {
 				Confirm deleting {parseItemName(targetItem)} from your collection?
 			</ModalTitle>
 			<ModalButtonDiv>
-				<Button variant='danger' onClick={handleCancel}>
+				<Button disabled={asyncStatus==='pending'}variant='danger' onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' onClick={handleDelete}>
+				<Button disabled={asyncStatus==='pending'} variant='primary' onClick={handleDelete}>
 					Confirm
 				</Button>
 			</ModalButtonDiv>
