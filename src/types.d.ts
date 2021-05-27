@@ -29,6 +29,8 @@ export type AsyncStatus = 'idle' | 'fulfilled' | 'rejected' | 'pending'
 export type ActionStatus = 'idle' | 'editing' | 'creating' | 'deleting'
 export interface CollectionState 
 {
+    asyncError: string | null
+    asyncStatus: AsyncStatus
     currentPage: number
     pages: number
     status: ActionStatus

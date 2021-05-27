@@ -22,7 +22,8 @@ const CreateModalContent = () => {
 	const [buyPrice, setBuyPrice] = React.useState('');
 	const [targetPrice, setTargetPrice] = React.useState('');
 	const [isFoil, setIsFoil] = React.useState(false);
-    const [selectedCard, setSelectedCard] = React.useState<{name:string, set:string} | null>(null)
+	const [selectedCard, setSelectedCard] =
+		React.useState<{ name: string; set: string } | null>(null);
 	const { colors } = React.useContext(ThemeContext);
 	const customSelectStyles = {
 		control: () => ({
@@ -32,9 +33,10 @@ const CreateModalContent = () => {
 		})
 	};
 	//  ======================================== HANDLERS
-	const handleCancel = () => dispatch(statusSet({status:'idle'}));
+	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
 	const handleDelete = () => console.log('handle deletion');
-    const handleSelectChange = (card:Record<string, string>) => setSelectedCard({name:card.name, set:card.set})
+	const handleSelectChange = (card: Record<string, string>) =>
+		setSelectedCard({ name: card.name, set: card.set });
 	const optionSearch = (value: string) => getCardsByNameViaScf(value);
 	const debouncedSearch = debounce(optionSearch, 300, { leading: true });
 
@@ -42,14 +44,14 @@ const CreateModalContent = () => {
 	//  ======================================== JSX
 	return (
 		<div className='flex flex-col'>
-            <ModalTitle>Add a card</ModalTitle>
+			<ModalTitle>Add a card</ModalTitle>
 			<AsyncSelect
 				loadOptions={debouncedSearch}
 				getOptionLabel={(card) =>
-					parseItemName({...card, cardName: card.name})
+					parseItemName({ ...card, cardName: card.name })
 				}
 				getOptionValue={({ name, set }) => `${name}-${set}`}
-                onChange={handleSelectChange}
+				onChange={handleSelectChange}
 				className='mb-6'
 				styles={customSelectStyles}
 			/>

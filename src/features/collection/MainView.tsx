@@ -1,5 +1,6 @@
 //  ======================================== IMPORTS
 import collection from 'mocks/Collection';
+import React from 'react'
 import MTGItemCard from 'features/collection/MTGItemCard';
 import Button from 'common/components/Button';
 import SearchBar from 'common/components/SearchBar';
@@ -7,10 +8,12 @@ import Pagination from 'common/components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	currentPageSet,
+	fetchCollection,
 	statusSet,
 	selectCurrentPage,
 	selectPages,
-	selectStatus
+	selectStatus,
+	selectAllCollectionItems
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
 import CreateModalContent from 'features/collection/CreateModalContent';
@@ -24,10 +27,16 @@ const CollectionView = () => {
 	const currentPage = useSelector(selectCurrentPage);
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
+	const collection = useSelector(selectAllCollectionItems)
+	console.log(collection)
 	//  ======================================== HANDLERS
 	const handleAdd = () => dispatch(statusSet({status:'creating'}));
 	const handleCloseModal = () => dispatch(statusSet({status:'idle'}));
 	//  ======================================== EFFECTS
+	React.useEffect(() => 
+	{
+		dispatch(fetchCollection({id:'123'}))
+	}, [])
 	//  ======================================== JSX
 	return (
 		<>
