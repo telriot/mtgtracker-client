@@ -16,7 +16,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	//  ======================================== HANDLERS
-	const onModalClick = (e: MouseEvent) => e.stopPropagation();
+	const handleModalClick = (e: MouseEvent) => e.stopPropagation();
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
@@ -24,7 +24,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 			className={`fixed top-0 left-0 w-screen h-screen flex items-center justify-center transition-color duration-200 ${isOpen? 'bg-gray-700 bg-opacity-30':'opacity-0 pointer-events-none'}`}
 			onClick={onClose}>
 			<div
-				onClick={onModalClick}
+				onClick={handleModalClick}
 				className={`rounded w-96 px-12 py-8 ${isOpen? 'bg-white bg-opacity-100':'bg-transparent bg-opacity-0'}`}>
 				{children}
 			</div>

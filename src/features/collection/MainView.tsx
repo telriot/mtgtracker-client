@@ -25,8 +25,8 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	//  ======================================== HANDLERS
-	const onAdd = () => dispatch(statusSet('creating'));
-	const onCloseModal = () => dispatch(statusSet('idle'));
+	const handleAdd = () => dispatch(statusSet('creating'));
+	const handleCloseModal = () => dispatch(statusSet('idle'));
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
@@ -34,7 +34,7 @@ const CollectionView = () => {
 			<div className='container mx-auto py-8'>
 				<div className='flex justify-between mb-4'>
 					<SearchBar />
-					<Button onClick={onAdd}>Add</Button>
+					<Button onClick={handleAdd}>Add</Button>
 				</div>
 				<div>
 					{collection.map((card, index) => (
@@ -55,7 +55,7 @@ const CollectionView = () => {
 					/>
 				</div>
 			</div>
-			<Modal onClose={onCloseModal} isOpen={status !== 'idle'}>
+			<Modal onClose={handleCloseModal} isOpen={status !== 'idle'}>
 				{status === 'creating' ? (
 					<CreateModalContent />
 				) : status === 'deleting' ? (

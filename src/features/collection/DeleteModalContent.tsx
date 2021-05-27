@@ -9,8 +9,8 @@ const DeleteModalContent = () => {
 	const dispatch = useDispatch();
 	//  ======================================== STATE
 	//  ======================================== HANDLERS
-	const onCancel = () => dispatch(statusSet('idle'));
-	const onDelete = () => console.log('handle deletion');
+	const handleCancel = () => dispatch(statusSet('idle'));
+	const handleDelete = () => console.log('handle deletion');
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
@@ -19,10 +19,10 @@ const DeleteModalContent = () => {
 				Confirm deleting SOMECARD from your collection?
 			</div>
 			<ModalButtonDiv>
-				<Button variant='danger' onClick={onCancel}>
+				<Button variant='danger' onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' onClick={onDelete}>
+				<Button variant='primary' onClick={handleDelete}>
 					Confirm
 				</Button>
 			</ModalButtonDiv>

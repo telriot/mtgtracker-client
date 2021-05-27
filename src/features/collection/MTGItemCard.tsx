@@ -64,8 +64,8 @@ const MTGItemCard = ({
 	const dispatch = useDispatch()
 	//  ======================================== STATE
 	//  ======================================== HANDLERS
-    const onDelete = () => dispatch(statusSet('deleting'))
-    const onEdit = () => dispatch(statusSet('editing'))
+    const handleDelete = () => dispatch(statusSet('deleting'))
+    const handleEdit = () => dispatch(statusSet('editing'))
 	
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
@@ -80,7 +80,7 @@ const MTGItemCard = ({
 			<CardTextBlock header='Median' text={medianPrice} />
 			<CardTextBlock header='Buy Price' text={buyPrice} />
 			<CardTextBlock header='Target Price' text={targetPrice} />
-            <CardActionBlock onDelete={onDelete} onEdit={onEdit}/>
+            <CardActionBlock onDelete={handleDelete} onEdit={handleEdit}/>
 		</div>
 	);
 };

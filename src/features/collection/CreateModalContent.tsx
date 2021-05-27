@@ -8,6 +8,8 @@ import {
 	EditorNumInput,
 	EditorCheckInput
 } from 'features/collection/EditInputs';
+import AsyncSelect from 'react-select/async'
+
 //  ======================================== COMPONENT
 const CreateModalContent = () => {
 //  ======================================== HOOKS
@@ -26,6 +28,10 @@ const onDelete = () => console.log('handle deletion');
 //  ======================================== JSX
 return (
     <div className='flex flex-col'>
+
+    <AsyncSelect 
+        onInputChange={onInputChange}
+    />
         <div className='mb-6'>
             <EditorNumInput value={owned} setValue={setOwned}>
                 Copies Owned

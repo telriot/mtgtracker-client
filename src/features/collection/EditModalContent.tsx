@@ -19,8 +19,8 @@ const EditModalContent = () => {
 	const [targetPrice, setTargetPrice] = React.useState('');
 	const [isFoil, setIsFoil] = React.useState(false);
 	//  ======================================== HANDLERS
-	const onCancel = () => dispatch(statusSet('idle'));
-	const onDelete = () => console.log('handle deletion');
+	const handleCancel = () => dispatch(statusSet('idle'));
+	const handleDelete = () => console.log('handle deletion');
 
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
@@ -43,10 +43,10 @@ const EditModalContent = () => {
 			</div>
 
 			<ModalButtonDiv>
-				<Button variant='danger' onClick={onCancel}>
+				<Button variant='danger' onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' onClick={onDelete}>
+				<Button variant='primary' onClick={handleDelete}>
 					Save
 				</Button>
 			</ModalButtonDiv>
