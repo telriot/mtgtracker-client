@@ -2,7 +2,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'common/components/Button';
-import { selectTargetObject, statusSet } from 'features/collection/collectionSlice';
+import {
+	selectAsyncStatus,
+	selectTargetObject,
+	statusSet,
+	updateCollectionItem
+} from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
 	EditorNumInput,
@@ -15,14 +20,30 @@ const EditModalContent = () => {
 	const dispatch = useDispatch();
 
 	//  ======================================== STATE
-	const initialValues = useSelector(selectTargetObject)
-	const [owned, setOwned] = React.useState<number | string>(initialValues.quantity);
-	const [buyPrice, setBuyPrice] = React.useState<number | string>(initialValues.buyPrice);
-	const [targetPrice, setTargetPrice] = React.useState<number | string>(initialValues.targetPrice);
+	const initialValues = useSelector(selectTargetObject);
+	const [owned, setOwned] = React.useState<string>(
+		initialValues.quantity.toString()
+	);
+	const [buyPrice, setBuyPrice] = React.useState<string>(
+		initialValues.buyPrice.toString()
+	);
+	const [targetPrice, setTargetPrice] = React.useState<string>(
+		initialValues.targetPrice.toString()
+	);
 	const [isFoil, setIsFoil] = React.useState(initialValues.foil);
+	const asyncStatus = useSelector(selectAsyncStatus)
 	//  ======================================== HANDLERS
-	const handleCancel = () => dispatch(statusSet({status:'idle'}));
-	const handleDelete = () => console.log('handle deletion');
+	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
+	const handleEdit = () =>
+		dispatch(
+			updateCollectionItem({
+				id: initialValues.id,
+				quantity: parseFloat(owned),
+				buyPrice:parseFloat(buyPrice),
+				targetPrice: parseFloat(targetPrice),
+				foil: isFoil
+			})
+		);
 
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
@@ -45,10 +66,10 @@ const EditModalContent = () => {
 			</div>
 
 			<ModalButtonDiv>
-				<Button variant='danger' onClick={handleCancel}>
+				<Button variant='danger' disabled={asyncStatus === 'pending'} onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' onClick={handleDelete}>
+				<Button variant='primary' disabled={asyncStatus === 'pending'} onClick={handleEdit}>
 					Save
 				</Button>
 			</ModalButtonDiv>

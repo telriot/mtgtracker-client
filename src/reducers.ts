@@ -1,11 +1,11 @@
 //  ======================================== IMPORTS
 import { combineReducers } from "@reduxjs/toolkit"
-import Collection from 'features/collection/collectionSlice'
+import collection from 'features/collection/collectionSlice'
 //  ========================================
 
 const Reducers = combineReducers
 ({
-    Collection
+    collection
 });
 
 //  ======================================== EXPORTS

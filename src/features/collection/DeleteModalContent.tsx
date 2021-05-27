@@ -1,6 +1,6 @@
 //  ======================================== IMPORTS
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTargetObject, statusSet } from 'features/collection/collectionSlice';
+import { deleteCollectionItem, selectTargetObject, statusSet } from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import parseItemName from 'common/utils/parsing/parseItemName';
@@ -12,7 +12,7 @@ const DeleteModalContent = () => {
 	const targetItem = useSelector(selectTargetObject)
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({status:'idle'}));
-	const handleDelete = () => console.log('handle deletion');
+	const handleDelete = () => dispatch(deleteCollectionItem())
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
