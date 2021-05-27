@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { statusSet } from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
-import { ModalButtonDiv } from 'common/components/Modal';
+import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 //  ======================================== COMPONENT
 const DeleteModalContent = () => {
 	//  ======================================== HOOKS
@@ -15,9 +15,9 @@ const DeleteModalContent = () => {
 	//  ======================================== JSX
 	return (
 		<div className='flex flex-col'>
-			<div className='mb-8 text-center'>
+			<ModalTitle>
 				Confirm deleting SOMECARD from your collection?
-			</div>
+			</ModalTitle>
 			<ModalButtonDiv>
 				<Button variant='danger' onClick={handleCancel}>
 					Cancel
