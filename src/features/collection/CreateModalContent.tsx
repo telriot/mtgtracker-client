@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'common/components/Button';
-import { statusSet } from 'features/collection/collectionSlice';
+import { fetchMKMData, statusSet } from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
 	EditorNumInput,
@@ -23,7 +23,11 @@ const CreateModalContent = () => {
 	const [targetPrice, setTargetPrice] = React.useState('');
 	const [isFoil, setIsFoil] = React.useState(false);
 	const [selectedCard, setSelectedCard] =
-		React.useState<{ name: string; set: string } | null>(null);
+		React.useState<{
+			cardName: string;
+			set: string;
+			cardmarket_id: string;
+		} | null>(null);
 	const { colors } = React.useContext(ThemeContext);
 	const customSelectStyles = {
 		control: () => ({
@@ -36,11 +40,20 @@ const CreateModalContent = () => {
 	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
 	const handleDelete = () => console.log('handle deletion');
 	const handleSelectChange = (card: Record<string, string>) =>
-		setSelectedCard({ name: card.name, set: card.set });
+		setSelectedCard({
+			cardName: card.name,
+			set: card.set,
+			cardmarket_id: card.cardmarket_id
+		});
 	const optionSearch = (value: string) => getCardsByNameViaScf(value);
 	const debouncedSearch = debounce(optionSearch, 300, { leading: true });
 
 	//  ======================================== EFFECTS
+	// React.useEffect(() => {
+	// 	if (!selectedCard) return;
+	// 	const { cardmarket_id } = selectedCard;
+	// 	dispatch(fetchMKMData(cardmarket_id));
+	// }, [selectedCard]);
 	//  ======================================== JSX
 	return (
 		<div className='flex flex-col'>

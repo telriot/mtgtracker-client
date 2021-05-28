@@ -13,7 +13,7 @@ import {
 	ReducerPayload
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
-import { getCollection, destroyCollectionItem, patchCollectionItem } from 'api';
+import { getCollection, destroyCollectionItem, patchCollectionItem, getCardsByNameViaMKM } from 'api';
 
 //  ======================================== ENTITIES
 export const collectionAdapter = createEntityAdapter<CollectionItem<MagicCard>>(
@@ -44,7 +44,19 @@ export const fetchCollection = createAsyncThunk<
 		};
 	}
 });
-
+export const fetchMKMData = createAsyncThunk<ThunkReturnValue<any>, string>
+	('collection/fetchMKMData', async (id) => {
+	try {
+		const response = await getCardsByNameViaMKM(id)
+		console.log(response, 'MKM RESPONSE THUNK')
+		return {data:{}, error:null, success: true}
+	}
+	
+	catch (error) {
+		console.error(error);
+		return {error : 'Something went wrong with our server', success: false}
+	}
+})
 export const updateCollectionItem = createAsyncThunk<
 	ThunkReturnValue<CardUpdate>,
 	CardUpdate,
@@ -61,12 +73,13 @@ export const updateCollectionItem = createAsyncThunk<
 		};
 	}
 });
-export const deleteCollectionItem = createAsyncThunk<ThunkReturnValue<{id:string}>, null, ThunkAPIReturnValue>
+
+export const deleteCollectionItem = createAsyncThunk<ThunkReturnValue<{id:string, cards:any[], pages:number}>, null, ThunkAPIReturnValue>
 	('collection/deleteCollectionItem', async (_, thunkAPI) => {
 	try {
-		const {id} = thunkAPI.getState().collection.targetObject
-		const result = await destroyCollectionItem(id)
-		return {data:{id}, error:null, success: result}
+		const {targetObject, currentPage} = thunkAPI.getState().collection
+		const {cards, pages} = await destroyCollectionItem(targetObject.id, currentPage)
+		return {data:{id: targetObject.id, cards, pages}, error:null, success: true}
 	}
 	
 	catch (error) {
@@ -110,6 +123,7 @@ const collection = createSlice({
 		}
 	},
 	extraReducers: (builder) => {
+		// FETCH COLLECTION
 		builder.addCase(fetchCollection.pending, (state) => {
 			state.asyncStatus = 'pending';
 		});
@@ -129,6 +143,8 @@ const collection = createSlice({
 		builder.addCase(fetchCollection.rejected, (state) => {
 			state.asyncStatus = 'rejected';
 		});
+
+		// UPDATE ITEM
 		builder.addCase(updateCollectionItem.pending, (state) => {
 			state.asyncStatus = 'pending';
 		});
@@ -154,6 +170,8 @@ const collection = createSlice({
 			state.asyncStatus = 'rejected';
 			state.targetObject = 'null'
 		});
+
+		// DELETE ITEM
 		builder.addCase(deleteCollectionItem.pending, (state) => {
 			state.asyncStatus = 'pending';
 		});
@@ -164,7 +182,9 @@ const collection = createSlice({
 					state.asyncStatus = 'idle';
 					state.status = 'idle'
 					state.targetObject = 'null'
-					collectionAdapter.removeOne(state, data.id) ;
+					state.pages = data.pages;
+					collectionAdapter.setAll(state, data.cards);
+					// collectionAdapter.removeOne(state, data.id) ;
 				} else {
 					state.asyncStatus = 'rejected';
 					state.targetObject = 'null'
