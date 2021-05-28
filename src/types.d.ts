@@ -37,12 +37,13 @@ export type ThunkReturnValue<T = null> = {
 	data?: T | null;
 };
 export type AsyncStatus = 'idle' | 'fulfilled' | 'rejected' | 'pending';
-export type ActionStatus = 'idle' | 'editing' | 'creating' | 'deleting';
+export type ActionStatus = 'idle' | 'editing' | 'creating' | 'deleting' | 'bulkDeleting';
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
 	currentPage: number;
 	pages: number;
+	selectedCardIds: string[]
 	status: ActionStatus;
 	targetObject: CollectionItem<any> | null;
 }

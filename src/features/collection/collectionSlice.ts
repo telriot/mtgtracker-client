@@ -13,7 +13,13 @@ import {
 	ReducerPayload
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
-import { getCollection, destroyCollectionItem, patchCollectionItem, getCardsByNameViaMKM } from 'api';
+import {
+	getCollection,
+	destroyCollectionItem,
+	patchCollectionItem,
+	getCardsByNameViaMKM,
+	destroyManyCollectionItems
+} from 'api';
 
 //  ======================================== ENTITIES
 export const collectionAdapter = createEntityAdapter<CollectionItem<MagicCard>>(
@@ -44,19 +50,22 @@ export const fetchCollection = createAsyncThunk<
 		};
 	}
 });
-export const fetchMKMData = createAsyncThunk<ThunkReturnValue<any>, string>
-	('collection/fetchMKMData', async (id) => {
-	try {
-		const response = await getCardsByNameViaMKM(id)
-		console.log(response, 'MKM RESPONSE THUNK')
-		return {data:{}, error:null, success: true}
+export const fetchMKMData = createAsyncThunk<ThunkReturnValue<any>, string>(
+	'collection/fetchMKMData',
+	async (id) => {
+		try {
+			const response = await getCardsByNameViaMKM(id);
+			console.log(response, 'MKM RESPONSE THUNK');
+			return { data: {}, error: null, success: true };
+		} catch (error) {
+			console.error(error);
+			return {
+				error: 'Something went wrong with our server',
+				success: false
+			};
+		}
 	}
-	
-	catch (error) {
-		console.error(error);
-		return {error : 'Something went wrong with our server', success: false}
-	}
-})
+);
 export const updateCollectionItem = createAsyncThunk<
 	ThunkReturnValue<CardUpdate>,
 	CardUpdate,
@@ -74,19 +83,54 @@ export const updateCollectionItem = createAsyncThunk<
 	}
 });
 
-export const deleteCollectionItem = createAsyncThunk<ThunkReturnValue<{id:string, cards:any[], pages:number}>, null, ThunkAPIReturnValue>
-	('collection/deleteCollectionItem', async (_, thunkAPI) => {
+export const deleteCollectionItem = createAsyncThunk<
+	ThunkReturnValue<{ id: string; cards: any[]; pages: number }>,
+	null,
+	ThunkAPIReturnValue
+>('collection/deleteCollectionItem', async (_, thunkAPI) => {
 	try {
-		const {targetObject, currentPage} = thunkAPI.getState().collection
-		const {cards, pages} = await destroyCollectionItem(targetObject.id, currentPage)
-		return {data:{id: targetObject.id, cards, pages}, error:null, success: true}
-	}
-	
-	catch (error) {
+		const { targetObject, currentPage } = thunkAPI.getState().collection;
+		const { cards, pages } = await destroyCollectionItem(
+			targetObject.id,
+			currentPage
+		);
+		return {
+			data: { id: targetObject.id, cards, pages },
+			error: null,
+			success: true
+		};
+	} catch (error) {
 		console.error(error);
-		return {error : 'Something went wrong with our server', success: false}
+		return {
+			error: 'Something went wrong with our server',
+			success: false
+		};
 	}
-})
+});
+export const bulkDeleteCollectionItems = createAsyncThunk<
+	ThunkReturnValue<{ ids:string[], cards: any[]; pages: number }>,
+	null,
+	ThunkAPIReturnValue
+>('collection/bulkDeleteCollectionItems', async (_, thunkAPI) => {
+	try {
+		const { selectedCardIds, currentPage } = thunkAPI.getState().collection;
+		const { cards, pages } = await destroyManyCollectionItems(
+			selectedCardIds,
+			currentPage
+		);
+		return {
+			data: { ids: selectedCardIds, cards, pages },
+			error: null,
+			success: true
+		};
+	} catch (error) {
+		console.error(error);
+		return {
+			error: 'Something went wrong with our server',
+			success: false
+		};
+	}
+});
 //  ======================================== INITIAL STATE
 
 const initialState = collectionAdapter.getInitialState({
@@ -95,6 +139,7 @@ const initialState = collectionAdapter.getInitialState({
 	asyncError: null,
 	asyncStatus: 'idle',
 	pages: 0,
+	selectedCardIds: [],
 	targetObject: null
 } as CollectionState);
 
@@ -103,6 +148,17 @@ const collection = createSlice({
 	name: 'collection',
 	initialState,
 	reducers: {
+		cardSelected: (state, { payload }: ReducerPayload<string>) => {
+			state.selectedCardIds = [payload];
+		},
+		cardMultiSelected: (state, { payload }: ReducerPayload<string>) => {
+			state.selectedCardIds.push(payload);
+		},
+		cardDeselected: (state, { payload }: ReducerPayload<string>) => {
+			state.selectedCardIds = state.selectedCardIds.filter(
+				(id) => id !== payload
+			);
+		},
 		currentPageSet: (state, { payload }: ReducerPayload<number>) => {
 			state.currentPage = payload;
 		},
@@ -153,22 +209,22 @@ const collection = createSlice({
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
 					state.asyncStatus = 'idle';
-					state.status = 'idle'
-					state.targetObject = 'null'
+					state.status = 'idle';
+					state.targetObject = 'null';
 					collectionAdapter.updateOne(state, {
 						id: data.id,
 						changes: data
 					});
 				} else {
 					state.asyncStatus = 'rejected';
-					state.targetObject = 'null'
+					state.targetObject = 'null';
 					state.asyncError = error;
 				}
 			}
 		);
 		builder.addCase(updateCollectionItem.rejected, (state) => {
 			state.asyncStatus = 'rejected';
-			state.targetObject = 'null'
+			state.targetObject = 'null';
 		});
 
 		// DELETE ITEM
@@ -180,27 +236,59 @@ const collection = createSlice({
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
 					state.asyncStatus = 'idle';
-					state.status = 'idle'
-					state.targetObject = 'null'
+					state.status = 'idle';
+					state.targetObject = 'null';
 					state.pages = data.pages;
 					collectionAdapter.setAll(state, data.cards);
 					// collectionAdapter.removeOne(state, data.id) ;
 				} else {
 					state.asyncStatus = 'rejected';
-					state.targetObject = 'null'
+					state.targetObject = 'null';
 					state.asyncError = error;
 				}
 			}
 		);
 		builder.addCase(deleteCollectionItem.rejected, (state) => {
 			state.asyncStatus = 'rejected';
-			state.targetObject = 'null'
+			state.targetObject = 'null';
 		});
+				// DELETE ITEM
+				builder.addCase(bulkDeleteCollectionItems.pending, (state) => {
+					state.asyncStatus = 'pending';
+				});
+				builder.addCase(
+					bulkDeleteCollectionItems.fulfilled,
+					(state, { payload: { data, error, success } }) => {
+						if (success && data) {
+							state.asyncStatus = 'idle';
+							state.status = 'idle';
+							state.targetObject = 'null';
+							state.pages = data.pages;
+							collectionAdapter.setAll(state, data.cards);
+							// collectionAdapter.removeOne(state, data.id) ;
+						} else {
+							state.asyncStatus = 'rejected';
+							state.targetObject = 'null';
+							state.asyncError = error;
+						}
+					}
+				);
+				builder.addCase(bulkDeleteCollectionItems.rejected, (state) => {
+					state.asyncStatus = 'rejected';
+					state.targetObject = 'null';
+				});
 	}
 });
 
 //  ======================================== EXPORTS
-export const { currentPageSet, pagesSet, statusSet } = collection.actions;
+export const { 
+	cardDeselected,
+	cardMultiSelected,
+	cardSelected,
+	currentPageSet, 
+	pagesSet, 
+	statusSet 
+} = collection.actions;
 
 const selectors = collectionAdapter.getSelectors();
 
@@ -208,10 +296,13 @@ export const selectAllCollectionItems = ({ collection }: RootState) =>
 	selectors.selectAll(collection);
 export const selectCurrentPage = ({ collection }: RootState) =>
 	collection.currentPage;
+export const selectSelectedCardIds = ({ collection }: RootState) =>
+	collection.selectedCardIds;
 export const selectPages = ({ collection }: RootState) => collection.pages;
 export const selectStatus = ({ collection }: RootState) => collection.status;
 export const selectAsyncStatus = ({ collection }: RootState) =>
 	collection.asyncStatus;
+
 export const selectTargetObject = ({ collection }: RootState) =>
 	collection.targetObject;
 

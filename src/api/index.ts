@@ -56,6 +56,18 @@ export const destroyCollectionItem = async (id: string, currentPage: number) => 
 	}
 };
 
+export const destroyManyCollectionItems = async (ids: string[], currentPage: number) => {
+	try {
+		console.log(`deleting items ${ids.toString()})`);
+		await mockTimeout(500);
+		const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, ids)
+		return response;
+	} catch (error) {
+		console.error(error);
+		throw Error(error);
+	}
+};
+
 export const getCardsByNameViaScf = async (
 	cardName: string
 ): Promise<{ [x: string]: any }[]> => {

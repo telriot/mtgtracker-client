@@ -14,9 +14,11 @@ import {
 	selectCurrentPage,
 	selectPages,
 	selectStatus,
-	selectAllCollectionItems
+	selectAllCollectionItems,
+	selectSelectedCardIds
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
+import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent'
 import CreateModalContent from 'features/collection/CreateModalContent';
 import DeleteModalContent from 'features/collection/DeleteModalContent';
 import EditModalContent from 'features/collection/EditModalContent';
@@ -32,10 +34,11 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	const collection = useSelector(selectAllCollectionItems);
-	const {colors} = useContext(ThemeContext)
-	console.log(collection);
+	const selectedCardIds = useSelector(selectSelectedCardIds);
+	const { colors } = useContext(ThemeContext);
 	//  ======================================== HANDLERS
 	const handleAdd = () => dispatch(statusSet({ status: 'creating' }));
+	const handleBulkDelete = () => dispatch(statusSet({status:'bulkDeleting'}))
 	const handleCloseModal = () => dispatch(statusSet({ status: 'idle' }));
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
@@ -47,44 +50,54 @@ const CollectionView = () => {
 			<div className='container mx-auto py-8'>
 				<div className='flex justify-between mb-4'>
 					<SearchBar />
-					<Button onClick={handleAdd}>Add</Button>
+					<div className='flex'>
+						{selectedCardIds.length > 1 ? (
+							<Button
+								className='mr-3'
+								onClick={handleBulkDelete}>
+								Delete Selected
+							</Button>
+						) : null}
+						<Button onClick={handleAdd}>Add</Button>
+					</div>
 				</div>
 				{status === 'idle' && asyncStatus === 'pending' ? (
 					<div className='w-100 h-100 flex items-center justify-center'>
-					<Loader
-						type='Puff'
-						color={colors.primary}
-						height={100}
-						width={100}
-						timeout={3000}
-					/>
+						<Loader
+							type='Puff'
+							color={colors.primary}
+							height={100}
+							width={100}
+							timeout={3000}
+						/>
 					</div>
 				) : (
-						<div>
-							{collection.map((card) => (
-								<MTGItemCard key={card.id} card={card} />
-							))}
-						</div>
+					<div>
+						{collection.map((card) => (
+							<MTGItemCard key={card.id} card={card} />
+						))}
+					</div>
 				)}
-				{pages?<div className='flex justify-end'>
-							<Pagination
-								pages={pages}
-								activePage={currentPage}
-								setPage={(page: number) =>
-									dispatch(currentPageSet(page))
-								}
-								maxButtons={7}
-							/>
-						</div>
-						:
-						null
-				}
+				{pages ? (
+					<div className='flex justify-end'>
+						<Pagination
+							pages={pages}
+							activePage={currentPage}
+							setPage={(page: number) =>
+								dispatch(currentPageSet(page))
+							}
+							maxButtons={7}
+						/>
+					</div>
+				) : null}
 			</div>
 			<Modal onClose={handleCloseModal} isOpen={status !== 'idle'}>
 				{status === 'creating' ? (
 					<CreateModalContent />
 				) : status === 'deleting' ? (
 					<DeleteModalContent />
+					) : status === 'bulkDeleting' ? (
+						<BulkDeleteModalContent />
 				) : status === 'editing' ? (
 					<EditModalContent />
 				) : null}
