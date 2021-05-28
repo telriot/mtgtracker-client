@@ -50,6 +50,232 @@ const Collection : CollectionItem<MagicCard>[] =
         targetPrice: 220,
         quantity: 2,
         id:'42345678'
+    },
+    {
+        cardName: 'Lightning Bolt',
+        set: '4ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 33.60,
+        buyPrice: 20,
+        targetPrice: 40,
+        quantity: 1,
+        id:'4562346'
+    },
+    {
+        cardName: 'Armageddon',
+        set: '3ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 15.20,
+        medianPrice: 23.60,
+        buyPrice: 2,
+        targetPrice: 30,
+        quantity: 4,
+        id:'325355'
+
+    },
+    {
+        cardName: 'Abomination',
+        set: '4ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 100.60,
+        buyPrice: 20,
+        targetPrice: 200,
+        quantity: 3,
+        id:'452452353223534'
+
+    },
+    {
+        cardName: 'Air Elemental',
+        set: '3ED',
+        language: 'EN',
+        foil: true,
+        minPrice: 55.20,
+        medianPrice: 200.60,
+        buyPrice: 30,
+        targetPrice: 220,
+        quantity: 2,
+        id:'8w905344523453420395'
+    },
+    {
+        cardName: 'Alabaster Potion',
+        set: '3ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 15.20,
+        medianPrice: 23.60,
+        buyPrice: 2,
+        targetPrice: 30,
+        quantity: 4,
+        id:'56345645345423'
+
+    },
+    {
+        cardName: "Alladin's Lamp",
+        set: '4ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 100.60,
+        buyPrice: 20,
+        targetPrice: 200,
+        quantity: 3,
+        id:'32346346346345678'
+
+    },
+    {
+        cardName: 'Counterspell',
+        set: '2ED',
+        language: 'JP',
+        foil: true,
+        minPrice: 55.20,
+        medianPrice: 200.60,
+        buyPrice: 30,
+        targetPrice: 220,
+        quantity: 2,
+        id:'4523432452'
+    },
+    {
+        cardName: 'Lightning Bolt',
+        set: '3ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 33.60,
+        buyPrice: 20,
+        targetPrice: 40,
+        quantity: 1,
+        id:'523451232678'
+    },
+    {
+        cardName: 'Armageddon',
+        set: '2ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 15.20,
+        medianPrice: 23.60,
+        buyPrice: 2,
+        targetPrice: 30,
+        quantity: 4,
+        id:'45345234545'
+
+    },
+    {
+        cardName: 'Abomination',
+        set: '4ED',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 100.60,
+        buyPrice: 20,
+        targetPrice: 200,
+        quantity: 3,
+        id:'7234345345345678'
+
+    },
+    {
+        cardName: 'Air Elemental',
+        set: '4EQ',
+        language: 'EN',
+        foil: true,
+        minPrice: 55.20,
+        medianPrice: 200.60,
+        buyPrice: 30,
+        targetPrice: 220,
+        quantity: 2,
+        id:'345345344534'
+    },
+    {
+        cardName: 'Alabaster Potion',
+        set: 'LEB',
+        language: 'EN',
+        foil: false,
+        minPrice: 15.20,
+        medianPrice: 23.60,
+        buyPrice: 2,
+        targetPrice: 30,
+        quantity: 4,
+        id:'563456345423'
+
+    },
+    {
+        cardName: "Alladin's Lamp",
+        set: 'LEB',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 100.60,
+        buyPrice: 20,
+        targetPrice: 200,
+        quantity: 3,
+        id:'3445'
+
+    },
+    {
+        cardName: 'Counterspell',
+        set: 'LEB',
+        language: 'JP',
+        foil: true,
+        minPrice: 55.20,
+        medianPrice: 200.60,
+        buyPrice: 30,
+        targetPrice: 220,
+        quantity: 2,
+        id:'2345235234'
+    },
+    {
+        cardName: 'Lightning Bolt',
+        set: 'LEB',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 33.60,
+        buyPrice: 20,
+        targetPrice: 40,
+        quantity: 1,
+        id:'52345324234423232678'
+    },
+    {
+        cardName: 'Armageddon',
+        set: 'LEB',
+        language: 'EN',
+        foil: false,
+        minPrice: 15.20,
+        medianPrice: 23.60,
+        buyPrice: 2,
+        targetPrice: 30,
+        quantity: 4,
+        id:'2343'
+
+    },
+    {
+        cardName: 'Abomination',
+        set: 'LEB',
+        language: 'EN',
+        foil: false,
+        minPrice: 25.20,
+        medianPrice: 100.60,
+        buyPrice: 20,
+        targetPrice: 200,
+        quantity: 3,
+        id:'723423345345345678'
+
+    },
+    {
+        cardName: 'Air Elemental',
+        set: 'LEB',
+        language: 'EN',
+        foil: true,
+        minPrice: 55.20,
+        medianPrice: 200.60,
+        buyPrice: 30,
+        targetPrice: 220,
+        quantity: 2,
+        id:'32423'
     }
 ]
 
