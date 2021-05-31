@@ -3,108 +3,80 @@ import mockTimeout from 'common/utils/timers/mockTimeout';
 import collection from 'mocks/Collection';
 import { CardUpdate, SearchFilters } from 'types';
 
+// CONSTANTS
 const MKM_SANDBOX_API = 'https://sandbox.cardmarket.com';
 const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
-
 const MOCK_PAGE_SIZE = 10;
+
+// UTILS
 const buildFakePaginatedRes = (
 	currentPage: number,
 	pageSize: number,
 	exclude: string[] = [],
 	filters?: SearchFilters
 ) => {
-
 	const startIndex = (currentPage - 1) * pageSize;
 	const endIndex = currentPage * pageSize;
-	const filteredCollection = collection.filter(card =>{
-		if(exclude.includes(card.id)) return false
+	const filteredCollection = collection.filter((card) => {
+		if (exclude.includes(card.id)) return false;
 		if (filters?.cardName) {
-			console.log(filters)
-			return (
-				card.cardName
-					.toLowerCase()
-					.match(filters.cardName.toLowerCase())
-			);
+			return card.cardName
+				.toLowerCase()
+				.match(filters.cardName.toLowerCase());
 		}
-		return true
-	})
+		return true;
+	});
 	const pages = Math.ceil(filteredCollection.length / pageSize);
 	const cards = filteredCollection
 		.sort((a, b) => a.cardName.localeCompare(b.cardName))
 		.slice(startIndex, endIndex);
-
 	return { cards, pages };
 };
 
+// API CALLS
 export const getCollection = async (
 	id: string,
 	currentPage: number,
 	filters?: SearchFilters
-): Promise<{ cards: any[]; pages: number }> => {
-	try {
-		console.log(`fetching collection ${id} at page ${currentPage})`);
-		await mockTimeout(500);
-		const response = buildFakePaginatedRes(
-			currentPage,
-			MOCK_PAGE_SIZE,
-			[],
-			filters
-		);
-		return response;
-	} catch (error) {
-		console.error(error);
-		throw Error(error);
-	}
+) => {
+	console.log(`fetching collection ${id} at page ${currentPage})`);
+	await mockTimeout(500);
+	const response = buildFakePaginatedRes(
+		currentPage,
+		MOCK_PAGE_SIZE,
+		[],
+		filters
+	);
+	return response;
 };
 export const patchCollectionItem = async (payload: CardUpdate) => {
-	try {
-		console.log(
-			`editing item ${payload.id} with following changes ${JSON.stringify(
-				payload
-			)})`
-		);
-		await mockTimeout(500);
-		const response = true;
-		return response;
-	} catch (error) {
-		console.error(error);
-		throw Error(error);
-	}
+	console.log(
+		`editing item ${payload.id} with following changes ${JSON.stringify(
+			payload
+		)})`
+	);
+	await mockTimeout(500);
+	const response = true;
+	return response;
 };
 export const destroyCollectionItem = async (
 	id: string,
 	currentPage: number
 ) => {
-	try {
-		console.log(`deleting item ${id})`);
-		await mockTimeout(500);
-		const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, [
-			id
-		]);
-		return response;
-	} catch (error) {
-		console.error(error);
-		throw Error(error);
-	}
+	console.log(`deleting item ${id})`);
+	await mockTimeout(500);
+	const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, [id]);
+	return response;
 };
 
 export const destroyManyCollectionItems = async (
 	ids: string[],
 	currentPage: number
 ) => {
-	try {
-		console.log(`deleting items ${ids.toString()})`);
-		await mockTimeout(500);
-		const response = buildFakePaginatedRes(
-			currentPage,
-			MOCK_PAGE_SIZE,
-			ids
-		);
-		return response;
-	} catch (error) {
-		console.error(error);
-		throw Error(error);
-	}
+	console.log(`deleting items ${ids.toString()})`);
+	await mockTimeout(500);
+	const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, ids);
+	return response;
 };
 
 export const getCardsByNameViaScf = async (
