@@ -10,19 +10,23 @@ import {
 	statusSet
 } from './collectionSlice';
 import React from 'react';
+import { Popover } from 'react-tiny-popover';
+
+const TEST_IMGURL =
+	'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card';
 //  ======================================== SUBCOMPONENT
 interface CardTextBlockProps {
 	header: string;
-	text: string | number;
-	span?: number;
 	position?: 'start' | 'end';
+	span?: number;
+	text: string | number;
 }
 
 const CardTextBlock = ({
 	header,
-	text,
+	position = 'end',
 	span = 1,
-	position = 'end'
+	text
 }: CardTextBlockProps) => {
 	const textAlignment = position === 'end' ? 'right' : 'left';
 	return (
@@ -79,6 +83,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 		id
 	} = card;
 	//  ======================================== STATE
+	const [showCardImg, setShowCardImg] = React.useState(false);
 	const selectedCardIds = useSelector(selectSelectedCardIds);
 	const isSelected = selectedCardIds.includes(id);
 	//  ======================================== HANDLERS
@@ -98,30 +103,50 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 				: dispatch(cardSelected(id));
 		}
 	};
+	const handleNameBlockMouseEnter = () => setShowCardImg(true);
+	const handleNameBlockMouseLeave = () => setShowCardImg(false);
+
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div
-			className={`grid grid-cols-12 rounded border-2 border-${
-				isSelected ? 'primary' : 'secondary-light'
-			} px-4 py-2 mb-2`}
-			onClick={handleClick}>
-			<CardTextBlock
-				header='Name'
-				text={cardName}
-				span={3}
-				position='start'
-			/>
-			<CardTextBlock header='Qty' text={quantity} />
-			<CardTextBlock header='Expansion' text={set} />
-			<CardTextBlock header='Language' text={language} />
-			<CardTextBlock header='Foil' text={foil ? 'Yes' : 'No'} />
-			<CardTextBlock header='Min' text={minPrice} />
-			<CardTextBlock header='Median' text={medianPrice} />
-			<CardTextBlock header='Buy Price' text={buyPrice} />
-			<CardTextBlock header='Target Price' text={targetPrice} />
-			<CardActionBlock onDelete={handleDelete} onEdit={handleEdit} />
-		</div>
+		<>
+			<div
+				className={`grid grid-cols-12 rounded border-2 border-${
+					isSelected ? 'primary' : 'secondary-light'
+				} px-4 py-2 mb-2`}
+				onClick={handleClick}>
+				<div className={`flex flex-col items-start col-span-3`}>
+					<div className={`text-left text-xs text-gray-400`}>
+						Name
+					</div>
+					<Popover
+						isOpen={showCardImg}
+						positions={['right']}
+						padding={10}
+						content={
+							<div>
+								<img src={TEST_IMGURL} alt={card.cardName} />
+							</div>
+						}>
+						<div
+							onMouseEnter={handleNameBlockMouseEnter}
+							onMouseLeave={handleNameBlockMouseLeave}
+							className={`text-left`}>
+							{cardName}
+						</div>
+					</Popover>
+				</div>
+				<CardTextBlock header='Qty' text={quantity} />
+				<CardTextBlock header='Expansion' text={set} />
+				<CardTextBlock header='Language' text={language} />
+				<CardTextBlock header='Foil' text={foil ? 'Yes' : 'No'} />
+				<CardTextBlock header='Min' text={minPrice} />
+				<CardTextBlock header='Median' text={medianPrice} />
+				<CardTextBlock header='Buy Price' text={buyPrice} />
+				<CardTextBlock header='Target Price' text={targetPrice} />
+				<CardActionBlock onDelete={handleDelete} onEdit={handleEdit} />
+			</div>
+		</>
 	);
 };
 
