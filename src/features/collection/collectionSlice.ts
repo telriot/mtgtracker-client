@@ -139,6 +139,7 @@ const initialState = collectionAdapter.getInitialState({
 	asyncError: null,
 	asyncStatus: 'idle',
 	pages: 0,
+	searchBarInput: '',
 	selectedCardIds: [],
 	targetObject: null
 } as CollectionState);
@@ -164,6 +165,9 @@ const collection = createSlice({
 		},
 		pagesSet: (state, { payload }: ReducerPayload<number>) => {
 			state.pages = payload;
+		},
+		searchBarInputChanged: (state, { payload }: ReducerPayload<string>) => {
+			state.searchBarInput = payload;
 		},
 		statusSet: (
 			state,
@@ -286,6 +290,7 @@ export const {
 	cardSelected,
 	currentPageSet,
 	pagesSet,
+	searchBarInputChanged,
 	statusSet
 } = collection.actions;
 
@@ -298,10 +303,10 @@ export const selectCurrentPage = ({ collection }: RootState) =>
 export const selectSelectedCardIds = ({ collection }: RootState) =>
 	collection.selectedCardIds;
 export const selectPages = ({ collection }: RootState) => collection.pages;
+export const selectSearchBarInput = ({ collection }: RootState) => collection.searchBarInput;
 export const selectStatus = ({ collection }: RootState) => collection.status;
 export const selectAsyncStatus = ({ collection }: RootState) =>
 	collection.asyncStatus;
-
 export const selectTargetObject = ({ collection }: RootState) =>
 	collection.targetObject;
 

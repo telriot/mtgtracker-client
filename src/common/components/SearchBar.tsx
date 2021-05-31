@@ -1,19 +1,32 @@
 //  ======================================== IMPORTS
- 
+
+import React from 'react';
+
 //  ======================================== COMPONENT
-const SearchBar = () => {
-    //  ======================================== HOOKS
-    //  ======================================== STATE
-    //  ======================================== HANDLERS
-    //  ======================================== EFFECTS
-    //  ======================================== JSX
-    return (
-        <div>
-            <input className='border-gray-300 border-2 rounded py-2 px-4' type='text' placeholder='Search in your collection'/>
-        </div>
-    )
+export interface SearchBarProps {
+	className?: string;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	value: string;
 }
- 
+const SearchBar = ({ className, onChange, value }: SearchBarProps) => {
+	//  ======================================== HOOKS
+	//  ======================================== STATE
+	//  ======================================== HANDLERS
+	//  ======================================== EFFECTS
+	//  ======================================== JSX
+	return (
+		<div className={className || ''}>
+			<input
+				className='border-gray-300 border-2 rounded py-2 px-4'
+				type='text'
+                onChange={onChange}
+                value={value}
+				placeholder='Search in your collection'
+			/>
+		</div>
+	);
+};
+
 //  ======================================== EXPORTS
-export default SearchBar
+export default SearchBar;
 //  ========================================

@@ -1,6 +1,6 @@
 //  ======================================== IMPORTS
 import collection from 'mocks/Collection';
-import React, { useContext } from 'react';
+import React, { ReactSVG, useContext } from 'react';
 import MTGItemCard from 'features/collection/MTGItemCard';
 import Button from 'common/components/Button';
 import SearchBar from 'common/components/SearchBar';
@@ -15,10 +15,12 @@ import {
 	selectPages,
 	selectStatus,
 	selectAllCollectionItems,
-	selectSelectedCardIds
+	selectSearchBarInput,
+	selectSelectedCardIds,
+	searchBarInputChanged
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
-import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent'
+import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent';
 import CreateModalContent from 'features/collection/CreateModalContent';
 import DeleteModalContent from 'features/collection/DeleteModalContent';
 import EditModalContent from 'features/collection/EditModalContent';
@@ -34,12 +36,17 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	const collection = useSelector(selectAllCollectionItems);
+	const searchBarInput = useSelector(selectSearchBarInput)
 	const selectedCardIds = useSelector(selectSelectedCardIds);
 	const { colors } = useContext(ThemeContext);
 	//  ======================================== HANDLERS
 	const handleAdd = () => dispatch(statusSet({ status: 'creating' }));
-	const handleBulkDelete = () => dispatch(statusSet({status:'bulkDeleting'}))
+	const handleBulkDelete = () =>
+		dispatch(statusSet({ status: 'bulkDeleting' }));
 	const handleCloseModal = () => dispatch(statusSet({ status: 'idle' }));
+	const handleSearchBarChange = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => dispatch(searchBarInputChanged(event.target.value));
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
 		dispatch(fetchCollection({ id: '123' }));
@@ -49,12 +56,10 @@ const CollectionView = () => {
 		<>
 			<div className='container mx-auto py-8'>
 				<div className='flex justify-between mb-4'>
-					<SearchBar />
+					<SearchBar value={searchBarInput} onChange={handleSearchBarChange} />
 					<div className='flex'>
 						{selectedCardIds.length > 1 ? (
-							<Button
-								className='mr-3'
-								onClick={handleBulkDelete}>
+							<Button className='mr-3' onClick={handleBulkDelete}>
 								Delete Selected
 							</Button>
 						) : null}
@@ -96,8 +101,8 @@ const CollectionView = () => {
 					<CreateModalContent />
 				) : status === 'deleting' ? (
 					<DeleteModalContent />
-					) : status === 'bulkDeleting' ? (
-						<BulkDeleteModalContent />
+				) : status === 'bulkDeleting' ? (
+					<BulkDeleteModalContent />
 				) : status === 'editing' ? (
 					<EditModalContent />
 				) : null}
