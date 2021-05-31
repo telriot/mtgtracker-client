@@ -1,6 +1,5 @@
 //  ======================================== IMPORTS
-import collection from 'mocks/Collection';
-import React, { ReactSVG, useContext } from 'react';
+import React, { useContext } from 'react';
 import MTGItemCard from 'features/collection/MTGItemCard';
 import Button from 'common/components/Button';
 import SearchBar from 'common/components/SearchBar';
@@ -50,11 +49,13 @@ const CollectionView = () => {
 	const handleSearchBarChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => dispatch(searchBarInputChanged(event.target.value));
+	const handleSetPage = (page: number) => {
+		dispatch(currentPageSet(page))
+		dispatch(fetchCollection({ id: '123' }))
+	}
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
-		dispatch(fetchCollection({ id: '123' }));
-	}, [currentPage]);
-	React.useEffect(() => {
+		dispatch(currentPageSet(1))
 		dispatch(fetchCollection({ id: '123' }));
 	}, [debouncedSearch]);
 	//  ======================================== JSX
@@ -94,9 +95,7 @@ const CollectionView = () => {
 						<Pagination
 							pages={pages}
 							activePage={currentPage}
-							setPage={(page: number) =>
-								dispatch(currentPageSet(page))
-							}
+							setPage={handleSetPage}
 							maxButtons={7}
 						/>
 					</div>

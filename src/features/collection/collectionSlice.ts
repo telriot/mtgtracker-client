@@ -55,7 +55,6 @@ export const fetchMKMData = createAsyncThunk<ThunkReturnValue<any>, string>(
 	async (id) => {
 		try {
 			const response = await getCardsByNameViaMKM(id);
-			console.log(response, 'MKM RESPONSE THUNK');
 			return { data: {}, error: null, success: true };
 		} catch (error) {
 			console.error(error);
