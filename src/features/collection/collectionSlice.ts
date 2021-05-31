@@ -10,7 +10,7 @@ import {
 	CollectionItem,
 	CollectionState,
 	MagicCard,
-	ReducerPayload
+	ReducerPayload,
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
 import {
@@ -34,9 +34,9 @@ export const fetchCollection = createAsyncThunk<
 	{ id: string },
 	ThunkAPIReturnValue
 >('collection/fetchCollection', async ({ id }, ThunkAPI) => {
-	const { currentPage } = ThunkAPI.getState().collection;
+	const { currentPage, searchBarInput } = ThunkAPI.getState().collection;
 	try {
-		const { cards, pages } = await getCollection(id, currentPage);
+		const { cards, pages } = await getCollection(id, currentPage, {cardName:searchBarInput});
 		return {
 			data: { cards, pages },
 			error: null,

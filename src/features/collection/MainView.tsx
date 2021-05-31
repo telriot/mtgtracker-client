@@ -26,6 +26,8 @@ import DeleteModalContent from 'features/collection/DeleteModalContent';
 import EditModalContent from 'features/collection/EditModalContent';
 import Loader from 'react-loader-spinner';
 import { ThemeContext } from 'index';
+import { useDebounce } from 'use-debounce';
+
 //  ======================================== COMPONENT
 const CollectionView = () => {
 	//  ======================================== HOOKS
@@ -39,6 +41,7 @@ const CollectionView = () => {
 	const searchBarInput = useSelector(selectSearchBarInput)
 	const selectedCardIds = useSelector(selectSelectedCardIds);
 	const { colors } = useContext(ThemeContext);
+	const [debouncedSearch] = useDebounce(searchBarInput, 300)
 	//  ======================================== HANDLERS
 	const handleAdd = () => dispatch(statusSet({ status: 'creating' }));
 	const handleBulkDelete = () =>
@@ -51,6 +54,9 @@ const CollectionView = () => {
 	React.useEffect(() => {
 		dispatch(fetchCollection({ id: '123' }));
 	}, [currentPage]);
+	React.useEffect(() => {
+		dispatch(fetchCollection({ id: '123' }));
+	}, [debouncedSearch]);
 	//  ======================================== JSX
 	return (
 		<>

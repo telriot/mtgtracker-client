@@ -1,28 +1,55 @@
 import axios from 'axios';
 import mockTimeout from 'common/utils/timers/mockTimeout';
 import collection from 'mocks/Collection';
-import { CardUpdate } from 'types';
+import { CardUpdate, SearchFilters } from 'types';
 
 const MKM_SANDBOX_API = 'https://sandbox.cardmarket.com';
 const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
 
-const MOCK_PAGE_SIZE = 10
-const buildFakePaginatedRes = (currentPage:number, pageSize:number, exclude:string[]=[]) => {
-	const pages = Math.ceil(collection.length/pageSize)
-	const startIndex = (currentPage -1) * pageSize
-	const endIndex = currentPage * pageSize
-	const cards = collection.filter(card => !exclude.includes(card.id)).sort((a,b)=>a.cardName.localeCompare(b.cardName)).slice(startIndex, endIndex)
-	return  { cards, pages };
-}
+const MOCK_PAGE_SIZE = 10;
+const buildFakePaginatedRes = (
+	currentPage: number,
+	pageSize: number,
+	exclude: string[] = [],
+	filters?: SearchFilters
+) => {
+
+	const startIndex = (currentPage - 1) * pageSize;
+	const endIndex = currentPage * pageSize;
+	const filteredCollection = collection.filter(card =>{
+		if(exclude.includes(card.id)) return false
+		if (filters?.cardName) {
+			console.log(filters)
+			return (
+				card.cardName
+					.toLowerCase()
+					.match(filters.cardName.toLowerCase())
+			);
+		}
+		return true
+	})
+	const pages = Math.ceil(filteredCollection.length / pageSize);
+	const cards = filteredCollection
+		.sort((a, b) => a.cardName.localeCompare(b.cardName))
+		.slice(startIndex, endIndex);
+
+	return { cards, pages };
+};
 
 export const getCollection = async (
 	id: string,
-	currentPage: number
+	currentPage: number,
+	filters?: SearchFilters
 ): Promise<{ cards: any[]; pages: number }> => {
 	try {
 		console.log(`fetching collection ${id} at page ${currentPage})`);
 		await mockTimeout(500);
-		const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE)
+		const response = buildFakePaginatedRes(
+			currentPage,
+			MOCK_PAGE_SIZE,
+			[],
+			filters
+		);
 		return response;
 	} catch (error) {
 		console.error(error);
@@ -44,11 +71,16 @@ export const patchCollectionItem = async (payload: CardUpdate) => {
 		throw Error(error);
 	}
 };
-export const destroyCollectionItem = async (id: string, currentPage: number) => {
+export const destroyCollectionItem = async (
+	id: string,
+	currentPage: number
+) => {
 	try {
 		console.log(`deleting item ${id})`);
 		await mockTimeout(500);
-		const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, [id])
+		const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, [
+			id
+		]);
 		return response;
 	} catch (error) {
 		console.error(error);
@@ -56,11 +88,18 @@ export const destroyCollectionItem = async (id: string, currentPage: number) => 
 	}
 };
 
-export const destroyManyCollectionItems = async (ids: string[], currentPage: number) => {
+export const destroyManyCollectionItems = async (
+	ids: string[],
+	currentPage: number
+) => {
 	try {
 		console.log(`deleting items ${ids.toString()})`);
 		await mockTimeout(500);
-		const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, ids)
+		const response = buildFakePaginatedRes(
+			currentPage,
+			MOCK_PAGE_SIZE,
+			ids
+		);
 		return response;
 	} catch (error) {
 		console.error(error);
@@ -84,12 +123,12 @@ export const getCardsByNameViaScf = async (
 	}
 };
 
-export const getCardsByNameViaMKM = async (id:string) => {
+export const getCardsByNameViaMKM = async (id: string) => {
 	try {
 		const response = await axios.get(
-			`${MKM_SANDBOX_API}/ws/v2.0/products/${id}`,
+			`${MKM_SANDBOX_API}/ws/v2.0/products/${id}`
 		);
-		console.log(response, 'MKM RESPONSE')
+		console.log(response, 'MKM RESPONSE');
 		return response;
 	} catch (error) {
 		console.error(error);

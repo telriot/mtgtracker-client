@@ -43,7 +43,7 @@ export type ActionStatus =
 	| 'creating'
 	| 'deleting'
 	| 'bulkDeleting';
-	
+
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
@@ -54,6 +54,11 @@ export interface CollectionState {
 	status: ActionStatus;
 	targetObject: CollectionItem<any> | null;
 }
+
 export type CardUpdate = {
 	id: string;
 } & Partial<Omit<CollectionItem, 'id' | 'minPrice' | 'medianPrice'>>;
+
+export type SearchFilters = {
+	cardName: string	
+}
