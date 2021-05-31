@@ -61,24 +61,37 @@ export const patchCollectionItem = async (payload: CardUpdate) => {
 };
 export const destroyCollectionItem = async (
 	id: string,
-	currentPage: number
+	currentPage: number,
+	filters?: SearchFilters
 ) => {
 	console.log(`deleting item ${id})`);
 	await mockTimeout(500);
-	const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, [id]);
+	const response = buildFakePaginatedRes(
+		currentPage,
+		MOCK_PAGE_SIZE,
+		[id],
+		filters
+	);
 	return response;
 };
 
 export const destroyManyCollectionItems = async (
 	ids: string[],
-	currentPage: number
+	currentPage: number,
+	filters?: SearchFilters
 ) => {
 	console.log(`deleting items ${ids.toString()})`);
 	await mockTimeout(500);
-	const response = buildFakePaginatedRes(currentPage, MOCK_PAGE_SIZE, ids);
+	const response = buildFakePaginatedRes(
+		currentPage,
+		MOCK_PAGE_SIZE,
+		ids,
+		filters
+	);
 	return response;
 };
 
+// NON-THUNK-HANDLED CALLS
 export const getCardsByNameViaScf = async (
 	cardName: string
 ): Promise<{ [x: string]: any }[]> => {

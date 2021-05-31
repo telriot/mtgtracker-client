@@ -88,10 +88,11 @@ export const deleteCollectionItem = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/deleteCollectionItem', async (_, thunkAPI) => {
 	try {
-		const { targetObject, currentPage } = thunkAPI.getState().collection;
+		const { targetObject, currentPage, searchBarInput } = thunkAPI.getState().collection;
 		const { cards, pages } = await destroyCollectionItem(
 			targetObject.id,
-			currentPage
+			currentPage,
+			{cardName: searchBarInput}
 		);
 		return {
 			data: { id: targetObject.id, cards, pages },
@@ -112,10 +113,11 @@ export const bulkDeleteCollectionItems = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/bulkDeleteCollectionItems', async (_, thunkAPI) => {
 	try {
-		const { selectedCardIds, currentPage } = thunkAPI.getState().collection;
+		const { selectedCardIds, currentPage, searchBarInput } = thunkAPI.getState().collection;
 		const { cards, pages } = await destroyManyCollectionItems(
 			selectedCardIds,
-			currentPage
+			currentPage,
+			{cardName:searchBarInput}
 		);
 		return {
 			data: { ids: selectedCardIds, cards, pages },
