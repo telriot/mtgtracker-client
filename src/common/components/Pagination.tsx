@@ -1,95 +1,114 @@
 //  ======================================== IMPORTS
 
 import React from 'react';
-import getRange from 'common/utils/arrays/getRange';
-//  ======================================== UTILS
-
-/**
- *
- * @param activePage the page you are currently on
- * @param pages the total number of pages to paginate
- * @param maxButtons the max number of buttons to display, defaults at 5
- * @returns the range of buttons to render in pagination
- */
-const calcRenderedButtons = (
-	activePage: number,
-	pages: number,
-	maxButtons: 5 | 7 | 9 = 5
-) => {
-	const span = Math.floor(maxButtons / 2);
-	const firstPage = Math.max(
-		Math.min(activePage - span, pages - maxButtons + 1),
-		1
-	);
-	const lastPage = Math.min(Math.max(activePage + span, maxButtons), pages);
-	return getRange(lastPage, firstPage);
-};
+import usePagination from 'common/hooks/usePagination';
 //  ======================================== SUBCOMPONENT
 export interface PaginationButtonProps {
 	children: React.ReactNode;
+	disabled?: boolean;
 	onClick: () => void;
 	isActive?: boolean;
 }
+
 const PaginationButton = ({
 	children,
+	disabled,
 	onClick,
 	isActive
 }: PaginationButtonProps) => {
 	return (
 		<div
-			onClick={onClick}
+			onClick={!disabled && onClick}
 			className={`grid justify-center items-center h-6 w-6 ${
-				isActive ? 'bg-primary-dark' : 'bg-primary'
+				isActive
+					? 'bg-primary-dark'
+					: disabled
+					? 'bg-primary-light'
+					: 'bg-primary'
 			} rounded text-sm cursor-pointer text-white hover:bg-primary-dark transition-colors`}>
 			{children}
+		</div>
+	);
+};
+//  ======================================== SUBCOMPONENT
+const PaginationEllipsis = () => {
+	return (
+		<div className='grid justify-center items-center h-6 w-6 bg-primary rounded text-sm cursor-pointer text-white hover:bg-primary-dark transition-colors'>
+			...
 		</div>
 	);
 };
 //  ======================================== COMPONENT
 export interface PaginationProps {
 	activePage: number;
+	disabled?: boolean;
 	pages: number;
-	maxButtons?: 5 | 7 | 9;
+	maxButtons?: number;
 	setPage: (page: number) => void;
 }
 const Pagination = ({
 	activePage,
+	disabled,
 	pages,
 	setPage,
 	maxButtons = 5
 }: PaginationProps) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
+	const {
+		pageIndexes,
+		showFirst,
+		showLast,
+		showStartEllipsis,
+		showEndEllipsis,
+		showBack,
+		showNext
+	} = usePagination(activePage, pages, maxButtons);
+
 	//  ======================================== HANDLERS
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
-	const buttons = calcRenderedButtons(activePage, pages, maxButtons);
 	return (
 		<div className='flex flex-row gap-x-1'>
-			{buttons.map((btnValue, index) =>
-				//First btnValue, is not page 1
-				index === 0 && btnValue > 1 ? (
-					<PaginationButton
-						onClick={() => setPage(activePage - 1)}
-						key={`pagination-btn-${index}`}>
+			{showBack && (
+				<PaginationButton
+					disabled={disabled}
+					onClick={() => setPage(Math.max(1, activePage - 1))}>
 						&#8249;
-					</PaginationButton>
-				) : //Last btnValue, is not last page
-				index === maxButtons - 1 && btnValue < pages ? (
-					<PaginationButton
-						onClick={() => setPage(activePage + 1)}
-						key={`pagination-btn-${index}`}>
-						&#8250;
-					</PaginationButton>
-				) : (
-					//Other pages
-					<PaginationButton
-						onClick={() => setPage(btnValue)}
-						isActive={activePage === btnValue}
-						key={`pagination-btn-${index}`}>
-						{btnValue}
-					</PaginationButton>
-				)
+				</PaginationButton>
+			)}
+			{showFirst && (
+				<PaginationButton
+					disabled={disabled}
+					onClick={() => setPage(1)}>
+					{1}
+				</PaginationButton>
+			)}
+			{showStartEllipsis && <PaginationEllipsis />}
+
+			{pageIndexes.map((page) => (
+				<PaginationButton
+					key={`pagination-${page}`}
+					disabled={disabled && page !== activePage}
+					onClick={() => setPage(page)}
+					isActive={page === activePage}>
+					{page}
+				</PaginationButton>
+			))}
+
+			{showEndEllipsis && <PaginationEllipsis />}
+			{showLast && (
+				<PaginationButton
+					disabled={disabled}
+					onClick={() => setPage(pages)}>
+					{pages}
+				</PaginationButton>
+			)}
+			{showNext && (
+				<PaginationButton
+					onClick={() => setPage(Math.min(pages, activePage + 1))}>
+					&#8250;
+				</PaginationButton>
 			)}
 		</div>
 	);

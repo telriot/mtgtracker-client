@@ -108,7 +108,7 @@ export const deleteCollectionItem = createAsyncThunk<
 	}
 });
 export const bulkDeleteCollectionItems = createAsyncThunk<
-	ThunkReturnValue<{ ids:string[], cards: any[]; pages: number }>,
+	ThunkReturnValue<{ ids: string[]; cards: any[]; pages: number }>,
 	null,
 	ThunkAPIReturnValue
 >('collection/bulkDeleteCollectionItems', async (_, thunkAPI) => {
@@ -252,42 +252,41 @@ const collection = createSlice({
 			state.asyncStatus = 'rejected';
 			state.targetObject = 'null';
 		});
-				// DELETE ITEM
-				builder.addCase(bulkDeleteCollectionItems.pending, (state) => {
-					state.asyncStatus = 'pending';
-				});
-				builder.addCase(
-					bulkDeleteCollectionItems.fulfilled,
-					(state, { payload: { data, error, success } }) => {
-						if (success && data) {
-							state.asyncStatus = 'idle';
-							state.status = 'idle';
-							state.targetObject = 'null';
-							state.pages = data.pages;
-							collectionAdapter.setAll(state, data.cards);
-							// collectionAdapter.removeOne(state, data.id) ;
-						} else {
-							state.asyncStatus = 'rejected';
-							state.targetObject = 'null';
-							state.asyncError = error;
-						}
-					}
-				);
-				builder.addCase(bulkDeleteCollectionItems.rejected, (state) => {
+		// DELETE ITEM
+		builder.addCase(bulkDeleteCollectionItems.pending, (state) => {
+			state.asyncStatus = 'pending';
+		});
+		builder.addCase(
+			bulkDeleteCollectionItems.fulfilled,
+			(state, { payload: { data, error, success } }) => {
+				if (success && data) {
+					state.asyncStatus = 'idle';
+					state.status = 'idle';
+					state.pages = data.pages;
+					collectionAdapter.setAll(state, data.cards);
+					state.selectedCardIds = [];
+					// collectionAdapter.removeOne(state, data.id) ;
+				} else {
 					state.asyncStatus = 'rejected';
-					state.targetObject = 'null';
-				});
+					state.selectedCardIds = [];
+					state.asyncError = error;
+				}
+			}
+		);
+		builder.addCase(bulkDeleteCollectionItems.rejected, (state) => {
+			state.asyncStatus = 'rejected';
+		});
 	}
 });
 
 //  ======================================== EXPORTS
-export const { 
+export const {
 	cardDeselected,
 	cardMultiSelected,
 	cardSelected,
-	currentPageSet, 
-	pagesSet, 
-	statusSet 
+	currentPageSet,
+	pagesSet,
+	statusSet
 } = collection.actions;
 
 const selectors = collectionAdapter.getSelectors();
