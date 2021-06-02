@@ -105,7 +105,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 								<div
 									onMouseEnter={handleNameBlockMouseEnter}
 									onMouseLeave={handleNameBlockMouseLeave}
-									className={`text-left`}>
+									className={`text-left truncate`}>
 									{cardName}
 								</div>
 							</Popover>
@@ -131,7 +131,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 								isOpen={false}
 								positions={['right']}
 								content={null}>
-								<div className={`text-left`}>{cardName}</div>
+								<div className={`text-left truncate`}>{cardName}</div>
 							</Popover>
 						</CardTextBlock>
 						{mainInfoBlock.map(({ header, content }) => (

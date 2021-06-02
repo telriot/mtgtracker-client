@@ -2,7 +2,7 @@ import { CollectionItem, MagicCard } from 'types'
 const Collection : CollectionItem<MagicCard>[] = 
 [
     {
-        cardName: 'Snapcaster Mage',
+        cardName: 'A card with a very very very very long name',
         set: 'ISD',
         language: 'EN',
         foil: false,

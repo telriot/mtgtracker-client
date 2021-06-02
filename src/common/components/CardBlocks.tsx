@@ -26,7 +26,7 @@ export const CardTextBlock = ({
 				{header}
 			</div>
 			<div
-				className={`text-${textAlignment} ${
+				className={`text-${textAlignment} w-full ${
 					size === 'sm' ? 'text-sm' : ''
 				}`}>
 				{children}
