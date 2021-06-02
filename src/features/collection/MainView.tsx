@@ -26,7 +26,7 @@ import EditModalContent from 'features/collection/EditModalContent';
 import Loader from 'react-loader-spinner';
 import { ThemeContext } from 'index';
 import { useDebounce } from 'use-debounce';
-
+import { useMediaQuery } from 'react-responsive';
 //  ======================================== COMPONENT
 const CollectionView = () => {
 	//  ======================================== HOOKS
@@ -37,10 +37,12 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	const collection = useSelector(selectAllCollectionItems);
-	const searchBarInput = useSelector(selectSearchBarInput)
+	const searchBarInput = useSelector(selectSearchBarInput);
 	const selectedCardIds = useSelector(selectSelectedCardIds);
 	const { colors } = useContext(ThemeContext);
-	const [debouncedSearch] = useDebounce(searchBarInput, 300)
+	const [debouncedSearch] = useDebounce(searchBarInput, 300);
+	const isMd = useMediaQuery({ query: '(min-width: 640px)' });
+	const isMultiSelecting = selectedCardIds.length > 1;
 	//  ======================================== HANDLERS
 	const handleAdd = () => dispatch(statusSet({ status: 'creating' }));
 	const handleBulkDelete = () =>
@@ -50,22 +52,32 @@ const CollectionView = () => {
 		event: React.ChangeEvent<HTMLInputElement>
 	) => dispatch(searchBarInputChanged(event.target.value));
 	const handleSetPage = (page: number) => {
-		dispatch(currentPageSet(page))
-		dispatch(fetchCollection({ id: '123' }))
-	}
+		dispatch(currentPageSet(page));
+		dispatch(fetchCollection({ id: '123' }));
+	};
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
-		dispatch(currentPageSet(1))
+		dispatch(currentPageSet(1));
 		dispatch(fetchCollection({ id: '123' }));
 	}, [debouncedSearch]);
 	//  ======================================== JSX
 	return (
 		<>
-			<div className='container mx-auto py-8'>
+					{!isMd && isMultiSelecting && (
+					<div className='fixed w-full py-4 px-2'><Button variant='danger' block onClick={handleBulkDelete}>
+						Delete Selected
+					</Button></div>
+				)}
+			<div className='container px-2 sm:mx-auto py-8'>
+
 				<div className='flex justify-between mb-4'>
-					<SearchBar value={searchBarInput} onChange={handleSearchBarChange} />
+					<SearchBar
+						value={searchBarInput}
+						className='mr-3'
+						onChange={handleSearchBarChange}
+					/>
 					<div className='flex'>
-						{selectedCardIds.length > 1 ? (
+						{isMultiSelecting && isMd ? (
 							<Button className='mr-3' onClick={handleBulkDelete}>
 								Delete Selected
 							</Button>
@@ -73,6 +85,7 @@ const CollectionView = () => {
 						<Button onClick={handleAdd}>Add</Button>
 					</div>
 				</div>
+
 				{status === 'idle' && asyncStatus === 'pending' ? (
 					<div className='w-100 h-100 flex items-center justify-center'>
 						<Loader

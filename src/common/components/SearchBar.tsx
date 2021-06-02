@@ -17,7 +17,7 @@ const SearchBar = ({ className, onChange, value }: SearchBarProps) => {
 	return (
 		<div className={className || ''}>
 			<input
-				className='border-gray-300 border-2 rounded py-2 px-4'
+				className='border-gray-300 border-2 rounded py-2 px-4 w-full'
 				type='text'
                 onChange={onChange}
                 value={value}
