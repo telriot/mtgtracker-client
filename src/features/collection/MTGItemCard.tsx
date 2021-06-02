@@ -93,7 +93,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 						<CardTextBlock header='Name' position='start' span={3}>
 							<Popover
 								isOpen={showCardImg}
-								positions={['right']}
+								positions={['top', 'bottom']}
 								padding={10}
 								content={
 									<CardImage
@@ -111,10 +111,10 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 							</Popover>
 						</CardTextBlock>
 						{mainInfoBlock.map(({ header, content }) => (
-							<CardTextBlock header={header} children={content} />
+							<CardTextBlock key={`${id}-${header}`} header={header} children={content} />
 						))}
 						{detailBlock.map(({ header, content }) => (
-							<CardTextBlock header={header} children={content} />
+							<CardTextBlock key={`${id}-${header}`} header={header} children={content} />
 						))}
 
 						<CardActionBlock
@@ -136,6 +136,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 						</CardTextBlock>
 						{mainInfoBlock.map(({ header, content }) => (
 							<CardTextBlock
+							key={`${id}-${header}`}
 								header={header}
 								span={2}
 								children={content}
@@ -157,6 +158,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 							<>
 								{detailBlock.map(({ header, content }) => (
 									<CardTextBlock
+										key={`${id}-${header}`}
 										header={header}
 										children={content}
 										size='sm'

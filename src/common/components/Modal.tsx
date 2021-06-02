@@ -25,7 +25,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 	//  ======================================== JSX
 	return (
 		<div
-			className={`fixed top-0 left-0 w-screen h-screen flex items-center justify-center transition-color duration-100 ${isOpen? 'bg-gray-700 bg-opacity-30':'opacity-0 pointer-events-none'}`}
+			className={`fixed top-0 left-0 w-screen h-screen flex items-center justify-center p-3 transition-color duration-100 ${isOpen? 'bg-gray-700 bg-opacity-30':'opacity-0 pointer-events-none'}`}
 			onClick={onClose}>
 			<div
 				onClick={handleModalClick}

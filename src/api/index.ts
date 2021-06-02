@@ -39,7 +39,6 @@ export const getCollection = async (
 	currentPage: number,
 	filters?: SearchFilters
 ) => {
-	console.log(`fetching collection ${id} at page ${currentPage})`);
 	await mockTimeout(500);
 	const response = buildFakePaginatedRes(
 		currentPage,
