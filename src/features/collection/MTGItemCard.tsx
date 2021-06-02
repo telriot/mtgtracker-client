@@ -11,30 +11,29 @@ import {
 } from './collectionSlice';
 import React from 'react';
 import { Popover } from 'react-tiny-popover';
+import CardImage from 'common/components/CardImage';
 
-const TEST_IMGURL =
-	'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card';
 //  ======================================== SUBCOMPONENT
 interface CardTextBlockProps {
 	header: string;
 	position?: 'start' | 'end';
 	span?: number;
-	text: string | number;
+	children?: React.ReactNode
 }
 
 const CardTextBlock = ({
 	header,
 	position = 'end',
 	span = 1,
-	text
+	children
 }: CardTextBlockProps) => {
 	const textAlignment = position === 'end' ? 'right' : 'left';
 	return (
-		<div className={`flex flex-col items-${position} col-span-${span}`}>
+		<div className={`flex flex-col items-${position} col-span-${span} cursor-default`}>
 			<div className={`text-${textAlignment} text-xs text-gray-400`}>
 				{header}
 			</div>
-			<div className={`text-${textAlignment}`}>{text}</div>
+			<div className={`text-${textAlignment}`}>{children}</div>
 		</div>
 	);
 };
@@ -115,18 +114,13 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 					isSelected ? 'primary' : 'secondary-light'
 				} px-4 py-2 mb-2`}
 				onClick={handleClick}>
-				<div className={`flex flex-col items-start col-span-3`}>
-					<div className={`text-left text-xs text-gray-400`}>
-						Name
-					</div>
-					<Popover
+				<CardTextBlock header="Name" position='start' span={3}>
+				<Popover
 						isOpen={showCardImg}
 						positions={['right']}
 						padding={10}
 						content={
-							<div>
-								<img src={TEST_IMGURL} alt={card.cardName} />
-							</div>
+							<CardImage src={card.image} alt={card.cardName} zoom={3}/>
 						}>
 						<div
 							onMouseEnter={handleNameBlockMouseEnter}
@@ -135,15 +129,16 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 							{cardName}
 						</div>
 					</Popover>
-				</div>
-				<CardTextBlock header='Qty' text={quantity} />
-				<CardTextBlock header='Expansion' text={set} />
-				<CardTextBlock header='Language' text={language} />
-				<CardTextBlock header='Foil' text={foil ? 'Yes' : 'No'} />
-				<CardTextBlock header='Min' text={minPrice} />
-				<CardTextBlock header='Median' text={medianPrice} />
-				<CardTextBlock header='Buy Price' text={buyPrice} />
-				<CardTextBlock header='Target Price' text={targetPrice} />
+				</CardTextBlock>
+
+				<CardTextBlock header='Qty' children={quantity} />
+				<CardTextBlock header='Expansion' children={set} />
+				<CardTextBlock header='Language' children={language} />
+				<CardTextBlock header='Foil' children={foil ? 'Yes' : 'No'} />
+				<CardTextBlock header='Min' children={minPrice} />
+				<CardTextBlock header='Median' children={medianPrice} />
+				<CardTextBlock header='Buy Price' children={buyPrice} />
+				<CardTextBlock header='Target Price' children={targetPrice} />
 				<CardActionBlock onDelete={handleDelete} onEdit={handleEdit} />
 			</div>
 		</>

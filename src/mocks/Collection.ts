@@ -11,6 +11,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 40,
         quantity: 1,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'12345678'
     },
     {
@@ -23,6 +24,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 2,
         targetPrice: 30,
         quantity: 4,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'22345678'
 
     },
@@ -36,6 +38,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 200,
         quantity: 3,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'32345678'
 
     },
@@ -49,6 +52,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 30,
         targetPrice: 220,
         quantity: 2,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'42345678'
     },
     {
@@ -61,6 +65,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 40,
         quantity: 1,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'4562346'
     },
     {
@@ -73,6 +78,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 2,
         targetPrice: 30,
         quantity: 4,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'325355'
 
     },
@@ -86,6 +92,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 200,
         quantity: 3,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'452452353223534'
 
     },
@@ -99,6 +106,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 30,
         targetPrice: 220,
         quantity: 2,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'8w905344523453420395'
     },
     {
@@ -111,6 +119,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 2,
         targetPrice: 30,
         quantity: 4,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'56345645345423'
 
     },
@@ -124,6 +133,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 200,
         quantity: 3,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'32346346346345678'
 
     },
@@ -137,6 +147,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 30,
         targetPrice: 220,
         quantity: 2,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'4523432452'
     },
     {
@@ -149,6 +160,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 40,
         quantity: 1,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'523451232678'
     },
     {
@@ -161,6 +173,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 2,
         targetPrice: 30,
         quantity: 4,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'45345234545'
 
     },
@@ -174,6 +187,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 200,
         quantity: 3,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'7234345345345678'
 
     },
@@ -187,6 +201,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 30,
         targetPrice: 220,
         quantity: 2,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'345345344534'
     },
     {
@@ -199,6 +214,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 2,
         targetPrice: 30,
         quantity: 4,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'563456345423'
 
     },
@@ -212,6 +228,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 200,
         quantity: 3,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'3445'
 
     },
@@ -225,6 +242,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 30,
         targetPrice: 220,
         quantity: 2,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'2345235234'
     },
     {
@@ -237,6 +255,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 40,
         quantity: 1,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'52345324234423232678'
     },
     {
@@ -249,6 +268,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 2,
         targetPrice: 30,
         quantity: 4,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'2343'
 
     },
@@ -262,6 +282,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 20,
         targetPrice: 200,
         quantity: 3,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'723423345345345678'
 
     },
@@ -275,6 +296,7 @@ const Collection : CollectionItem<MagicCard>[] =
         buyPrice: 30,
         targetPrice: 220,
         quantity: 2,
+        image:'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=39884&type=card',
         id:'32423'
     }
 ]

@@ -18,6 +18,7 @@ export type MagicCard = {
 	set: string;
 	language: LangVariant;
 	foil: boolean;
+	image:string;
 };
 export type CollectionItem<T> = T & {
 	id: string;
