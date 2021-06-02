@@ -1,6 +1,5 @@
 //  ======================================== IMPORTS
 import { CollectionItem, MagicCard } from 'types';
-import { FiEdit, FiTrash } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	cardDeselected,
