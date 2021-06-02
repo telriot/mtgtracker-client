@@ -1,7 +1,7 @@
 //  ======================================== IMPORTS
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import React from 'react';
-
+import clsx from 'clsx'
 //  ======================================== SUBCOMPONENT
 interface CardTextBlockProps {
 	header: string;
@@ -21,14 +21,18 @@ export const CardTextBlock = ({
 	const textAlignment = position === 'end' ? 'right' : 'left';
 	return (
 		<div
-			className={`flex flex-col items-${position} col-span-${span} cursor-default`}>
-			<div className={`text-${textAlignment} text-xs text-gray-400`}>
+			className={clsx(
+				'flex flex-col cursor-default', 
+				`items-${position} col-span-${span}`
+			)}>
+			<div className={clsx(
+				`text-${textAlignment}`, 
+				'text-xs text-gray-400'
+			)}>
 				{header}
 			</div>
 			<div
-				className={`text-${textAlignment} w-full ${
-					size === 'sm' ? 'text-sm' : ''
-				}`}>
+				className={clsx( 'w-full', `text-${textAlignment}`, size === 'sm' && 'text-sm')}>
 				{children}
 			</div>
 		</div>
@@ -43,7 +47,7 @@ export interface CardActionBlockProps {
 export const CardActionBlock = ({ onEdit, onDelete }: CardActionBlockProps) => {
 	const iconSize = 20;
 	return (
-		<div className='flex flex-row justify-end items-center col-span-1'>
+		<div className='flex flex-row items-center justify-end col-span-1'>
 			<FiEdit
 				onClick={onEdit}
 				size={iconSize}

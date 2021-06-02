@@ -16,7 +16,7 @@ import Button from 'common/components/Button';
 import { ReactComponent as More } from 'assets/svg/more.svg';
 import { ReactComponent as Less } from 'assets/svg/chevron-up.svg';
 import { CardTextBlock, CardActionBlock } from 'common/components/CardBlocks';
-
+import clsx from 'clsx';
 //  ======================================== COMPONENT
 interface MTGItemCardProps {
 	card: CollectionItem<MagicCard>;
@@ -66,6 +66,8 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	const handleNameBlockMouseEnter = () => setShowCardImg(true);
 	const handleNameBlockMouseLeave = () => setShowCardImg(false);
 	const toggleExpand = () => setIsExpanded((prev) => !prev);
+
+	// CONTENTS
 	const mainInfoBlock = [
 		{ header: 'Qty', content: quantity },
 		{ header: 'Set', content: set }
@@ -82,9 +84,10 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	//  ======================================== JSX
 	return (
 		<div
-			className={`rounded border-2 border-${
-				isSelected ? 'primary' : 'secondary-light'
-			} px-4 py-2 mb-2`}
+			className={clsx('px-4 py-2 mb-2 rounded border-2', {
+				'border-primary': isSelected,
+				'border-secondary-light': !isSelected
+			})}
 			onClick={handleClick}>
 			<div className='grid grid-cols-12 gap-2'>
 				{isMd ? (
@@ -111,10 +114,18 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 							</Popover>
 						</CardTextBlock>
 						{mainInfoBlock.map(({ header, content }) => (
-							<CardTextBlock key={`${id}-${header}`} header={header} children={content} />
+							<CardTextBlock
+								key={`${id}-${header}`}
+								header={header}
+								children={content}
+							/>
 						))}
 						{detailBlock.map(({ header, content }) => (
-							<CardTextBlock key={`${id}-${header}`} header={header} children={content} />
+							<CardTextBlock
+								key={`${id}-${header}`}
+								header={header}
+								children={content}
+							/>
 						))}
 
 						<CardActionBlock
@@ -131,18 +142,20 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 								isOpen={false}
 								positions={['right']}
 								content={null}>
-								<div className={`text-left truncate`}>{cardName}</div>
+								<div className={`text-left truncate`}>
+									{cardName}
+								</div>
 							</Popover>
 						</CardTextBlock>
 						{mainInfoBlock.map(({ header, content }) => (
 							<CardTextBlock
-							key={`${id}-${header}`}
+								key={`${id}-${header}`}
 								header={header}
 								span={2}
 								children={content}
 							/>
 						))}
-						<div className='col-start-11 flex col-span-2 items-center justify-end'>
+						<div className='col-start-11 col-span-2 flex items-center justify-end'>
 							<Button
 								onClick={toggleExpand}
 								size='sm'

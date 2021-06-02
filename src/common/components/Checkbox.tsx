@@ -1,6 +1,7 @@
 //  ======================================== IMPORTS
 import { ThemeContext } from 'index';
 import React from 'react';
+import clsx from 'clsx'
 //  ======================================== COMPONENT
 const Checkbox = ({
 	id,
@@ -23,15 +24,16 @@ const Checkbox = ({
 				type='checkbox'
 				id={id}
 				checked={checked}
-				className='opacity-0 absolute h-6 w-6'
+				className='absolute w-6 h-6 opacity-0'
 				onChange={(e) => setValue(e.target.checked)}
 			/>
 			<div
-				className={`bg-white border-2 rounded transition-colors ${
-					checked ? 'border-primary text-primary' : 'border-secondary-light text-transparent'
-				} w-6 h-6 flex flex-shrink-0 justify-center items-center focus-within:border-blue-500`}>
+				className={clsx('bg-white border-2 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center transition-colors focus-within:border-blue-500', {
+					'border-primary text-primary': checked,
+					'border-secondary-light text-transparent':!checked
+				} )}>
 				<svg
-					className={`w-3 h-3 text-blue-600 pointer-events-none`}
+					className='w-3 h-3 text-blue-600 pointer-events-none'
 					version='1.1'
 					viewBox='0 0 17 12'
 					xmlns='http://www.w3.org/2000/svg'>

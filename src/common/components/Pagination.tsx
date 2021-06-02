@@ -2,6 +2,7 @@
 
 import React from 'react';
 import usePagination from 'common/hooks/usePagination';
+import clsx from 'clsx';
 //  ======================================== SUBCOMPONENT
 export interface PaginationButtonProps {
 	children: React.ReactNode;
@@ -19,13 +20,17 @@ const PaginationButton = ({
 	return (
 		<div
 			onClick={!disabled && onClick}
-			className={`grid justify-center items-center h-6 w-6 ${
-				isActive
-					? 'bg-primary-dark'
-					: disabled
-					? 'bg-primary-light'
-					: 'bg-primary'
-			} rounded text-sm cursor-pointer text-white hover:bg-primary-dark transition-colors`}>
+			className={clsx(
+				'grid justify-center items-center',
+				'h-6 w-6 rounded',
+				'hover:bg-primary-dark transition-colors',
+				'text-sm text-white cursor-pointer',
+				{
+					'bg-primary-dark': isActive,
+					'bg-primary-light': disabled,
+					'bg-primary': !isActive && !disabled
+				}
+			)}>
 			{children}
 		</div>
 	);
@@ -33,7 +38,13 @@ const PaginationButton = ({
 //  ======================================== SUBCOMPONENT
 const PaginationEllipsis = () => {
 	return (
-		<div className='grid justify-center items-center h-6 w-6 bg-primary rounded text-sm cursor-pointer text-white hover:bg-primary-dark transition-colors'>
+		<div
+			className={clsx(
+				'grid justify-center items-center',
+				'h-6 w-6 rounded',
+				'bg-primary hover:bg-primary-dark transition-colors',
+				'text-white text-sm cursor-pointer'
+			)}>
 			...
 		</div>
 	);
@@ -74,7 +85,7 @@ const Pagination = ({
 				<PaginationButton
 					disabled={disabled}
 					onClick={() => setPage(Math.max(1, activePage - 1))}>
-						&#8249;
+					&#8249;
 				</PaginationButton>
 			)}
 			{showFirst && (

@@ -28,7 +28,7 @@ export const EditorNumInput = ({
 				step='any'
 				value={value.toString()}
 				onChange={handleChange}
-				className='py-1 px-1 border-2 border-gray-300 rounded w-20 text-right'
+				className='w-20 py-1 px-1 rounded border-2 border-gray-300 text-right'
 			/>
 		</div>
 	);

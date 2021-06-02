@@ -38,7 +38,7 @@ const CreateModalContent = () => {
 	};
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
-	const handleDelete = () => console.log('handle deletion');
+	const handleSave = () => console.log('handle save');
 	const handleSelectChange = (card: Record<string, string>) =>
 		setSelectedCard({
 			cardName: card.name,
@@ -87,7 +87,7 @@ const CreateModalContent = () => {
 				<Button variant='danger' onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' onClick={handleDelete}>
+				<Button variant='primary' onClick={handleSave}>
 					Save
 				</Button>
 			</ModalButtonDiv>
