@@ -14,10 +14,9 @@ import { Popover } from 'react-tiny-popover';
 import CardImage from 'common/components/CardImage';
 import { useMediaQuery } from 'react-responsive';
 import Button from 'common/components/Button';
-import {ReactComponent as More}from 'assets/svg/more.svg'
-import {ReactComponent as Less} from 'assets/svg/chevron-up.svg'
-import {CardTextBlock, CardActionBlock} from 'common/components/CardBlocks'
-
+import { ReactComponent as More } from 'assets/svg/more.svg';
+import { ReactComponent as Less } from 'assets/svg/chevron-up.svg';
+import { CardTextBlock, CardActionBlock } from 'common/components/CardBlocks';
 
 //  ======================================== COMPONENT
 interface MTGItemCardProps {
@@ -67,7 +66,19 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	};
 	const handleNameBlockMouseEnter = () => setShowCardImg(true);
 	const handleNameBlockMouseLeave = () => setShowCardImg(false);
-	const toggleExpand = () => setIsExpanded(prev => !prev);
+	const toggleExpand = () => setIsExpanded((prev) => !prev);
+	const mainInfoBlock = [
+		{ header: 'Qty', content: quantity },
+		{ header: 'Set', content: set }
+	];
+	const detailBlock = [
+		{ header: 'Lang', content: language },
+		{ header: 'Foil', content: foil ? 'Yes' : 'No' },
+		{ header: 'Min', content: minPrice },
+		{ header: 'Median', content: medianPrice },
+		{ header: 'Buy', content: buyPrice },
+		{ header: 'Target', content: targetPrice }
+	];
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
@@ -100,20 +111,13 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 								</div>
 							</Popover>
 						</CardTextBlock>
-						<CardTextBlock header='Qty' children={quantity} />
-						<CardTextBlock header='Set' children={set} />
-						<CardTextBlock header='Lang' children={language} />
-						<CardTextBlock
-							header='Foil'
-							children={foil ? 'Yes' : 'No'}
-						/>
-						<CardTextBlock header='Min' children={minPrice} />
-						<CardTextBlock header='Median' children={medianPrice} />
-						<CardTextBlock header='Buy' children={buyPrice} />
-						<CardTextBlock
-							header='Target'
-							children={targetPrice}
-						/>
+						{mainInfoBlock.map(({ header, content }) => (
+							<CardTextBlock header={header} children={content} />
+						))}
+						{detailBlock.map(({ header, content }) => (
+							<CardTextBlock header={header} children={content} />
+						))}
+
 						<CardActionBlock
 							onDelete={handleDelete}
 							onEdit={handleEdit}
@@ -123,6 +127,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 					// MOBILE VERSION
 					<>
 						<CardTextBlock header='Name' position='start' span={6}>
+							{/* HAVE TO KEEP POPOVER HERE BECAUSE OF LIBRARY REQUIREMENTS */}
 							<Popover
 								isOpen={false}
 								positions={['right']}
@@ -130,66 +135,49 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 								<div className={`text-left`}>{cardName}</div>
 							</Popover>
 						</CardTextBlock>
-
-						<CardTextBlock
-							header='Qty'
-							span={2}
-							children={quantity}
-						/>
-						<CardTextBlock header='Set' span={2} children={set} />
+						{mainInfoBlock.map(({ header, content }) => (
+							<CardTextBlock
+								header={header}
+								span={2}
+								children={content}
+							/>
+						))}
 						<div className='col-start-11 flex col-span-2 items-center justify-end'>
 							<Button
 								onClick={toggleExpand}
 								size='sm'
 								className='col-start-11'>
-								{isExpanded?<Less className='h-6 w-6 fill-current'/>:<More className='h-6 w-6'/>}
+								{isExpanded ? (
+									<Less className='h-6 w-5 fill-current' />
+								) : (
+									<More className='h-6 w-5' />
+								)}
 							</Button>
 						</div>
 						{isExpanded && (
 							<>
-								<CardTextBlock
+								{detailBlock.map(({ header, content }) => (
+									<CardTextBlock
+										header={header}
+										children={content}
+										size='sm'
+										span={2}
+									/>
+								))}
+								<Button
+									className='col-span-6'
+									block
 									size='sm'
-									header='Language'
-									children={language}
-									span={2}
-									
-								/>
-								<CardTextBlock
+									onClick={handleDelete}>
+									Delete
+								</Button>
+								<Button
+									className='col-span-6'
+									block
 									size='sm'
-									header='Foil'
-									children={foil ? 'Yes' : 'No'}
-									span={2}
-
-								/>
-								<CardTextBlock
-									size='sm'
-									header='Min'
-									children={minPrice}
-									span={2}
-
-								/>
-								<CardTextBlock
-									size='sm'
-									header='Median'
-									children={medianPrice}
-									span={2}
-
-								/>
-								<CardTextBlock
-									size='sm'
-									header='Buy'
-									children={buyPrice}
-									span={2}
-
-								/>
-								<CardTextBlock
-									header='Target'
-									children={targetPrice}
-									span={2}
-
-								/>
-								<Button className='col-span-6' block size='sm' onClick={handleDelete}>Delete</Button>
-								<Button className='col-span-6' block size='sm' onClick={handleEdit}>Edit</Button>
+									onClick={handleEdit}>
+									Edit
+								</Button>
 							</>
 						)}
 					</>

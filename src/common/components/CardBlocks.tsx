@@ -27,7 +27,7 @@ export const CardTextBlock = ({
 			</div>
 			<div
 				className={`text-${textAlignment} ${
-					size === 'sm' ? 'text-s' : ''
+					size === 'sm' ? 'text-sm' : ''
 				}`}>
 				{children}
 			</div>
