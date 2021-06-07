@@ -58,6 +58,7 @@ export interface CollectionState {
 
 export type CardUpdate = {
 	id: string;
+	foil?: boolean
 } & Partial<Omit<CollectionItem, 'id' | 'minPrice' | 'medianPrice'>>;
 
 export type SearchFilters = {
