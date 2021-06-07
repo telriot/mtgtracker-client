@@ -1,53 +1,47 @@
 import axios from 'axios';
 import mockTimeout from 'common/utils/timers/mockTimeout';
 import collection from 'mocks/Collection';
-import { CardUpdate, SearchFilters } from 'types';
+import { CardUpdate, CollectionItem, MagicCard, SearchFilters } from 'types';
+import buildRes from 'common/utils/api/buildFakeRes'
+import formatCards from 'common/utils/api/formatAPICardResults'
 
 // CONSTANTS
 const MKM_SANDBOX_API = 'https://sandbox.cardmarket.com';
 const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
+const SERVER_API = 'http://localhost:5000/api';
 const MOCK_PAGE_SIZE = 10;
-
-// UTILS
-const buildFakePaginatedRes = (
-	currentPage: number,
-	pageSize: number,
-	exclude: string[] = [],
-	filters?: SearchFilters
-) => {
-	const startIndex = (currentPage - 1) * pageSize;
-	const endIndex = currentPage * pageSize;
-	const filteredCollection = collection.filter((card) => {
-		if (exclude.includes(card.id)) return false;
-		if (filters?.cardName) {
-			return card.cardName
-				.toLowerCase()
-				.match(filters.cardName.toLowerCase());
-		}
-		return true;
-	});
-	const pages = Math.ceil(filteredCollection.length / pageSize);
-	const cards = filteredCollection
-		.sort((a, b) => a.cardName.localeCompare(b.cardName))
-		.slice(startIndex, endIndex);
-	return { cards, pages };
-};
+export const TEST_COLLECTION_ID = '60bb3e1e2cc9711f847ac195';
+const IS_TESTING_LOCAL = false;
 
 // API CALLS
-export const getCollection = async (
+export const getCardsFromCollection = async (
 	id: string,
 	currentPage: number,
 	filters?: SearchFilters
-) => {
-	await mockTimeout(500);
-	const response = buildFakePaginatedRes(
-		currentPage,
-		MOCK_PAGE_SIZE,
-		[],
-		filters
-	);
-	return response;
+): Promise<{cards:CollectionItem<MagicCard>[], pages:number}> => {
+	if (IS_TESTING_LOCAL) {
+		await mockTimeout(500);
+		const response = buildRes(
+			currentPage,
+			MOCK_PAGE_SIZE,
+			[],
+			filters
+		);
+		console.log(response, 'MOCK RESPONSE')
+		return response;
+	} else {
+		const response = await axios.get(`${SERVER_API}/collections/${id}/cards`, {
+			params: {
+				page: currentPage,
+				cardName: filters.cardName
+			}
+		});
+		const cards = formatCards(response.data.cards.docs)
+		console.log(cards)
+		return {cards, pages:response.data.cards.totalPages}
+	}
 };
+
 export const patchCollectionItem = async (payload: CardUpdate) => {
 	console.log(
 		`editing item ${payload.id} with following changes ${JSON.stringify(
@@ -59,19 +53,31 @@ export const patchCollectionItem = async (payload: CardUpdate) => {
 	return response;
 };
 export const destroyCollectionItem = async (
+	collectionId:string,
 	id: string,
 	currentPage: number,
 	filters?: SearchFilters
 ) => {
-	console.log(`deleting item ${id})`);
+	if (IS_TESTING_LOCAL) {
 	await mockTimeout(500);
-	const response = buildFakePaginatedRes(
+	const response = buildRes(
 		currentPage,
 		MOCK_PAGE_SIZE,
 		[id],
 		filters
 	);
 	return response;
+	}
+	else{
+		const response = await axios.delete(`${SERVER_API}/collections/${collectionId}/${id}`, {
+			params: {
+				page: currentPage,
+				cardName: filters.cardName
+			}
+		});
+		const cards = formatCards(response.data.cards.docs)
+		return {cards, pages:response.data.cards.totalPages}
+	}
 };
 
 export const destroyManyCollectionItems = async (
@@ -81,7 +87,7 @@ export const destroyManyCollectionItems = async (
 ) => {
 	console.log(`deleting items ${ids.toString()})`);
 	await mockTimeout(500);
-	const response = buildFakePaginatedRes(
+	const response = buildRes(
 		currentPage,
 		MOCK_PAGE_SIZE,
 		ids,

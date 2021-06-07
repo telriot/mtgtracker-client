@@ -14,11 +14,12 @@ import {
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
 import {
-	getCollection,
+	getCardsFromCollection,
 	destroyCollectionItem,
 	patchCollectionItem,
 	getCardsByNameViaMKM,
-	destroyManyCollectionItems
+	destroyManyCollectionItems,
+	TEST_COLLECTION_ID
 } from 'api';
 
 //  ======================================== ENTITIES
@@ -36,7 +37,7 @@ export const fetchCollection = createAsyncThunk<
 >('collection/fetchCollection', async ({ id }, ThunkAPI) => {
 	const { currentPage, searchBarInput } = ThunkAPI.getState().collection;
 	try {
-		const { cards, pages } = await getCollection(id, currentPage, {cardName:searchBarInput});
+		const { cards, pages } = await getCardsFromCollection(TEST_COLLECTION_ID, currentPage, {cardName:searchBarInput});
 		return {
 			data: { cards, pages },
 			error: null,
@@ -90,6 +91,7 @@ export const deleteCollectionItem = createAsyncThunk<
 	try {
 		const { targetObject, currentPage, searchBarInput } = thunkAPI.getState().collection;
 		const { cards, pages } = await destroyCollectionItem(
+			TEST_COLLECTION_ID,
 			targetObject.id,
 			currentPage,
 			{cardName: searchBarInput}
