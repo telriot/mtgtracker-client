@@ -23,7 +23,7 @@ import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent';
 import CreateModalContent from 'features/collection/CreateModalContent';
 import DeleteModalContent from 'features/collection/DeleteModalContent';
 import EditModalContent from 'features/collection/EditModalContent';
-import Loader from 'react-loader-spinner';
+import LoadingOverlay from 'common/components/LoadingOverlay'
 import { ThemeContext } from 'index';
 import { useDebounce } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
@@ -85,31 +85,19 @@ const CollectionView = () => {
 						<Button onClick={handleAdd}>Add</Button>
 					</div>
 				</div>
-
-				{status === 'idle' && asyncStatus === 'pending' ? (
-					<div className='w-100 h-100 flex items-center justify-center'>
-						<Loader
-							type='Puff'
-							color={colors.primary}
-							height={100}
-							width={100}
-							timeout={3000}
-						/>
-					</div>
-				) : (
-					<div>
-						{collection.map((card) => (
-							<MTGItemCard key={card.id} card={card} />
-						))}
-					</div>
-				)}
+				<div className='relative'>
+					{status === 'idle' && asyncStatus === 'pending' && <LoadingOverlay/>}
+					{collection.map((card) => (
+						<MTGItemCard key={card.id} card={card} />
+					))}
+				</div>
 				{pages ? (
 					<div className='flex justify-end'>
 						<Pagination
 							pages={pages}
 							activePage={currentPage}
 							setPage={handleSetPage}
-							maxButtons={7}
+							maxButtons={5}
 						/>
 					</div>
 				) : null}
