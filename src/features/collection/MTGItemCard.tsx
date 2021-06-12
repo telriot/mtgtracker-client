@@ -35,10 +35,9 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 		set,
 		language,
 		foil,
-		minPrice,
-		medianPrice,
 		buyPrice,
 		targetPrice,
+		prices,
 		quantity,
 		id
 	} = card;
@@ -66,7 +65,6 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	const handleNameBlockMouseEnter = () => setShowCardImg(true);
 	const handleNameBlockMouseLeave = () => setShowCardImg(false);
 	const toggleExpand = () => setIsExpanded((prev) => !prev);
-
 	// CONTENTS
 	const mainInfoBlock = [
 		{ header: 'Qty', content: quantity },
@@ -75,8 +73,8 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	const detailBlock = [
 		{ header: 'Lang', content: language },
 		{ header: 'Foil', content: foil ? 'Yes' : 'No' },
-		{ header: 'Min', content: minPrice },
-		{ header: 'Median', content: medianPrice },
+		{ header: 'Eur', content: (foil? prices.eurFoil : prices.eur) || 'N/A'},
+		{ header: 'Usd', content: (foil? prices.usdFoil : prices.usd) || 'N/A'},
 		{ header: 'Buy', content: buyPrice },
 		{ header: 'Target', content: targetPrice }
 	];

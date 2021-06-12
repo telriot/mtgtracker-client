@@ -20,6 +20,13 @@ export type MagicCard = {
 	foil: boolean;
 	image:string;
 };
+export type Prices = {
+	usd?: number;
+	eur?: number;
+	usdFoil?: number;
+	eurFoil?: number;
+	tix?: number;
+}
 export type CollectionItem<T> = T & {
 	id: string;
 	minPrice: number;
@@ -27,6 +34,7 @@ export type CollectionItem<T> = T & {
 	buyPrice: number;
 	targetPrice: number;
 	quantity: number;
+	prices: Prices
 };
 
 //REDUX STORE TYPES
@@ -61,6 +69,13 @@ export type CardUpdate = {
 	foil?: boolean
 } & Partial<Omit<CollectionItem, 'id' | 'minPrice' | 'medianPrice'>>;
 
+export type CardCreationPayload = {
+	card: Record<string, any>;
+	buyPrice: number;
+	targetPrice: number;
+	quantity: number;
+	isFoil: boolean;
+}
 export type SearchFilters = {
 	cardName: string	
 }

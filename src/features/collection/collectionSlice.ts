@@ -7,6 +7,7 @@ import {
 import { RootState } from 'reducers';
 import {
 	ActionStatus,
+	CardCreationPayload,
 	CollectionItem,
 	CollectionState,
 	MagicCard,
@@ -17,7 +18,7 @@ import {
 	getCardsFromCollection,
 	destroyCollectionItem,
 	patchCollectionItem,
-	getCardsByNameViaMKM,
+	postCollectionItem,
 	destroyManyCollectionItems,
 	TEST_COLLECTION_ID
 } from 'api';
@@ -55,21 +56,28 @@ export const fetchCollection = createAsyncThunk<
 		};
 	}
 });
-export const fetchMKMData = createAsyncThunk<ThunkReturnValue<any>, string>(
-	'collection/fetchMKMData',
-	async (id) => {
-		try {
-			const response = await getCardsByNameViaMKM(id);
-			return { data: {}, error: null, success: true };
-		} catch (error) {
-			console.error(error);
-			return {
-				error: 'Something went wrong with our server',
-				success: false
-			};
-		}
+export const addCollectionItem = createAsyncThunk<
+	ThunkReturnValue<{ cards: any[]; pages: number }>,
+	CardCreationPayload,
+	ThunkAPIReturnValue
+>('collection/addCollectionItem', async (payload, thunkAPI) => {
+	try {
+		const { currentPage, searchBarInput } = thunkAPI.getState().collection;
+		const { cards, pages } = await postCollectionItem(
+			TEST_COLLECTION_ID,
+			currentPage,
+			{ cardName: searchBarInput },
+			payload
+		);
+		return { data: { cards, pages }, error: null, success: true };
+	} catch (error) {
+		console.error(error);
+		return {
+			error: 'Something went wrong with our server',
+			success: false
+		};
 	}
-);
+});
 export const updateCollectionItem = createAsyncThunk<
 	ThunkReturnValue<{ cards: any[]; pages: number }>,
 	CardUpdate,
@@ -219,7 +227,31 @@ const collection = createSlice({
 		builder.addCase(fetchCollection.rejected, (state) => {
 			state.asyncStatus = 'rejected';
 		});
-
+		// ADD ITEM
+		builder.addCase(addCollectionItem.pending, (state) => {
+			state.asyncStatus = 'pending';
+		});
+		builder.addCase(
+			addCollectionItem.fulfilled,
+			(state, { payload: { data, error, success } }) => {
+				if (success && data) {
+					state.asyncStatus = 'fulfilled';
+					state.status = 'idle';
+					state.targetObject = null;
+					state.pages = data.pages;
+					collectionAdapter.setAll(state, data.cards);
+				} else {
+					state.asyncStatus = 'rejected';
+					state.status = 'idle';
+					state.targetObject = null;
+					state.asyncError = error;
+				}
+			}
+		);
+		builder.addCase(addCollectionItem.rejected, (state) => {
+			state.asyncStatus = 'rejected';
+			state.targetObject = null;
+		});
 		// UPDATE ITEM
 		builder.addCase(updateCollectionItem.pending, (state) => {
 			state.asyncStatus = 'pending';
@@ -229,13 +261,13 @@ const collection = createSlice({
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
 					state.asyncStatus = 'fulfilled';
-					state.status= 'idle';
+					state.status = 'idle';
 					state.targetObject = null;
 					state.pages = data.pages;
 					collectionAdapter.setAll(state, data.cards);
 				} else {
 					state.asyncStatus = 'rejected';
-					state.status= 'idle';
+					state.status = 'idle';
 					state.targetObject = null;
 					state.asyncError = error;
 				}

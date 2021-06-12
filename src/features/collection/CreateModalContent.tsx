@@ -2,7 +2,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'common/components/Button';
-import { fetchMKMData, statusSet } from 'features/collection/collectionSlice';
+import {
+	addCollectionItem,
+	statusSet
+} from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
 	EditorNumInput,
@@ -18,7 +21,7 @@ const CreateModalContent = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
-	const [owned, setOwned] = React.useState('');
+	const [quantity, setQuantity] = React.useState('');
 	const [buyPrice, setBuyPrice] = React.useState('');
 	const [targetPrice, setTargetPrice] = React.useState('');
 	const [isFoil, setIsFoil] = React.useState(false);
@@ -27,6 +30,7 @@ const CreateModalContent = () => {
 			cardName: string;
 			set: string;
 			cardmarket_id: string;
+			cardObject: Record<string, any>;
 		} | null>(null);
 	const { colors } = React.useContext(ThemeContext);
 	const customSelectStyles = {
@@ -38,22 +42,28 @@ const CreateModalContent = () => {
 	};
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
-	const handleSave = () => console.log('handle save');
+	const handleSave = () =>
+		selectedCard.cardObject &&
+		dispatch(
+			addCollectionItem({
+				card: selectedCard.cardObject,
+				quantity:parseInt(quantity),
+				buyPrice:parseFloat(buyPrice),
+				targetPrice:parseFloat(targetPrice),
+				isFoil
+			})
+		);
 	const handleSelectChange = (card: Record<string, string>) =>
 		setSelectedCard({
 			cardName: card.name,
 			set: card.set,
-			cardmarket_id: card.cardmarket_id
+			cardmarket_id: card.cardmarket_id,
+			cardObject: card
 		});
 	const optionSearch = (value: string) => getCardsByNameViaScf(value);
 	const debouncedSearch = debounce(optionSearch, 300, { leading: true });
 
 	//  ======================================== EFFECTS
-	// React.useEffect(() => {
-	// 	if (!selectedCard) return;
-	// 	const { cardmarket_id } = selectedCard;
-	// 	dispatch(fetchMKMData(cardmarket_id));
-	// }, [selectedCard]);
 	//  ======================================== JSX
 	return (
 		<div className='flex flex-col'>
@@ -69,7 +79,7 @@ const CreateModalContent = () => {
 				styles={customSelectStyles}
 			/>
 			<div className='mb-6'>
-				<EditorNumInput value={owned} setValue={setOwned}>
+				<EditorNumInput value={quantity} setValue={setQuantity}>
 					Copies Owned
 				</EditorNumInput>
 				<EditorNumInput value={buyPrice} setValue={setBuyPrice}>

@@ -7,19 +7,20 @@ import { ThemeContext } from 'index';
 const LoadingOverlay = () => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
-    const { colors } = useContext(ThemeContext);
+	const { colors } = useContext(ThemeContext);
 	//  ======================================== HANDLERS
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className='absolute top-0 left-0 bottom-0 right-0 grid place-items-center' style={{background:'rgba(0,0,0,.05'}}>
-            <Loader
+		<div
+			className='absolute top-0 left-0 bottom-0 right-0 grid place-items-center'
+			style={{ background: 'rgba(0,0,0,.05' }}>
+			<Loader
 				type='Puff'
 				color={colors.primary}
 				height={100}
 				width={100}
 				timeout={3000}
-                
 			/>
 		</div>
 	);
