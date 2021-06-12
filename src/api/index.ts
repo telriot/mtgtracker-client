@@ -83,13 +83,23 @@ export const destroyCollectionItem = async (
 };
 
 export const destroyManyCollectionItems = async (
+	collectionId: string,
 	ids: string[],
 	currentPage: number,
 	filters?: SearchFilters
 ): Promise<{ cards: any; pages: number }> => {
-	console.log(`deleting items ${ids.toString()})`);
-	await mockTimeout(500);
-	return { cards: null, pages: 1 };
+	const response = await axios.delete(
+		`${SERVER_API}/collections/${collectionId}/bulk/delete`,
+		{
+			params: {
+				page: currentPage,
+				cardName: filters.cardName,
+				cardIds: ids
+			}
+		}
+	);
+	const cards = formatCards(response.data.cards.docs);
+	return { cards, pages: response.data.cards.totalPages };
 };
 
 // NON-THUNK-HANDLED CALLS

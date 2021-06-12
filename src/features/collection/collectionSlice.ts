@@ -138,6 +138,7 @@ export const bulkDeleteCollectionItems = createAsyncThunk<
 		const { selectedCardIds, currentPage, searchBarInput } =
 			thunkAPI.getState().collection;
 		const { cards, pages } = await destroyManyCollectionItems(
+			TEST_COLLECTION_ID,
 			selectedCardIds,
 			currentPage,
 			{ cardName: searchBarInput }
