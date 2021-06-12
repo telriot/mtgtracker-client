@@ -1,8 +1,11 @@
 //  ======================================== IMPORTS
 import {
+	isAnyOf,
 	createSlice,
 	createAsyncThunk,
-	createEntityAdapter
+	createEntityAdapter,
+	isRejected,
+	isPending
 } from '@reduxjs/toolkit';
 import { RootState } from 'reducers';
 import {
@@ -22,6 +25,8 @@ import {
 	destroyManyCollectionItems,
 	TEST_COLLECTION_ID
 } from 'api';
+import stdErrorHandler from 'common/utils/redux/stdErrorHandler'
+import stdSuccessHandler from 'common/utils/redux/stdSuccessHandler'
 
 //  ======================================== ENTITIES
 export const collectionAdapter = createEntityAdapter<CollectionItem<MagicCard>>(
@@ -43,17 +48,9 @@ export const fetchCollection = createAsyncThunk<
 			currentPage,
 			{ cardName: searchBarInput }
 		);
-		return {
-			data: { cards, pages },
-			error: null,
-			success: true
-		};
+		return stdSuccessHandler({cards, pages})
 	} catch (error) {
-		console.error(error);
-		return {
-			error: 'Something went wrong with our server',
-			success: false
-		};
+		return stdErrorHandler(error)
 	}
 });
 export const addCollectionItem = createAsyncThunk<
@@ -69,13 +66,9 @@ export const addCollectionItem = createAsyncThunk<
 			{ cardName: searchBarInput },
 			payload
 		);
-		return { data: { cards, pages }, error: null, success: true };
+		return stdSuccessHandler({ cards, pages })
 	} catch (error) {
-		console.error(error);
-		return {
-			error: 'Something went wrong with our server',
-			success: false
-		};
+		return stdErrorHandler(error)
 	}
 });
 export const updateCollectionItem = createAsyncThunk<
@@ -92,13 +85,9 @@ export const updateCollectionItem = createAsyncThunk<
 			{ cardName: searchBarInput },
 			payload
 		);
-		return { data: { cards, pages }, error: null, success: true };
+		return stdSuccessHandler({ cards, pages })
 	} catch (error) {
-		console.error(error);
-		return {
-			error: 'Something went wrong with our server',
-			success: false
-		};
+		return stdErrorHandler(error)
 	}
 });
 
@@ -116,17 +105,9 @@ export const deleteCollectionItem = createAsyncThunk<
 			currentPage,
 			{ cardName: searchBarInput }
 		);
-		return {
-			data: { id: targetObject.id, cards, pages },
-			error: null,
-			success: true
-		};
+		return stdSuccessHandler({ id: targetObject.id, cards, pages })
 	} catch (error) {
-		console.error(error);
-		return {
-			error: 'Something went wrong with our server',
-			success: false
-		};
+		return stdErrorHandler(error)
 	}
 });
 export const bulkDeleteCollectionItems = createAsyncThunk<
@@ -143,17 +124,9 @@ export const bulkDeleteCollectionItems = createAsyncThunk<
 			currentPage,
 			{ cardName: searchBarInput }
 		);
-		return {
-			data: { ids: selectedCardIds, cards, pages },
-			error: null,
-			success: true
-		};
+		return stdSuccessHandler({ id: selectedCardIds, cards, pages })
 	} catch (error) {
-		console.error(error);
-		return {
-			error: 'Something went wrong with our server',
-			success: false
-		};
+		return stdErrorHandler(error)
 	}
 });
 //  ======================================== INITIAL STATE
@@ -207,11 +180,9 @@ const collection = createSlice({
 			state.targetObject = payload.target || null;
 		}
 	},
+
 	extraReducers: (builder) => {
 		// FETCH COLLECTION
-		builder.addCase(fetchCollection.pending, (state) => {
-			state.asyncStatus = 'pending';
-		});
 		builder.addCase(
 			fetchCollection.fulfilled,
 			(state, { payload: { data, error, success } }) => {
@@ -225,89 +196,7 @@ const collection = createSlice({
 				}
 			}
 		);
-		builder.addCase(fetchCollection.rejected, (state) => {
-			state.asyncStatus = 'rejected';
-		});
-		// ADD ITEM
-		builder.addCase(addCollectionItem.pending, (state) => {
-			state.asyncStatus = 'pending';
-		});
-		builder.addCase(
-			addCollectionItem.fulfilled,
-			(state, { payload: { data, error, success } }) => {
-				if (success && data) {
-					state.asyncStatus = 'fulfilled';
-					state.status = 'idle';
-					state.targetObject = null;
-					state.pages = data.pages;
-					collectionAdapter.setAll(state, data.cards);
-				} else {
-					state.asyncStatus = 'rejected';
-					state.status = 'idle';
-					state.targetObject = null;
-					state.asyncError = error;
-				}
-			}
-		);
-		builder.addCase(addCollectionItem.rejected, (state) => {
-			state.asyncStatus = 'rejected';
-			state.targetObject = null;
-		});
-		// UPDATE ITEM
-		builder.addCase(updateCollectionItem.pending, (state) => {
-			state.asyncStatus = 'pending';
-		});
-		builder.addCase(
-			updateCollectionItem.fulfilled,
-			(state, { payload: { data, error, success } }) => {
-				if (success && data) {
-					state.asyncStatus = 'fulfilled';
-					state.status = 'idle';
-					state.targetObject = null;
-					state.pages = data.pages;
-					collectionAdapter.setAll(state, data.cards);
-				} else {
-					state.asyncStatus = 'rejected';
-					state.status = 'idle';
-					state.targetObject = null;
-					state.asyncError = error;
-				}
-			}
-		);
-		builder.addCase(updateCollectionItem.rejected, (state) => {
-			state.asyncStatus = 'rejected';
-			state.targetObject = null;
-		});
-
-		// DELETE ITEM
-		builder.addCase(deleteCollectionItem.pending, (state) => {
-			state.asyncStatus = 'pending';
-		});
-		builder.addCase(
-			deleteCollectionItem.fulfilled,
-			(state, { payload: { data, error, success } }) => {
-				if (success && data) {
-					state.asyncStatus = 'idle';
-					state.status = 'idle';
-					state.targetObject = null;
-					state.pages = data.pages;
-					collectionAdapter.setAll(state, data.cards);
-					// collectionAdapter.removeOne(state, data.id) ;
-				} else {
-					state.asyncStatus = 'rejected';
-					state.targetObject = null;
-					state.asyncError = error;
-				}
-			}
-		);
-		builder.addCase(deleteCollectionItem.rejected, (state) => {
-			state.asyncStatus = 'rejected';
-			state.targetObject = null;
-		});
-		// DELETE ITEM
-		builder.addCase(bulkDeleteCollectionItems.pending, (state) => {
-			state.asyncStatus = 'pending';
-		});
+		// BULK DELETE ITEMS
 		builder.addCase(
 			bulkDeleteCollectionItems.fulfilled,
 			(state, { payload: { data, error, success } }) => {
@@ -317,7 +206,6 @@ const collection = createSlice({
 					state.pages = data.pages;
 					collectionAdapter.setAll(state, data.cards);
 					state.selectedCardIds = [];
-					// collectionAdapter.removeOne(state, data.id) ;
 				} else {
 					state.asyncStatus = 'rejected';
 					state.selectedCardIds = [];
@@ -325,9 +213,40 @@ const collection = createSlice({
 				}
 			}
 		);
-		builder.addCase(bulkDeleteCollectionItems.rejected, (state) => {
-			state.asyncStatus = 'rejected';
-		});
+		// MATCHERS
+		builder.addMatcher(isRejected,
+			(state) => {
+				state.asyncStatus = 'rejected';
+				state.targetObject = null;
+			}
+		);
+		builder.addMatcher(
+			isAnyOf(
+				addCollectionItem.fulfilled,
+				updateCollectionItem.fulfilled,
+				deleteCollectionItem.fulfilled
+			),
+			(state, { payload: { data, error, success } }) => {
+				if (success && data) {
+					state.asyncStatus = 'fulfilled';
+					state.status = 'idle';
+					state.targetObject = null;
+					state.pages = data.pages;
+					collectionAdapter.setAll(state, data.cards);
+				} else {
+					state.asyncStatus = 'rejected';
+					state.status = 'idle';
+					state.targetObject = null;
+					state.asyncError = error;
+				}
+			}
+		);
+		builder.addMatcher(isPending,
+			(state) => {
+				state.asyncStatus = 'pending';
+				state.asyncError = null;
+			}
+		);
 	}
 });
 
