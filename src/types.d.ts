@@ -18,7 +18,7 @@ export type MagicCard = {
 	set: string;
 	language: LangVariant;
 	foil: boolean;
-	image:string;
+	image: string;
 };
 export type Prices = {
 	usd?: number;
@@ -26,7 +26,7 @@ export type Prices = {
 	usdFoil?: number;
 	eurFoil?: number;
 	tix?: number;
-}
+};
 export type CollectionItem<T> = T & {
 	id: string;
 	minPrice: number;
@@ -34,7 +34,7 @@ export type CollectionItem<T> = T & {
 	buyPrice: number;
 	targetPrice: number;
 	quantity: number;
-	prices: Prices
+	prices: Prices;
 };
 
 //REDUX STORE TYPES
@@ -53,10 +53,33 @@ export type ActionStatus =
 	| 'deleting'
 	| 'bulkDeleting';
 
+export interface CollectionSummary {
+	maxUsd: number;
+	minUsd: number;
+	maxEur: number;
+	minEur: number;
+	totalUsd: number;
+	totalEur: number;
+	cardsQuantity: number;
+}
+export interface CollectionFilters {
+	expansion: string
+	language: LangVariant
+	minEur: string
+	maxEur: string
+	minUsd: string
+	maxUsd: string
+	priceGroup: 'scr' | 'tcg'
+} 
+export type FilterKey = Partial<keyof CollectionFilters>
+const dog:FilterKey = ''
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
 	currentPage: number;
+	filters: CollectionFilters;
+	collectionSummary: CollectionSummary | null;
+	summaryStatus: AsyncStatus;
 	pages: number;
 	searchBarInput: string;
 	selectedCardIds: string[];
@@ -66,7 +89,7 @@ export interface CollectionState {
 
 export type CardUpdate = {
 	id: string;
-	foil?: boolean
+	foil?: boolean;
 } & Partial<Omit<CollectionItem, 'id' | 'minPrice' | 'medianPrice'>>;
 
 export type CardCreationPayload = {
@@ -75,7 +98,7 @@ export type CardCreationPayload = {
 	targetPrice: number;
 	quantity: number;
 	isFoil: boolean;
-}
+};
 export type SearchFilters = {
-	cardName: string	
-}
+	cardName: string;
+};

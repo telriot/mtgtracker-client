@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	currentPageSet,
 	fetchCollection,
+	fetchCollectionSummary,
 	statusSet,
 	selectAsyncStatus,
 	selectCurrentPage,
@@ -14,7 +15,8 @@ import {
 	selectStatus,
 	selectAllCollectionItems,
 	selectSearchBarInput,
-	selectSelectedCardIds
+	selectSelectedCardIds,
+	selectCollectionSummary
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
 import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent';
@@ -35,6 +37,7 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	const collection = useSelector(selectAllCollectionItems);
+	const collectionSummary = useSelector(selectCollectionSummary)
 	const searchBarInput = useSelector(selectSearchBarInput);
 	const selectedCardIds = useSelector(selectSelectedCardIds);
 	const [debouncedSearch] = useDebounce(searchBarInput, 300);
@@ -50,6 +53,9 @@ const CollectionView = () => {
 		dispatch(fetchCollection({ id: '123' }));
 	};
 	//  ======================================== EFFECTS
+	React.useEffect(() => {
+		!collectionSummary && dispatch(fetchCollectionSummary())
+	}, [collectionSummary])
 	React.useEffect(() => {
 		dispatch(currentPageSet(1));
 		dispatch(fetchCollection({ id: '123' }));

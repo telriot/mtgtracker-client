@@ -10,9 +10,9 @@ import {
 } from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
-	EditorNumInput,
-	EditorCheckInput
-} from 'features/collection/EditInputs';
+	NumInput,
+	CheckInput
+} from 'common/components/EditInputs';
 import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const EditModalContent = () => {
@@ -51,18 +51,18 @@ const EditModalContent = () => {
 		<div className='flex flex-col'>
 			<ModalTitle>{parseItemName(initialValues)}</ModalTitle>
 			<div className='mb-6'>
-				<EditorNumInput value={owned} setValue={setOwned}>
+				<NumInput value={owned} setValue={setOwned}>
 					Copies Owned
-				</EditorNumInput>
-				<EditorNumInput value={buyPrice} setValue={setBuyPrice}>
+				</NumInput>
+				<NumInput value={buyPrice} setValue={setBuyPrice}>
 					Buy Price
-				</EditorNumInput>
-				<EditorNumInput value={targetPrice} setValue={setTargetPrice}>
+				</NumInput>
+				<NumInput value={targetPrice} setValue={setTargetPrice}>
 					Target Price
-				</EditorNumInput>
-				<EditorCheckInput checked={isFoil} setValue={setIsFoil}>
+				</NumInput>
+				<CheckInput checked={isFoil} setValue={setIsFoil}>
 					Is Foil
-				</EditorCheckInput>
+				</CheckInput>
 			</div>
 
 			<ModalButtonDiv>

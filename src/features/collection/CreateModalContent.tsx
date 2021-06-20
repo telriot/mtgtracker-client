@@ -8,13 +8,14 @@ import {
 } from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
-	EditorNumInput,
-	EditorCheckInput
-} from 'features/collection/EditInputs';
+	NumInput,
+	CheckInput
+} from 'common/components/EditInputs';
 import AsyncSelect from 'react-select/async';
 import { getCardsByNameViaScf } from 'api';
 import debounce from 'debounce-promise';
 import { ThemeContext } from 'index';
+import {customStyles} from 'styles/reactSelectStyles'
 import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const CreateModalContent = () => {
@@ -32,14 +33,8 @@ const CreateModalContent = () => {
 			cardmarket_id: string;
 			cardObject: Record<string, any>;
 		} | null>(null);
-	const { colors } = React.useContext(ThemeContext);
-	const customSelectStyles = {
-		control: () => ({
-			border: `solid 2px ${colors['secondary-light']}`,
-			display: 'flex',
-			borderRadius: '4px'
-		})
-	};
+	const theme = React.useContext(ThemeContext);
+	const customSelectStyles = customStyles(theme)
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
 	const handleSave = () =>
@@ -79,18 +74,18 @@ const CreateModalContent = () => {
 				styles={customSelectStyles}
 			/>
 			<div className='mb-6'>
-				<EditorNumInput value={quantity} setValue={setQuantity}>
+				<NumInput value={quantity} setValue={setQuantity}>
 					Copies Owned
-				</EditorNumInput>
-				<EditorNumInput value={buyPrice} setValue={setBuyPrice}>
+				</NumInput>
+				<NumInput value={buyPrice} setValue={setBuyPrice}>
 					Buy Price
-				</EditorNumInput>
-				<EditorNumInput value={targetPrice} setValue={setTargetPrice}>
+				</NumInput>
+				<NumInput value={targetPrice} setValue={setTargetPrice}>
 					Target Price
-				</EditorNumInput>
-				<EditorCheckInput checked={isFoil} setValue={setIsFoil}>
+				</NumInput>
+				<CheckInput checked={isFoil} setValue={setIsFoil}>
 					Is Foil
-				</EditorCheckInput>
+				</CheckInput>
 			</div>
 
 			<ModalButtonDiv>

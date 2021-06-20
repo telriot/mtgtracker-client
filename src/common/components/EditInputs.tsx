@@ -2,18 +2,18 @@
 
 import Checkbox from 'common/components/Checkbox';
 import React from 'react';
-
+import NumberInput from 'common/components/NumInput'
 //  ======================================== SUBCOMPONENT
-export interface EditorNumInputProps {
+export interface NumInputProps {
 	children: string;
 	value: string | number;
 	setValue: (value: string) => void;
 }
-export const EditorNumInput = ({
+export const NumInput = ({
 	children,
 	value,
 	setValue
-}: EditorNumInputProps) => {
+}: NumInputProps) => {
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target;
 		const parsed = parseFloat(value) > 0 ? value :'0' as string;
@@ -22,32 +22,24 @@ export const EditorNumInput = ({
 	return (
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>
-			<input
-				id={children}
-				type='number'
-				step='any'
-				value={value.toString()}
-				onChange={handleChange}
-				className='w-20 py-1 px-1 rounded border-2 border-gray-300 text-right'
-			/>
+			<NumberInput id={children} value={value} setValue={setValue}/>
 		</div>
 	);
 };
 //  ======================================== SUBCOMPONENT
-export interface EditorCheckInputProps {
+export interface CheckInputProps {
 	children: string;
 	checked: boolean;
 	setValue: (value: boolean) => void;
 }
-export const EditorCheckInput = ({
+export const CheckInput = ({
 	children,
 	checked,
 	setValue
-}: EditorCheckInputProps) => {
+}: CheckInputProps) => {
 	return (
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>
-
 			<Checkbox id={children} checked={checked} setValue={setValue} />
 		</div>
 	);

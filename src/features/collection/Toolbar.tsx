@@ -41,7 +41,7 @@ const Toolbar = () => {
 	}, [debouncedSearch]);
 	//  ======================================== JSX
 	return (
-		<div>
+		<div className='mb-4'>
 			<div className='flex justify-between mb-4'>
 				<div className='flex'>
 					<SearchBar

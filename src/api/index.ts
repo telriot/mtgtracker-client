@@ -1,6 +1,6 @@
 import axios from 'axios';
 import mockTimeout from 'common/utils/timers/mockTimeout';
-import { CardCreationPayload, CardUpdate, CollectionItem, MagicCard, SearchFilters } from 'types';
+import { CardCreationPayload, CardUpdate, CollectionSummary, CollectionItem, MagicCard, SearchFilters } from 'types';
 import formatCards from 'common/utils/api/formatAPICardResults';
 
 // CONSTANTS
@@ -22,6 +22,13 @@ export const getCardsFromCollection = async (
 	});
 	const cards = formatCards(response.data.cards.docs);
 	return { cards, pages: response.data.cards.totalPages };
+};
+export const getCollectionSummary = async (
+	id: string,
+
+): Promise<{ collectionSummary:CollectionSummary }> => {
+	const response = await axios.get(`${SERVER_API}/collections/${id}/summary`);
+	return { collectionSummary: response.data.summary };
 };
 export const postCollectionItem = async (
 	collectionId: string,
