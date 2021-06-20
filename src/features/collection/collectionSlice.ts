@@ -28,7 +28,6 @@ import {
 } from 'api';
 import stdErrorHandler from 'common/utils/redux/stdErrorHandler';
 import stdSuccessHandler from 'common/utils/redux/stdSuccessHandler';
-import { State } from 'react-select/src/Select';
 
 //  ======================================== ENTITIES
 export const collectionAdapter = createEntityAdapter<CollectionItem<MagicCard>>(
@@ -311,7 +310,7 @@ const collection = createSlice({
 				updateCollectionItem.pending,
 				deleteCollectionItem.pending,
 				bulkDeleteCollectionItems.pending,
-				fetchCollection.rejected
+				fetchCollection.pending
 			),
 			(state) => {
 				state.asyncStatus = 'pending';

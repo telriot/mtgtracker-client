@@ -6,7 +6,11 @@ import { ThemeContext } from 'index';
 import NumInput from 'common/components/NumInput';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterSet, selectFilters } from './collectionSlice';
+import {
+	filterSet,
+	selectCollectionSummary,
+	selectFilters
+} from './collectionSlice';
 import { LangVariant } from 'types';
 //  ======================================== COMPONENT
 interface FilterInputProps {
@@ -35,24 +39,51 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 	//  ======================================== HOOKS
 	const theme = React.useContext(ThemeContext);
 	const customSelectStyles = customStyles(theme);
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 	//  ======================================== STATE
-	const filters = useSelector(selectFilters)
+	const filters = useSelector(selectFilters);
+	const collectionSummary = useSelector(selectCollectionSummary);
 	//  ======================================== HANDLERS
-	const expansionOptions = [{ label: 'some expansion', value: 'exp' }];
-	const langOptions = [{ label: 'some lang', value: 'EN' }];
+	const expansionOptions = React.useMemo(
+		() =>
+			collectionSummary
+				? Array.from(collectionSummary.expansions)
+						.sort((a, b) => a.localeCompare(b))
+						.map((expansion) => ({
+							label: expansion.toUpperCase(),
+							value: expansion.toUpperCase()
+						}))
+				: [],
+		[collectionSummary]
+	);
+	const langOptions = React.useMemo(
+		() =>
+			collectionSummary
+				? Array.from(collectionSummary.languages)
+						.sort((a, b) => a.localeCompare(b))
+						.map((lang) => ({ label: lang, value: lang }))
+				: [],
+		[collectionSummary]
+	);
 	const priceGroupOptions = [
 		{ label: 'Scryfall', value: 'scr' },
 		{ label: 'TCGPlayer', value: 'tcg' }
 	];
 
-	const handleMinPriceAChange =(value:string)=> dispatch(filterSet({filter:'minEur', value}))
-	const handleMinPriceBChange =(value:string)=> dispatch(filterSet({filter:'minUsd', value}))
-	const handleMaxPriceAChange =(value:string)=> dispatch(filterSet({filter:'maxEur', value}))
-	const handleMaxPriceBChange =(value:string)=> dispatch(filterSet({filter:'maxUsd', value}))
-	const handleExpansionChange = ({value}:{value:string})=> dispatch(filterSet({filter:'expansion', value}))
-	const handleLanguageChange = ({value}:{value:string})=> dispatch(filterSet({filter:'language', value}))
-	const handlePriceGroupChange = ({value}:{value:string})=> dispatch(filterSet({filter:'priceGroup', value}))
+	const handleMinPriceAChange = (value: string) =>
+		dispatch(filterSet({ filter: 'minEur', value }));
+	const handleMinPriceBChange = (value: string) =>
+		dispatch(filterSet({ filter: 'minUsd', value }));
+	const handleMaxPriceAChange = (value: string) =>
+		dispatch(filterSet({ filter: 'maxEur', value }));
+	const handleMaxPriceBChange = (value: string) =>
+		dispatch(filterSet({ filter: 'maxUsd', value }));
+	const handleExpansionChange = ({ value }: { value: string }) =>
+		dispatch(filterSet({ filter: 'expansion', value }));
+	const handleLanguageChange = ({ value }: { value: string }) =>
+		dispatch(filterSet({ filter: 'language', value }));
+	const handlePriceGroupChange = ({ value }: { value: string }) =>
+		dispatch(filterSet({ filter: 'priceGroup', value }));
 
 	//  ======================================== EFFECTS
 	//  ======================================== JSX

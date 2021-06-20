@@ -61,18 +61,20 @@ export interface CollectionSummary {
 	totalUsd: number;
 	totalEur: number;
 	cardsQuantity: number;
+	expansions: string[];
+	languages: LangVariant[];
 }
 export interface CollectionFilters {
-	expansion: string
-	language: LangVariant
-	minEur: string
-	maxEur: string
-	minUsd: string
-	maxUsd: string
-	priceGroup: 'scr' | 'tcg'
-} 
-export type FilterKey = Partial<keyof CollectionFilters>
-const dog:FilterKey = ''
+	expansion: string;
+	language: LangVariant;
+	minEur: string;
+	maxEur: string;
+	minUsd: string;
+	maxUsd: string;
+	priceGroup: 'scr' | 'tcg';
+}
+export type FilterKey = Partial<keyof CollectionFilters>;
+const dog: FilterKey = '';
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
