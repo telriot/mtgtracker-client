@@ -70,7 +70,9 @@ const CollectionView = () => {
 					</Button>
 				</div>
 			)}
+
 			<div className='container px-2 sm:mx-auto py-8'>
+				
 				<Toolbar />
 				<div className='relative'>
 					{status === 'idle' && asyncStatus === 'pending' && (

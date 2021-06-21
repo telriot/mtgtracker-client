@@ -26,7 +26,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 	return (
 		<div
 			className={clsx(
-				'fixed top-0 left-0 w-screen h-screen flex items-center justify-center p-3 transition-color duration-100',
+				'fixed top-0 left-0 w-screen h-screen flex items-center justify-center p-3 transition-color duration-100 z-50',
 				{
 					'bg-gray-700 bg-opacity-30': isOpen,
 					'opacity-0 pointer-events-none': !isOpen
@@ -35,7 +35,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 			onClick={onClose}>
 			<div
 				onClick={handleModalClick}
-				className={clsx('rounded w-96 px-12 py-8', {
+				className={clsx('rounded w-96 px-12 py-8 z-100', {
 					'bg-white bg-opacity-100': isOpen,
 					'bg-transparent bg-opacity-0': !isOpen
 				})}>

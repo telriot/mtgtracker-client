@@ -11,7 +11,6 @@ import {
 	selectCollectionSummary,
 	selectFilters
 } from './collectionSlice';
-import { LangVariant } from 'types';
 //  ======================================== COMPONENT
 interface FilterInputProps {
 	children: React.ReactElement;

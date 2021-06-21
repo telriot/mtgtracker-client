@@ -15,6 +15,8 @@ import {
 import { useDebounce } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import { FaFilter } from 'react-icons/fa';
+import CollectionSummary from './CollectionSummary';
+
 //  ======================================== COMPONENT
 const Toolbar = () => {
 	//  ======================================== HOOKS
@@ -41,7 +43,9 @@ const Toolbar = () => {
 	}, [debouncedSearch]);
 	//  ======================================== JSX
 	return (
-		<div className='mb-4'>
+		<div className='py-2 bg-white sticky z-10 top-0 left-0 right-0'>
+							<CollectionSummary className='mb-3 justify-end'/>
+
 			<div className='flex justify-between mb-4'>
 				<div className='flex'>
 					<SearchBar

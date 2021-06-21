@@ -29,6 +29,15 @@ import {
 import stdErrorHandler from 'common/utils/redux/stdErrorHandler';
 import stdSuccessHandler from 'common/utils/redux/stdSuccessHandler';
 
+//  ======================================== UTILS
+const getPrice = (
+	prices: Record<string, string>,
+	key: 'usd' | 'eur',
+	isFoil: boolean
+) => {
+	const price = parseFloat(prices[`${key}${isFoil ? 'Foil' : ''}`]);
+	return isNaN(price) ? 0 : price;
+};
 //  ======================================== ENTITIES
 export const collectionAdapter = createEntityAdapter<CollectionItem<MagicCard>>(
 	{
@@ -69,7 +78,11 @@ export const fetchCollectionSummary = createAsyncThunk<
 	}
 });
 export const addCollectionItem = createAsyncThunk<
-	ThunkReturnValue<{ cards: any[]; pages: number }>,
+	ThunkReturnValue<{
+		cards: any[];
+		pages: number;
+		update: CardCreationPayload;
+	}>,
 	CardCreationPayload,
 	ThunkAPIReturnValue
 >('collection/addCollectionItem', async (payload, thunkAPI) => {
@@ -81,18 +94,24 @@ export const addCollectionItem = createAsyncThunk<
 			{ cardName: searchBarInput },
 			payload
 		);
-		return stdSuccessHandler({ cards, pages });
+		return stdSuccessHandler({ cards, pages, update: payload });
 	} catch (error) {
 		return stdErrorHandler(error);
 	}
 });
 export const updateCollectionItem = createAsyncThunk<
-	ThunkReturnValue<{ cards: any[]; pages: number }>,
+	ThunkReturnValue<{
+		cards: any[];
+		pages: number;
+		update: CardUpdate;
+		target: CollectionItem<any>;
+	}>,
 	CardUpdate,
 	ThunkAPIReturnValue
 >('collection/updateCollectionItem', async (payload, thunkAPI) => {
 	try {
-		const { currentPage, searchBarInput } = thunkAPI.getState().collection;
+		const { currentPage, searchBarInput, targetObject } =
+			thunkAPI.getState().collection;
 		const { cards, pages } = await patchCollectionItem(
 			TEST_COLLECTION_ID,
 			payload.id,
@@ -100,14 +119,24 @@ export const updateCollectionItem = createAsyncThunk<
 			{ cardName: searchBarInput },
 			payload
 		);
-		return stdSuccessHandler({ cards, pages });
+		return stdSuccessHandler({
+			cards,
+			pages,
+			update: payload,
+			target: targetObject
+		});
 	} catch (error) {
 		return stdErrorHandler(error);
 	}
 });
 
 export const deleteCollectionItem = createAsyncThunk<
-	ThunkReturnValue<{ id: string; cards: any[]; pages: number }>,
+	ThunkReturnValue<{
+		id: string;
+		cards: any[];
+		pages: number;
+		target: CollectionItem<any>;
+	}>,
 	null,
 	ThunkAPIReturnValue
 >('collection/deleteCollectionItem', async (_, thunkAPI) => {
@@ -120,26 +149,42 @@ export const deleteCollectionItem = createAsyncThunk<
 			currentPage,
 			{ cardName: searchBarInput }
 		);
-		return stdSuccessHandler({ id: targetObject.id, cards, pages });
+		return stdSuccessHandler({
+			id: targetObject.id,
+			cards,
+			pages,
+			target: targetObject
+		});
 	} catch (error) {
 		return stdErrorHandler(error);
 	}
 });
 export const bulkDeleteCollectionItems = createAsyncThunk<
-	ThunkReturnValue<{ ids: string[]; cards: any[]; pages: number }>,
+	ThunkReturnValue<{
+		ids: string[];
+		cards: any[];
+		pages: number;
+		targets: CollectionItem<any>[];
+	}>,
 	null,
 	ThunkAPIReturnValue
 >('collection/bulkDeleteCollectionItems', async (_, thunkAPI) => {
 	try {
-		const { selectedCardIds, currentPage, searchBarInput } =
+		const { selectedCardIds, currentPage, searchBarInput, entities } =
 			thunkAPI.getState().collection;
+		const targetObjects = selectedCardIds.map((id) => entities[id]);
 		const { cards, pages } = await destroyManyCollectionItems(
 			TEST_COLLECTION_ID,
 			selectedCardIds,
 			currentPage,
 			{ cardName: searchBarInput }
 		);
-		return stdSuccessHandler({ id: selectedCardIds, cards, pages });
+		return stdSuccessHandler({
+			ids: selectedCardIds,
+			cards,
+			pages,
+			targets: targetObjects
+		});
 	} catch (error) {
 		return stdErrorHandler(error);
 	}
@@ -187,8 +232,11 @@ const collection = createSlice({
 		currentPageSet: (state, { payload }: ReducerPayload<number>) => {
 			state.currentPage = payload;
 		},
-		filterSet: (state, {payload}: ReducerPayload<{filter: FilterKey , value: string}>) =>{
-			state.filters[payload.filter as string] = payload.value
+		filterSet: (
+			state,
+			{ payload }: ReducerPayload<{ filter: FilterKey; value: string }>
+		) => {
+			state.filters[payload.filter as string] = payload.value;
 		},
 		pagesSet: (state, { payload }: ReducerPayload<number>) => {
 			state.pages = payload;
@@ -252,11 +300,72 @@ const collection = createSlice({
 		builder.addCase(fetchCollectionSummary.rejected, (state) => {
 			state.summaryStatus = 'rejected';
 		});
+		// CREATE ITEM
+		builder.addCase(
+			addCollectionItem.fulfilled,
+			(state, { payload: { data, success } }) => {
+				if (success) {
+					const { update } = data;
+					const { quantity } = update;
+
+					state.collectionSummary.cardsQuantity += quantity;
+					state.collectionSummary.totalEur +=
+						quantity *
+						getPrice(update.card.prices, 'eur', update.isFoil);
+					state.collectionSummary.totalUsd +=
+						quantity *
+						getPrice(update.card.prices, 'usd', update.isFoil);
+				}
+			}
+		);
+		// UPDATE ITEM
+		builder.addCase(
+			updateCollectionItem.fulfilled,
+			(state, { payload: { data, success } }) => {
+				if (success) {
+					const { target, update } = data;
+					const quantityDiff = update.quantity - target.quantity;
+					console.log(quantityDiff);
+					state.collectionSummary.cardsQuantity += quantityDiff;
+					state.collectionSummary.totalEur +=
+						quantityDiff *
+						getPrice(target.prices, 'eur', update.foil);
+					state.collectionSummary.totalUsd +=
+						quantityDiff *
+						getPrice(target.prices, 'usd', update.foil);
+				}
+			}
+		);
+		// DELETE ITEM
+		builder.addCase(
+			deleteCollectionItem.fulfilled,
+			(state, { payload: { data, success } }) => {
+				if (success) {
+					const {
+						target: { quantity, prices, foil }
+					} = data;
+					state.collectionSummary.cardsQuantity -= quantity;
+					state.collectionSummary.totalEur -=
+						quantity * getPrice(prices, 'eur', foil);
+
+					state.collectionSummary.totalUsd -=
+						quantity * getPrice(prices, 'usd', foil);
+				}
+			}
+		);
 		// BULK DELETE ITEMS
 		builder.addCase(
 			bulkDeleteCollectionItems.fulfilled,
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
+					data.targets.forEach(({ quantity, prices, foil }) => {
+						state.collectionSummary.cardsQuantity -= quantity;
+						state.collectionSummary.totalEur -=
+							quantity * getPrice(prices, 'eur', foil);
+
+						state.collectionSummary.totalUsd -=
+							quantity * getPrice(prices, 'usd', foil);
+					});
 					state.asyncStatus = 'idle';
 					state.status = 'idle';
 					state.pages = data.pages;
