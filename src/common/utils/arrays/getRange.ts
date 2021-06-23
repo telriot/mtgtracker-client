@@ -6,6 +6,7 @@
  * @returns range of integers from min to max by incremental steps
  */
  const getRange = (max: number, min: number = 0, increment: number = 1) => {
+	 if(typeof max==='undefined') throw new Error('Missing max value arg')
 	const range: number[] = [];
 	for (let i = min; i <= max; i += increment) {
 		range.push(i);

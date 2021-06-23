@@ -1,7 +1,7 @@
 //  ======================================== IMPORTS
 
 import Checkbox from 'common/components/Checkbox';
-import React from 'react';
+// import React from 'react';
 import NumberInput from 'common/components/NumInput'
 //  ======================================== SUBCOMPONENT
 export interface NumInputProps {
@@ -14,11 +14,11 @@ export const NumInput = ({
 	value,
 	setValue
 }: NumInputProps) => {
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const { value } = event.target;
-		const parsed = parseFloat(value) > 0 ? value :'0' as string;
-		setValue(parsed);
-	};
+	// const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 	const { value } = event.target;
+	// 	const parsed = parseFloat(value) > 0 ? value :'0' as string;
+	// 	setValue(parsed);
+	// };
 	return (
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>

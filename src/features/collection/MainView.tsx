@@ -16,7 +16,8 @@ import {
 	selectAllCollectionItems,
 	selectSearchBarInput,
 	selectSelectedCardIds,
-	selectCollectionSummary
+	selectCollectionSummary,
+	selectFilters
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
 import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent';
@@ -24,7 +25,7 @@ import CreateModalContent from 'features/collection/CreateModalContent';
 import DeleteModalContent from 'features/collection/DeleteModalContent';
 import EditModalContent from 'features/collection/EditModalContent';
 import LoadingOverlay from 'common/components/LoadingOverlay';
-import { useDebounce } from 'use-debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import Toolbar from 'features/collection/Toolbar';
 //  ======================================== COMPONENT
@@ -37,12 +38,14 @@ const CollectionView = () => {
 	const status = useSelector(selectStatus);
 	const pages = useSelector(selectPages);
 	const collection = useSelector(selectAllCollectionItems);
-	const collectionSummary = useSelector(selectCollectionSummary)
+	const collectionSummary = useSelector(selectCollectionSummary);
 	const searchBarInput = useSelector(selectSearchBarInput);
 	const selectedCardIds = useSelector(selectSelectedCardIds);
-	const [debouncedSearch] = useDebounce(searchBarInput, 300);
 	const isMd = useMediaQuery({ query: '(min-width: 640px)' });
 	const isMultiSelecting = selectedCardIds.length > 1;
+	const { expansion, language, minEur, maxEur, minUsd, maxUsd } =
+		useSelector(selectFilters);
+
 	//  ======================================== HANDLERS
 	const handleBulkDelete = () =>
 		dispatch(statusSet({ status: 'bulkDeleting' }));
@@ -52,19 +55,34 @@ const CollectionView = () => {
 		dispatch(currentPageSet(page));
 		dispatch(fetchCollection({ id: '123' }));
 	};
-	//  ======================================== EFFECTS
-	React.useEffect(() => {
-		!collectionSummary && dispatch(fetchCollectionSummary())
-	}, [collectionSummary])
-	React.useEffect(() => {
+	const debouncedUpdate = useDebouncedCallback(() => {
 		dispatch(currentPageSet(1));
 		dispatch(fetchCollection({ id: '123' }));
-	}, [debouncedSearch]);
+	}, 300);
+	//  ======================================== EFFECTS
+	React.useEffect(() => {
+		!collectionSummary && dispatch(fetchCollectionSummary());
+	}, [collectionSummary, dispatch]);
+	React.useEffect(() => {
+		if (!collectionSummary) return;
+		debouncedUpdate();
+	}, [
+		searchBarInput,
+		expansion,
+		language,
+		minEur,
+		maxEur,
+		minUsd,
+		maxUsd,
+		debouncedUpdate,
+		collectionSummary
+	]);
+
 	//  ======================================== JSX
 	return (
 		<>
 			{!isMd && isMultiSelecting && (
-				<div className='fixed w-full py-4 px-2'>
+				<div className='fixed w-full py-4 px-2' style={{ zIndex: 100 }}>
 					<Button variant='danger' block onClick={handleBulkDelete}>
 						Delete Selected
 					</Button>
@@ -72,7 +90,6 @@ const CollectionView = () => {
 			)}
 
 			<div className='container px-2 sm:mx-auto py-8'>
-				
 				<Toolbar />
 				<div className='relative'>
 					{status === 'idle' && asyncStatus === 'pending' && (

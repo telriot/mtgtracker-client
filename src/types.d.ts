@@ -103,4 +103,10 @@ export type CardCreationPayload = {
 };
 export type SearchFilters = {
 	cardName: string;
+	expansion: string;
+	language: LangVariant;
+	minEur: string;
+	maxEur: string;
+	minUsd: string;
+	maxUsd: string;
 };

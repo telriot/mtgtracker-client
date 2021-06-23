@@ -8,9 +8,13 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	filterSet,
+	filtersReset,
 	selectCollectionSummary,
-	selectFilters
+	selectFilters,
 } from './collectionSlice';
+import Button from 'common/components/Button';
+
+const DEFAULT_OPTION = { label: 'All', value: '' };
 //  ======================================== COMPONENT
 interface FilterInputProps {
 	children: React.ReactElement;
@@ -42,6 +46,7 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 	//  ======================================== STATE
 	const filters = useSelector(selectFilters);
 	const collectionSummary = useSelector(selectCollectionSummary);
+
 	//  ======================================== HANDLERS
 	const expansionOptions = React.useMemo(
 		() =>
@@ -64,10 +69,10 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 				: [],
 		[collectionSummary]
 	);
-	const priceGroupOptions = [
-		{ label: 'Scryfall', value: 'scr' },
-		{ label: 'TCGPlayer', value: 'tcg' }
-	];
+	// const priceGroupOptions = [
+	// 	{ label: 'Scryfall', value: 'scr' },
+	// 	{ label: 'TCGPlayer', value: 'tcg' }
+	// ];
 
 	const handleMinPriceAChange = (value: string) =>
 		dispatch(filterSet({ filter: 'minEur', value }));
@@ -81,72 +86,86 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 		dispatch(filterSet({ filter: 'expansion', value }));
 	const handleLanguageChange = ({ value }: { value: string }) =>
 		dispatch(filterSet({ filter: 'language', value }));
-	const handlePriceGroupChange = ({ value }: { value: string }) =>
-		dispatch(filterSet({ filter: 'priceGroup', value }));
+	const resetFilters = () => dispatch(filtersReset())
+	// const handlePriceGroupChange = ({ value }: { value: string }) =>
+	// 	dispatch(filterSet({ filter: 'priceGroup', value }));
 
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className={clsx(isOpen ? 'flex content-start' : 'hidden')}>
+		<div
+			className={clsx(
+				isOpen ? 'flex content-start flex-wrap' : 'hidden'
+			)}>
 			{/* EXPANSION BASED SEARCH */}
-			<div className='w-36'>
-				<FilterInput id='expansion-filter' label='Expansion'>
-					<Select
-						placeholder='All'
-						options={expansionOptions}
-						getOptionLabel={(expansion) => expansion.label}
-						getOptionValue={(expansion) => expansion.value}
-						onChange={handleExpansionChange}
-						styles={customSelectStyles}
-					/>
-				</FilterInput>
+			<div className='flex mb-1'>
+				<div className='w-36'>
+					<FilterInput id='expansion-filter' label='Expansion'>
+						<Select
+							defaultValue={DEFAULT_OPTION}
+							value={{label:filters.expansion || 'All', value:filters.expansion}}
+							options={[DEFAULT_OPTION, ...expansionOptions]}
+							getOptionLabel={(expansion) => expansion.label}
+							getOptionValue={(expansion) => expansion.value}
+							onChange={handleExpansionChange}
+							styles={customSelectStyles}
+						/>
+					</FilterInput>
+				</div>
+				<div className='w-36'>
+					<FilterInput id='language-filter' label='Language'>
+						<Select
+							defaultValue={DEFAULT_OPTION}
+							value={{label:filters.language || 'All', value:filters.language}}
+							options={[DEFAULT_OPTION, ...langOptions]}
+							getOptionLabel={(lang) => lang.label}
+							getOptionValue={(lang) => lang.value}
+							onChange={handleLanguageChange}
+							styles={customSelectStyles}
+						/>
+					</FilterInput>
+				</div>
 			</div>
-			<div className='w-36'>
-				<FilterInput id='language-filter' label='Language'>
-					<Select
-						placeholder='All'
-						options={langOptions}
-						getOptionLabel={(lang) => lang.label}
-						getOptionValue={(lang) => lang.value}
-						onChange={handleLanguageChange}
-						styles={customSelectStyles}
-					/>
-				</FilterInput>
-			</div>
-			<FilterInput id='min-value-input-a' label='Min Eur'>
-				<NumInput
-					className='h-10'
-					value={filters.minEur}
-					setValue={handleMinPriceAChange}
-					id='min-value-input-a'
-				/>
-			</FilterInput>
-			<FilterInput id='max-value-input-a' label='Max Eur'>
-				<NumInput
-					className='h-10'
-					value={filters.maxEur}
-					setValue={handleMinPriceBChange}
-					id='max-value-input-a'
-				/>
-			</FilterInput>
-			<FilterInput id='min-value-input-b' label='Min Usd'>
-				<NumInput
-					className='h-10'
-					value={filters.minUsd}
-					setValue={handleMaxPriceAChange}
-					id='min-value-input-b'
-				/>
-			</FilterInput>
-			<FilterInput id='max-value-input-b' label='Max Usd'>
-				<NumInput
-					className='h-10'
-					value={filters.maxUsd}
-					setValue={handleMaxPriceBChange}
-					id='max-value-input-b'
-				/>
-			</FilterInput>
 
-			<div className='w-36'>
+			<div className='flex mb-1'>
+				<FilterInput id='min-value-input-a' label='Min Eur'>
+					<NumInput
+						className='h-10'
+						value={filters.minEur}
+						setValue={handleMinPriceAChange}
+						id='min-value-input-a'
+					/>
+				</FilterInput>
+				<FilterInput id='max-value-input-a' label='Max Eur'>
+					<NumInput
+						className='h-10'
+						value={filters.maxEur}
+						setValue={handleMaxPriceAChange}
+						id='max-value-input-a'
+					/>
+				</FilterInput>
+			</div>
+			<div className='flex mb-1'>
+				<FilterInput id='min-value-input-b' label='Min Usd'>
+					<NumInput
+						className='h-10'
+						value={filters.minUsd}
+						setValue={handleMinPriceBChange}
+						id='min-value-input-b'
+					/>
+				</FilterInput>
+				<FilterInput id='max-value-input-b' label='Max Usd'>
+					<NumInput
+						className='h-10'
+						value={filters.maxUsd}
+						setValue={handleMaxPriceBChange}
+						id='max-value-input-b'
+					/>
+				</FilterInput>
+			</div>
+			<Button className='flex mb-1 self-end' onClick={resetFilters}>Reset</Button>
+
+			{/* <div className='w-36'>
 				<FilterInput id='price-group-filter' label='Price Group'>
 					<Select
 						placeholder='Any'
@@ -157,7 +176,7 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 						styles={customSelectStyles}
 					/>
 				</FilterInput>
-			</div>
+			</div> */}
 		</div>
 	);
 };

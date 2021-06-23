@@ -51,12 +51,12 @@ export const fetchCollection = createAsyncThunk<
 	{ id: string },
 	ThunkAPIReturnValue
 >('collection/fetchCollection', async ({ id }, thunkAPI) => {
-	const { currentPage, searchBarInput } = thunkAPI.getState().collection;
+	const { currentPage, searchBarInput, filters } = thunkAPI.getState().collection;
 	try {
 		const { cards, pages } = await getCardsFromCollection(
 			TEST_COLLECTION_ID,
 			currentPage,
-			{ cardName: searchBarInput }
+			{ cardName: searchBarInput, ...filters }
 		);
 		return stdSuccessHandler({ cards, pages });
 	} catch (error) {
@@ -87,11 +87,11 @@ export const addCollectionItem = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/addCollectionItem', async (payload, thunkAPI) => {
 	try {
-		const { currentPage, searchBarInput } = thunkAPI.getState().collection;
+		const { currentPage, searchBarInput, filters } = thunkAPI.getState().collection;
 		const { cards, pages } = await postCollectionItem(
 			TEST_COLLECTION_ID,
 			currentPage,
-			{ cardName: searchBarInput },
+			{ cardName: searchBarInput, ...filters },
 			payload
 		);
 		return stdSuccessHandler({ cards, pages, update: payload });
@@ -110,13 +110,13 @@ export const updateCollectionItem = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/updateCollectionItem', async (payload, thunkAPI) => {
 	try {
-		const { currentPage, searchBarInput, targetObject } =
+		const { currentPage, searchBarInput, targetObject, filters } =
 			thunkAPI.getState().collection;
 		const { cards, pages } = await patchCollectionItem(
 			TEST_COLLECTION_ID,
 			payload.id,
 			currentPage,
-			{ cardName: searchBarInput },
+			{ cardName: searchBarInput, ...filters},
 			payload
 		);
 		return stdSuccessHandler({
@@ -141,13 +141,13 @@ export const deleteCollectionItem = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/deleteCollectionItem', async (_, thunkAPI) => {
 	try {
-		const { targetObject, currentPage, searchBarInput } =
+		const { targetObject, currentPage, searchBarInput, filters } =
 			thunkAPI.getState().collection;
 		const { cards, pages } = await destroyCollectionItem(
 			TEST_COLLECTION_ID,
 			targetObject.id,
 			currentPage,
-			{ cardName: searchBarInput }
+			{ cardName: searchBarInput, ...filters }
 		);
 		return stdSuccessHandler({
 			id: targetObject.id,
@@ -170,14 +170,14 @@ export const bulkDeleteCollectionItems = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/bulkDeleteCollectionItems', async (_, thunkAPI) => {
 	try {
-		const { selectedCardIds, currentPage, searchBarInput, entities } =
+		const { selectedCardIds, currentPage, searchBarInput, entities, filters } =
 			thunkAPI.getState().collection;
 		const targetObjects = selectedCardIds.map((id) => entities[id]);
 		const { cards, pages } = await destroyManyCollectionItems(
 			TEST_COLLECTION_ID,
 			selectedCardIds,
 			currentPage,
-			{ cardName: searchBarInput }
+			{ cardName: searchBarInput, ...filters }
 		);
 		return stdSuccessHandler({
 			ids: selectedCardIds,
@@ -237,6 +237,19 @@ const collection = createSlice({
 			{ payload }: ReducerPayload<{ filter: FilterKey; value: string }>
 		) => {
 			state.filters[payload.filter as string] = payload.value;
+		},
+		filtersReset: (
+			state
+		) => {
+			state.filters = {
+				expansion: '',
+				language: 'EN',
+				minEur: state.collectionSummary.minEur.toString(),
+				maxEur: state.collectionSummary.maxEur.toString(),
+				minUsd: state.collectionSummary.minUsd.toString(),
+				maxUsd: state.collectionSummary.maxUsd.toString(),
+				priceGroup: 'scr'
+			}
 		},
 		pagesSet: (state, { payload }: ReducerPayload<number>) => {
 			state.pages = payload;
@@ -435,6 +448,7 @@ export const {
 	cardMultiSelected,
 	cardSelected,
 	currentPageSet,
+	filtersReset,
 	filterSet,
 	pagesSet,
 	searchBarInputChanged,

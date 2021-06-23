@@ -8,22 +8,22 @@ import { CollectionItem, MagicCard } from 'types';
 const formatAPICardResults = (docs:any[]) : CollectionItem<MagicCard>[] => {
 	return docs.map((card) =>({
 		id: card._id,
-		minPrice: parseFloat(card.item.scryfallPrices.eur) || 0,
-		medianPrice:  parseFloat(card.item.scryfallPrices.eur) || 0,
+		minPrice: parseFloat(card.scryfallPrices.eur) || 0,
+		medianPrice:  parseFloat(card.scryfallPrices.eur) || 0,
 		buyPrice: card.buyPrice,
 		targetPrice: card.targetPrice,
 		quantity: card.quantity,
-		set: card.item.expansion.toUpperCase(),
+		set: card.expansion.toUpperCase(),
 		language: card.language,
 		foil: card.foil,
-		image:card.item.image,
-		cardName: card.item.cardName,
+		image:card.image,
+		cardName: card.name,
 		prices:{
-			eur: card.item.scryfallPrices.eur,
-			usd: card.item.scryfallPrices.usd,
-			usdFoil: card.item.scryfallPrices.usd_foil,
-			eurFoil: card.item.scryfallPrices.eur_foil,
-			tix: card.item.scryfallPrices.tix
+			eur: card.scryfallPrices.eur,
+			usd: card.scryfallPrices.usd,
+			usdFoil: card.scryfallPrices.usdFoil,
+			eurFoil: card.scryfallPrices.eurFoil,
+			tix: card.scryfallPrices.tix
 		}
 	})) 
 }

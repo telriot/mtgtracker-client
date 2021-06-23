@@ -1,21 +1,18 @@
 //  ======================================== IMPORTS
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from 'common/components/Button';
 import {
 	addCollectionItem,
 	statusSet
 } from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
-import {
-	NumInput,
-	CheckInput
-} from 'common/components/EditInputs';
+import { NumInput, CheckInput } from 'common/components/EditInputs';
 import AsyncSelect from 'react-select/async';
 import { getCardsByNameViaScf } from 'api';
 import debounce from 'debounce-promise';
 import { ThemeContext } from 'index';
-import {customStyles} from 'styles/reactSelectStyles'
+import { customStyles } from 'styles/reactSelectStyles';
 import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const CreateModalContent = () => {
@@ -34,7 +31,7 @@ const CreateModalContent = () => {
 			cardObject: Record<string, any>;
 		} | null>(null);
 	const theme = React.useContext(ThemeContext);
-	const customSelectStyles = customStyles(theme)
+	const customSelectStyles = customStyles(theme);
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
 	const handleSave = () =>
@@ -42,9 +39,9 @@ const CreateModalContent = () => {
 		dispatch(
 			addCollectionItem({
 				card: selectedCard.cardObject,
-				quantity:parseInt(quantity),
-				buyPrice:parseFloat(buyPrice),
-				targetPrice:parseFloat(targetPrice),
+				quantity: parseInt(quantity),
+				buyPrice: parseFloat(buyPrice),
+				targetPrice: parseFloat(targetPrice),
 				isFoil
 			})
 		);

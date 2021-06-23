@@ -1,12 +1,12 @@
 import axios from 'axios';
-import mockTimeout from 'common/utils/timers/mockTimeout';
+// import mockTimeout from 'common/utils/timers/mockTimeout';
 import { CardCreationPayload, CardUpdate, CollectionSummary, CollectionItem, MagicCard, SearchFilters } from 'types';
 import formatCards from 'common/utils/api/formatAPICardResults';
 
 // CONSTANTS
 const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
 const SERVER_API = 'http://localhost:5000/api';
-export const TEST_COLLECTION_ID = '60bb3e1e2cc9711f847ac195';
+export const TEST_COLLECTION_ID = '60d0559479086231e711cd19';
 
 // API CALLS
 export const getCardsFromCollection = async (
@@ -17,7 +17,7 @@ export const getCardsFromCollection = async (
 	const response = await axios.get(`${SERVER_API}/collections/${id}/cards`, {
 		params: {
 			page: currentPage,
-			cardName: filters.cardName
+			...filters
 		}
 	});
 	const cards = formatCards(response.data.cards.docs);
@@ -41,7 +41,8 @@ export const postCollectionItem = async (
 		{
 			query: {
 				page: currentPage,
-				cardName: filters.cardName
+				...filters
+
 			},
 			payload
 		}
@@ -62,7 +63,8 @@ export const patchCollectionItem = async (
 		{
 			query: {
 				page: currentPage,
-				cardName: filters.cardName
+				...filters
+
 			},
 			update
 		}
@@ -81,7 +83,8 @@ export const destroyCollectionItem = async (
 		{
 			params: {
 				page: currentPage,
-				cardName: filters.cardName
+				...filters
+
 			}
 		}
 	);
@@ -100,8 +103,9 @@ export const destroyManyCollectionItems = async (
 		{
 			params: {
 				page: currentPage,
-				cardName: filters.cardName,
-				cardIds: ids
+				cardIds: ids,
+				...filters
+
 			}
 		}
 	);

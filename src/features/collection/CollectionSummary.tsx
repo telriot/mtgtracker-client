@@ -19,11 +19,11 @@ const CollectionSummary = ({ className }: { className?: string }) => {
 			</div>
 			<div className='flex items-center mr-1'>
 				<FaDollarSign />
-				<div className='mr-1'>{summary.totalUsd.toFixed(2)}</div>
+				<div className='mr-1'>{summary.totalUsd}</div>
 			</div>
 			<div className='flex items-center mr-1'>
 				<FaEuroSign />
-				<div className='mr-1'>{summary.totalEur.toFixed(2)}</div>
+				<div className='mr-1'>{summary.totalEur}</div>
 			</div>
 		</div>
 	) : (

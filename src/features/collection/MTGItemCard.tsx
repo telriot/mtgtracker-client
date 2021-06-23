@@ -93,8 +93,9 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 					<>
 						<CardTextBlock header='Name' position='start' span={3}>
 							<Popover
+								containerStyle={{zIndex:'100'}}
 								isOpen={showCardImg}
-								positions={['top', 'bottom']}
+								positions={['bottom', 'top']}
 								padding={10}
 								content={
 									<CardImage

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { bulkDeleteCollectionItems, selectAsyncStatus, selectSelectedCardIds, statusSet } from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
-import parseItemName from 'common/utils/parsing/parseItemName';
 //  ======================================== COMPONENT
 const BulkDeleteModalContent = () => {
 	//  ======================================== HOOKS
