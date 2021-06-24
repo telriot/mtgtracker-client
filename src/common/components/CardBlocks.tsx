@@ -1,7 +1,7 @@
 //  ======================================== IMPORTS
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import React from 'react';
-import clsx from 'clsx'
+import clsx from 'clsx';
 //  ======================================== SUBCOMPONENT
 interface CardTextBlockProps {
 	header: string;
@@ -22,17 +22,22 @@ export const CardTextBlock = ({
 	return (
 		<div
 			className={clsx(
-				'flex flex-col cursor-default', 
+				'flex flex-col cursor-default',
 				`items-${position} col-span-${span}`
 			)}>
-			<div className={clsx(
-				`text-${textAlignment}`, 
-				'text-xs text-gray-400'
-			)}>
+			<div
+				className={clsx(
+					`text-${textAlignment}`,
+					'text-xs text-gray-400'
+				)}>
 				{header}
 			</div>
 			<div
-				className={clsx( 'w-full', `text-${textAlignment}`, size === 'sm' && 'text-sm')}>
+				className={clsx(
+					'w-full',
+					`text-${textAlignment}`,
+					size === 'sm' && 'text-sm'
+				)}>
 				{children}
 			</div>
 		</div>
@@ -49,11 +54,13 @@ export const CardActionBlock = ({ onEdit, onDelete }: CardActionBlockProps) => {
 	return (
 		<div className='flex flex-row items-center justify-end col-span-1'>
 			<FiEdit
+				aria-label='edit-button'
 				onClick={onEdit}
 				size={iconSize}
 				className='mr-3 cursor-pointer'
 			/>
 			<FiTrash
+				aria-label='delete-button'
 				onClick={onDelete}
 				size={iconSize}
 				className='cursor-pointer'

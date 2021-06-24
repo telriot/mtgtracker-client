@@ -73,8 +73,14 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	const detailBlock = [
 		{ header: 'Lang', content: language },
 		{ header: 'Foil', content: foil ? 'Yes' : 'No' },
-		{ header: 'Eur', content: (foil? prices.eurFoil : prices.eur) || 'N/A'},
-		{ header: 'Usd', content: (foil? prices.usdFoil : prices.usd) || 'N/A'},
+		{
+			header: 'Eur',
+			content: (foil ? prices.eurFoil : prices.eur) || 'N/A'
+		},
+		{
+			header: 'Usd',
+			content: (foil ? prices.usdFoil : prices.usd) || 'N/A'
+		},
 		{ header: 'Buy', content: buyPrice },
 		{ header: 'Target', content: targetPrice }
 	];
@@ -82,10 +88,13 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	//  ======================================== JSX
 	return (
 		<div
-			className={clsx('px-4 py-2 mb-2 rounded border-2 bg-card-bg text-text-primary hover:bg-primary-dark transition-colors', {
-				'border-primary': isSelected,
-				'border-secondary-light': !isSelected
-			})}
+			className={clsx(
+				'px-4 py-2 mb-2 rounded border-2 bg-card-bg text-text-primary hover:bg-primary-dark transition-colors',
+				{
+					'border-primary': isSelected,
+					'border-secondary-light': !isSelected
+				}
+			)}
 			onClick={handleClick}>
 			<div className='grid grid-cols-12 gap-2'>
 				{isMd ? (
@@ -93,7 +102,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 					<>
 						<CardTextBlock header='Name' position='start' span={3}>
 							<Popover
-								containerStyle={{zIndex:'100'}}
+								containerStyle={{ zIndex: '100' }}
 								isOpen={showCardImg}
 								positions={['bottom', 'top']}
 								padding={10}
@@ -156,6 +165,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 						))}
 						<div className='col-start-11 col-span-2 flex items-center justify-end'>
 							<Button
+								id='expand-button'
 								onClick={toggleExpand}
 								size='sm'
 								className='col-start-11'>
@@ -178,6 +188,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 									/>
 								))}
 								<Button
+									id='delete-button'
 									className='col-span-6'
 									block
 									size='sm'
@@ -185,6 +196,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 									Delete
 								</Button>
 								<Button
+									id='edit-button'
 									className='col-span-6'
 									block
 									size='sm'
