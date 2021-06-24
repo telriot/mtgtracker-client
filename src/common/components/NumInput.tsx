@@ -26,7 +26,7 @@ const NumInput = ({ value, setValue, id, className }: NumInputProps) => {
 			step='any'
 			value={value.toString() || 0}
 			onChange={handleChange}
-			className={clsx('w-20 py-1 px-1 rounded border-2 border-secondary-light text-right bg-card-bg text-text-primary', className)}
+			className={clsx('w-20 py-1 px-2 rounded border-2 border-secondary-light text-right bg-card-bg text-text-primary', className)}
 		/>
 	);
 };

@@ -27,8 +27,8 @@ const usePagination = (
 		setShowLast(currentPage + maxPagesAfterCurrentPage < pages);
 		setShowStartEllipsis(currentPage - maxPagesBeforeCurrentPage > 2);
 		setShowEndEllipsis(currentPage + maxPagesAfterCurrentPage < pages - 1);
-		setShowBack(currentPage !== 1)
-		setShowNext(currentPage !== pages && pages<=maxPages)
+		setShowBack(pages > 1 && currentPage !== 1)
+		setShowNext(pages < 1 && currentPage !== pages && pages<=maxPages)
 		const indexes: number[] = [];
 		for (let i = minPage; i <= maxPage; i++) {
 			indexes.push(i);

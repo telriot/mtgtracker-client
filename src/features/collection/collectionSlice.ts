@@ -14,8 +14,7 @@ import {
 	CollectionItem,
 	CollectionState,
 	MagicCard,
-	ReducerPayload,
-	LangVariant
+	ReducerPayload
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
 import {
@@ -349,7 +348,7 @@ const collection = createSlice({
 				if (success) {
 					const { target, update } = data;
 					const quantityDiff = update.quantity - target.quantity;
-					
+
 					collectionSummary.cardsQuantity += quantityDiff;
 					collectionSummary.totalEur +=
 						quantityDiff *

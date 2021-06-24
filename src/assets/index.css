@@ -1,3 +1,19 @@
 body{
     background-color: #232323;
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* -webkit-appearance: none; */
+  margin: 0 -.25rem 0 .125rem;
+  cursor: pointer;
+
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+    cursor: pointer !important;
+
+}
+input[type="number"]:hover{
+    -moz-appearance: auto;
+}

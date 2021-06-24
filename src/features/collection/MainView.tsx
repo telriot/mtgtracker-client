@@ -56,7 +56,7 @@ const CollectionView = () => {
 		dispatch(fetchCollection({ id: '123' }));
 	};
 	const debouncedUpdate = useDebouncedCallback(() => {
-		dispatch(currentPageSet(1));
+		// dispatch(currentPageSet(1));
 		dispatch(fetchCollection({ id: '123' }));
 	}, 300);
 	//  ======================================== EFFECTS
@@ -75,9 +75,15 @@ const CollectionView = () => {
 		minUsd,
 		maxUsd,
 		debouncedUpdate,
-		collectionSummary
+		// collectionSummary
 	]);
-
+	React.useEffect(() => {
+		if(currentPage > pages)
+		{
+			dispatch(currentPageSet(pages))
+			dispatch(fetchCollection({id:'123'}))
+		} 
+	}, [currentPage, dispatch, pages])
 	//  ======================================== JSX
 	return (
 		<>
