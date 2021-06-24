@@ -14,7 +14,7 @@ const LoadingOverlay = () => {
 	return (
 		<div
 			className='absolute top-0 left-0 bottom-0 right-0 grid place-items-center'
-			style={{ background: 'rgba(0,0,0,.05' }}>
+			style={{ background: 'rgba(0,0,0,.1' }}>
 			<Loader
 				type='Puff'
 				color={colors.primary}

@@ -24,11 +24,11 @@ const Checkbox = ({
 				type='checkbox'
 				id={id}
 				checked={checked}
-				className='absolute w-6 h-6 opacity-0'
+				className='absolute w-6 h-6 opacity-0 '
 				onChange={(e) => setValue(e.target.checked)}
 			/>
 			<div
-				className={clsx('bg-white border-2 rounded w-6 h-6 flex flex-shrink-0 justify-center items-center transition-colors focus-within:border-blue-500', {
+				className={clsx('bg-card-bg border-2 border-secondary-light rounded w-6 h-6 flex flex-shrink-0 justify-center items-center transition-colors focus-within:border-blue-500', {
 					'border-primary text-primary': checked,
 					'border-secondary-light text-transparent':!checked
 				} )}>

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import 'assets/tailwind.css';
 import App from './App';
 import store from 'store';
+import 'assets/index.css'
 import { Provider } from 'react-redux';
 const theme = require('./theme.js')
 export const ThemeContext = createContext(theme)

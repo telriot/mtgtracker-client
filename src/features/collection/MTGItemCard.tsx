@@ -82,7 +82,7 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 	//  ======================================== JSX
 	return (
 		<div
-			className={clsx('px-4 py-2 mb-2 rounded border-2', {
+			className={clsx('px-4 py-2 mb-2 rounded border-2 bg-card-bg text-text-primary hover:bg-primary-dark transition-colors', {
 				'border-primary': isSelected,
 				'border-secondary-light': !isSelected
 			})}
