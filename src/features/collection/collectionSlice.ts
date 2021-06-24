@@ -14,7 +14,8 @@ import {
 	CollectionItem,
 	CollectionState,
 	MagicCard,
-	ReducerPayload
+	ReducerPayload,
+	LangVariant
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
 import {
@@ -51,7 +52,8 @@ export const fetchCollection = createAsyncThunk<
 	{ id: string },
 	ThunkAPIReturnValue
 >('collection/fetchCollection', async ({ id }, thunkAPI) => {
-	const { currentPage, searchBarInput, filters } = thunkAPI.getState().collection;
+	const { currentPage, searchBarInput, filters } =
+		thunkAPI.getState().collection;
 	try {
 		const { cards, pages } = await getCardsFromCollection(
 			TEST_COLLECTION_ID,
@@ -87,7 +89,8 @@ export const addCollectionItem = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/addCollectionItem', async (payload, thunkAPI) => {
 	try {
-		const { currentPage, searchBarInput, filters } = thunkAPI.getState().collection;
+		const { currentPage, searchBarInput, filters } =
+			thunkAPI.getState().collection;
 		const { cards, pages } = await postCollectionItem(
 			TEST_COLLECTION_ID,
 			currentPage,
@@ -116,7 +119,7 @@ export const updateCollectionItem = createAsyncThunk<
 			TEST_COLLECTION_ID,
 			payload.id,
 			currentPage,
-			{ cardName: searchBarInput, ...filters},
+			{ cardName: searchBarInput, ...filters },
 			payload
 		);
 		return stdSuccessHandler({
@@ -170,8 +173,13 @@ export const bulkDeleteCollectionItems = createAsyncThunk<
 	ThunkAPIReturnValue
 >('collection/bulkDeleteCollectionItems', async (_, thunkAPI) => {
 	try {
-		const { selectedCardIds, currentPage, searchBarInput, entities, filters } =
-			thunkAPI.getState().collection;
+		const {
+			selectedCardIds,
+			currentPage,
+			searchBarInput,
+			entities,
+			filters
+		} = thunkAPI.getState().collection;
 		const targetObjects = selectedCardIds.map((id) => entities[id]);
 		const { cards, pages } = await destroyManyCollectionItems(
 			TEST_COLLECTION_ID,
@@ -202,7 +210,7 @@ const initialState = collectionAdapter.getInitialState({
 	searchBarInput: '',
 	filters: {
 		expansion: '',
-		language: 'EN',
+		language: '',
 		minEur: '0',
 		maxEur: '0',
 		minUsd: '0',
@@ -238,18 +246,16 @@ const collection = createSlice({
 		) => {
 			state.filters[payload.filter as string] = payload.value;
 		},
-		filtersReset: (
-			state
-		) => {
+		filtersReset: (state) => {
 			state.filters = {
 				expansion: '',
-				language: 'EN',
+				language: '',
 				minEur: state.collectionSummary.minEur.toString(),
 				maxEur: state.collectionSummary.maxEur.toString(),
 				minUsd: state.collectionSummary.minUsd.toString(),
 				maxUsd: state.collectionSummary.maxUsd.toString(),
 				priceGroup: 'scr'
-			}
+			};
 		},
 		pagesSet: (state, { payload }: ReducerPayload<number>) => {
 			state.pages = payload;
@@ -316,36 +322,46 @@ const collection = createSlice({
 		// CREATE ITEM
 		builder.addCase(
 			addCollectionItem.fulfilled,
-			(state, { payload: { data, success } }) => {
+			({ collectionSummary }, { payload: { data, success } }) => {
 				if (success) {
 					const { update } = data;
 					const { quantity } = update;
 
-					state.collectionSummary.cardsQuantity += quantity;
-					state.collectionSummary.totalEur +=
+					collectionSummary.cardsQuantity += quantity;
+					collectionSummary.totalEur +=
 						quantity *
 						getPrice(update.card.prices, 'eur', update.isFoil);
-					state.collectionSummary.totalUsd +=
+					collectionSummary.totalUsd +=
 						quantity *
 						getPrice(update.card.prices, 'usd', update.isFoil);
+					if (
+						!collectionSummary.languages.includes(update.language)
+					) {
+						collectionSummary.languages.push(update.language);
+					}
 				}
 			}
 		);
 		// UPDATE ITEM
 		builder.addCase(
 			updateCollectionItem.fulfilled,
-			(state, { payload: { data, success } }) => {
+			({ collectionSummary }, { payload: { data, success } }) => {
 				if (success) {
 					const { target, update } = data;
 					const quantityDiff = update.quantity - target.quantity;
-					console.log(quantityDiff);
-					state.collectionSummary.cardsQuantity += quantityDiff;
-					state.collectionSummary.totalEur +=
+					
+					collectionSummary.cardsQuantity += quantityDiff;
+					collectionSummary.totalEur +=
 						quantityDiff *
 						getPrice(target.prices, 'eur', update.foil);
-					state.collectionSummary.totalUsd +=
+					collectionSummary.totalUsd +=
 						quantityDiff *
 						getPrice(target.prices, 'usd', update.foil);
+					if (
+						!collectionSummary.languages.includes(update.language)
+					) {
+						collectionSummary.languages.push(update.language);
+					}
 				}
 			}
 		);

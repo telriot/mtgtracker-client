@@ -11,7 +11,8 @@ export type LangVariant =
 	| 'KO'
 	| 'PT'
 	| 'RU'
-	| 'ES';
+	| 'ES'
+	|'';
 export type MagicCard = {
 	cardName: string;
 	//TODO: download list and parse it
@@ -100,13 +101,15 @@ export type CardCreationPayload = {
 	targetPrice: number;
 	quantity: number;
 	isFoil: boolean;
+	language: LangVariant
 };
 export type SearchFilters = {
 	cardName: string;
 	expansion: string;
 	language: LangVariant;
 	minEur: string;
-	maxEur: string;
 	minUsd: string;
 	maxUsd: string;
 };
+
+export type SelectOption =  { label: string, value: string }

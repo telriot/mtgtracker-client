@@ -7,29 +7,35 @@ import {
 	statusSet
 } from 'features/collection/collectionSlice';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
-import { NumInput, CheckInput } from 'common/components/EditInputs';
+import {
+	NumInput,
+	CheckInput,
+	SelectInput
+} from 'common/components/EditInputs';
 import AsyncSelect from 'react-select/async';
 import { getCardsByNameViaScf } from 'api';
 import debounce from 'debounce-promise';
 import { ThemeContext } from 'index';
 import { customStyles } from 'styles/reactSelectStyles';
 import parseItemName from 'common/utils/parsing/parseItemName';
+import { langOptions } from 'assets/cardData';
+import { LangVariant } from 'types';
 //  ======================================== COMPONENT
 const CreateModalContent = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
+	const [language, setLanguage] = React.useState('EN');
 	const [quantity, setQuantity] = React.useState('');
 	const [buyPrice, setBuyPrice] = React.useState('');
 	const [targetPrice, setTargetPrice] = React.useState('');
 	const [isFoil, setIsFoil] = React.useState(false);
-	const [selectedCard, setSelectedCard] =
-		React.useState<{
-			cardName: string;
-			set: string;
-			cardmarket_id: string;
-			cardObject: Record<string, any>;
-		} | null>(null);
+	const [selectedCard, setSelectedCard] = React.useState<{
+		cardName: string;
+		set: string;
+		cardmarket_id: string;
+		cardObject: Record<string, any>;
+	} | null>(null);
 	const theme = React.useContext(ThemeContext);
 	const customSelectStyles = customStyles(theme);
 	//  ======================================== HANDLERS
@@ -42,6 +48,7 @@ const CreateModalContent = () => {
 				quantity: parseInt(quantity),
 				buyPrice: parseFloat(buyPrice),
 				targetPrice: parseFloat(targetPrice),
+				language:language as LangVariant,
 				isFoil
 			})
 		);
@@ -71,6 +78,12 @@ const CreateModalContent = () => {
 				styles={customSelectStyles}
 			/>
 			<div className='mb-6'>
+				<SelectInput
+					options={langOptions}
+					value={language}
+					setValue={setLanguage}>
+					Language
+				</SelectInput>
 				<NumInput value={quantity} setValue={setQuantity}>
 					Copies Owned
 				</NumInput>

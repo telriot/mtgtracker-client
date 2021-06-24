@@ -11,9 +11,14 @@ import {
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import {
 	NumInput,
-	CheckInput
+	CheckInput,
+	SelectInput
+
 } from 'common/components/EditInputs';
 import parseItemName from 'common/utils/parsing/parseItemName';
+import { langOptions } from 'assets/cardData';
+import { LangVariant } from 'types';
+
 //  ======================================== COMPONENT
 const EditModalContent = () => {
 	//  ======================================== HOOKS
@@ -21,6 +26,8 @@ const EditModalContent = () => {
 
 	//  ======================================== STATE
 	const initialValues = useSelector(selectTargetObject);
+	const [language, setLanguage] = React.useState(initialValues.language)
+
 	const [owned, setOwned] = React.useState<string>(
 		initialValues.quantity.toString()
 	);
@@ -41,6 +48,7 @@ const EditModalContent = () => {
 				quantity: parseFloat(owned),
 				buyPrice:parseFloat(buyPrice),
 				targetPrice: parseFloat(targetPrice),
+				language: language as LangVariant,
 				foil: isFoil
 			})
 		);
@@ -51,6 +59,8 @@ const EditModalContent = () => {
 		<div className='flex flex-col'>
 			<ModalTitle>{parseItemName(initialValues)}</ModalTitle>
 			<div className='mb-6'>
+			<SelectInput options={langOptions} value={language} setValue={setLanguage}>Language</SelectInput>
+
 				<NumInput value={owned} setValue={setOwned}>
 					Copies Owned
 				</NumInput>
