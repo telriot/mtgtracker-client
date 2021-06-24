@@ -9,16 +9,19 @@ export interface PaginationButtonProps {
 	disabled?: boolean;
 	onClick: () => void;
 	isActive?: boolean;
+	id: string;
 }
 
 const PaginationButton = ({
 	children,
 	disabled,
 	onClick,
-	isActive
+	isActive,
+	id
 }: PaginationButtonProps) => {
 	return (
 		<div
+			aria-label={id}
 			onClick={!disabled && onClick}
 			className={clsx(
 				'grid justify-center items-center',
@@ -39,6 +42,7 @@ const PaginationButton = ({
 const PaginationEllipsis = () => {
 	return (
 		<div
+			aria-label='pagination-ellipsis'
 			className={clsx(
 				'grid justify-center items-center',
 				'h-6 w-6 rounded',
@@ -83,6 +87,7 @@ const Pagination = ({
 		<div className='flex flex-row gap-x-1'>
 			{showBack && (
 				<PaginationButton
+					id='pagination-prev-button'
 					disabled={disabled}
 					onClick={() => setPage(Math.max(1, activePage - 1))}>
 					&#8249;
@@ -90,6 +95,7 @@ const Pagination = ({
 			)}
 			{showFirst && (
 				<PaginationButton
+					id='pagination-first-button'
 					disabled={disabled}
 					onClick={() => setPage(1)}>
 					{1}
@@ -99,6 +105,7 @@ const Pagination = ({
 
 			{pageIndexes.map((page) => (
 				<PaginationButton
+					id={`pagination-page-${page}`}
 					key={`pagination-${page}`}
 					disabled={disabled && page !== activePage}
 					onClick={() => setPage(page)}
@@ -110,6 +117,7 @@ const Pagination = ({
 			{showEndEllipsis && <PaginationEllipsis />}
 			{showLast && (
 				<PaginationButton
+					id='pagination-last-button'
 					disabled={disabled}
 					onClick={() => setPage(pages)}>
 					{pages}
@@ -117,6 +125,7 @@ const Pagination = ({
 			)}
 			{showNext && (
 				<PaginationButton
+					id='pagination-next-button'
 					onClick={() => setPage(Math.min(pages, activePage + 1))}>
 					&#8250;
 				</PaginationButton>

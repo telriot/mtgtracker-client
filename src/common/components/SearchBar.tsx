@@ -1,7 +1,7 @@
 //  ======================================== IMPORTS
 
 import React from 'react';
-
+import clsx from 'clsx'
 //  ======================================== COMPONENT
 export interface SearchBarProps {
 	className?: string;
@@ -15,7 +15,7 @@ const SearchBar = ({ className, onChange, value }: SearchBarProps) => {
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className={className || ''}>
+		<div className={clsx(className)}>
 			<input
 				className=' w-full py-2 px-4 rounded bg-card-bg border-secondary-light border-2 text-text-primary'
 				type='text'

@@ -78,12 +78,13 @@ const CollectionView = () => {
 		// collectionSummary
 	]);
 	React.useEffect(() => {
+		if (!collectionSummary) return;
 		if(currentPage > pages)
 		{
-			dispatch(currentPageSet(pages))
+			dispatch(currentPageSet(pages || 1))
 			dispatch(fetchCollection({id:'123'}))
 		} 
-	}, [currentPage, dispatch, pages])
+	}, [currentPage, dispatch, pages, collectionSummary])
 	//  ======================================== JSX
 	return (
 		<>

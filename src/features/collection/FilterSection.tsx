@@ -69,10 +69,7 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 				: [],
 		[collectionSummary]
 	);
-	// const priceGroupOptions = [
-	// 	{ label: 'Scryfall', value: 'scr' },
-	// 	{ label: 'TCGPlayer', value: 'tcg' }
-	// ];
+
 
 	const handleMinPriceAChange = (value: string) =>
 		dispatch(filterSet({ filter: 'minEur', value }));

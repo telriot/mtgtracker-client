@@ -21,6 +21,7 @@ const NumInput = ({ value, setValue, id, className }: NumInputProps) => {
 	//  ======================================== JSX
 	return (
 		<input
+			aria-label={id}
 			id={id}
 			type='number'
 			step='any'
