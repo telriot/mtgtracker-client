@@ -48,7 +48,7 @@ const Toolbar = () => {
 						className='mr-3'
 						onChange={handleSearchBarChange}
 					/>
-					<Button className='mr-3' onClick={toggleFilters}>
+					<Button id='filters-toggle-button' className='mr-3' onClick={toggleFilters}>
 						<FaFilter />
 					</Button>
 				</div>

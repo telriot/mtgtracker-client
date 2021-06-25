@@ -10,7 +10,7 @@ import {
 	filterSet,
 	filtersReset,
 	selectCollectionSummary,
-	selectFilters,
+	selectFilters
 } from './collectionSlice';
 import Button from 'common/components/Button';
 
@@ -70,7 +70,6 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 		[collectionSummary]
 	);
 
-
 	const handleMinPriceAChange = (value: string) =>
 		dispatch(filterSet({ filter: 'minEur', value }));
 	const handleMinPriceBChange = (value: string) =>
@@ -83,7 +82,7 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 		dispatch(filterSet({ filter: 'expansion', value }));
 	const handleLanguageChange = ({ value }: { value: string }) =>
 		dispatch(filterSet({ filter: 'language', value }));
-	const resetFilters = () => dispatch(filtersReset())
+	const resetFilters = () => dispatch(filtersReset());
 	// const handlePriceGroupChange = ({ value }: { value: string }) =>
 	// 	dispatch(filterSet({ filter: 'priceGroup', value }));
 
@@ -91,6 +90,7 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 	//  ======================================== JSX
 	return (
 		<div
+			aria-label='filter-section'
 			className={clsx(
 				isOpen ? 'flex content-start flex-wrap' : 'hidden'
 			)}>
@@ -100,7 +100,10 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 					<FilterInput id='expansion-filter' label='Expansion'>
 						<Select
 							defaultValue={DEFAULT_OPTION}
-							value={{label:filters.expansion || 'All', value:filters.expansion}}
+							value={{
+								label: filters.expansion || 'All',
+								value: filters.expansion
+							}}
 							options={[DEFAULT_OPTION, ...expansionOptions]}
 							getOptionLabel={(expansion) => expansion.label}
 							getOptionValue={(expansion) => expansion.value}
@@ -113,7 +116,10 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 					<FilterInput id='language-filter' label='Language'>
 						<Select
 							defaultValue={DEFAULT_OPTION}
-							value={{label:filters.language || 'All', value:filters.language}}
+							value={{
+								label: filters.language || 'All',
+								value: filters.language
+							}}
 							options={[DEFAULT_OPTION, ...langOptions]}
 							getOptionLabel={(lang) => lang.label}
 							getOptionValue={(lang) => lang.value}
@@ -160,7 +166,9 @@ const FilterSection = ({ isOpen }: FilterSectionProps) => {
 					/>
 				</FilterInput>
 			</div>
-			<Button className='flex mb-1 self-end' onClick={resetFilters}>Reset</Button>
+			<Button className='flex mb-1 self-end' onClick={resetFilters}>
+				Reset
+			</Button>
 
 			{/* <div className='w-36'>
 				<FilterInput id='price-group-filter' label='Price Group'>
