@@ -1,33 +1,31 @@
 //  ======================================== IMPORTS
-import { useSelector } from 'react-redux';
-import { selectCollectionSummary } from './collectionSlice';
 import { FaBuffer, FaEuroSign, FaDollarSign } from 'react-icons/fa';
 import clsx from 'clsx';
+import { CollectionSummary as TSummary} from 'types';
 //  ======================================== COMPONENT
-const CollectionSummary = ({ className }: { className?: string }) => {
+const CollectionSummary = ({ className, summary }: { className?: string, summary:TSummary }) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
-	const summary = useSelector(selectCollectionSummary);
 	//  ======================================== HANDLERS
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
-	return summary ? (
+	return summary.isLoaded ? (
 		<div className={clsx('flex text-text-primary', className)}>
 			<div className='flex items-center mr-1'>
 				<FaBuffer />
-				<div className='mr-1'>{summary.cardsQuantity}</div>
+				<div aria-label='cards-total-quantity' className='mr-1'>{summary.cardsQuantity}</div>
 			</div>
 			<div className='flex items-center mr-1'>
 				<FaDollarSign />
-				<div className='mr-1'>{parseFloat(summary.totalUsd.toFixed(2))}</div>
+				<div aria-label='cards-total-usd' className='mr-1'>{parseFloat(summary.totalUsd.toFixed(2))}</div>
 			</div>
 			<div className='flex items-center mr-1'>
 				<FaEuroSign />
-				<div className='mr-1'>{parseFloat(summary.totalEur.toFixed(2))}</div>
+				<div aria-label='cards-total-eur' className='mr-1'>{parseFloat(summary.totalEur.toFixed(2))}</div>
 			</div>
 		</div>
 	) : (
-		<div>Loading...</div>
+		<div aria-label='loading-indicator'>Loading...</div>
 	);
 };
 

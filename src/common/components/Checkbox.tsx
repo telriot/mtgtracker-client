@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import { ThemeContext } from 'index';
+import ThemeContext from 'themeContext';
 import React from 'react';
 import clsx from 'clsx'
 //  ======================================== COMPONENT

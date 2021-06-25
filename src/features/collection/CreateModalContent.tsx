@@ -15,7 +15,7 @@ import {
 import AsyncSelect from 'react-select/async';
 import { getCardsByNameViaScf } from 'api';
 import debounce from 'debounce-promise';
-import { ThemeContext } from 'index';
+import ThemeContext from 'themeContext';
 import { customStyles } from 'styles/reactSelectStyles';
 import parseItemName from 'common/utils/parsing/parseItemName';
 import { langOptions } from 'assets/cardData';
@@ -65,7 +65,7 @@ const CreateModalContent = () => {
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className='flex flex-col'>
+		<div aria-label='create-modal' className='flex flex-col'>
 			<ModalTitle>Add a card</ModalTitle>
 			<AsyncSelect
 				loadOptions={debouncedSearch}

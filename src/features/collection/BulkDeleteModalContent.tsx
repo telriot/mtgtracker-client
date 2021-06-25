@@ -1,30 +1,46 @@
 //  ======================================== IMPORTS
-import { useDispatch, useSelector } from 'react-redux';
-import { bulkDeleteCollectionItems, selectAsyncStatus, selectSelectedCardIds, statusSet } from 'features/collection/collectionSlice';
+import { useDispatch } from 'react-redux';
+import {
+	bulkDeleteCollectionItems,
+	statusSet
+} from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
+import { AsyncStatus } from 'types';
 //  ======================================== COMPONENT
-const BulkDeleteModalContent = () => {
+interface BulkDeleteModalContentProps {
+	status: AsyncStatus;
+	ids: string[];
+}
+const BulkDeleteModalContent = ({
+	status,
+	ids
+}: BulkDeleteModalContentProps) => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
-	const asyncStatus = useSelector(selectAsyncStatus)
-	const selectedCardIds = useSelector(selectSelectedCardIds)
+
 	//  ======================================== HANDLERS
-	const handleCancel = () => dispatch(statusSet({status:'idle'}));
-	const handleDelete = () => dispatch(bulkDeleteCollectionItems())
+	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
+	const handleDelete = () => dispatch(bulkDeleteCollectionItems());
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className='flex flex-col'>
+		<div aria-label='bulk-delete-modal' className='flex flex-col'>
 			<ModalTitle>
-				Confirm deleting {selectedCardIds.length} items from your collection?
+				Confirm deleting {ids.length} items from your collection?
 			</ModalTitle>
 			<ModalButtonDiv>
-				<Button disabled={asyncStatus==='pending'}variant='danger' onClick={handleCancel}>
+				<Button
+					disabled={status === 'pending'}
+					variant='danger'
+					onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button disabled={asyncStatus==='pending'} variant='primary' onClick={handleDelete}>
+				<Button
+					disabled={status === 'pending'}
+					variant='primary'
+					onClick={handleDelete}>
 					Confirm
 				</Button>
 			</ModalButtonDiv>

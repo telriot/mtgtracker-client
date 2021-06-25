@@ -1,10 +1,8 @@
 //  ======================================== IMPORTS
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from 'common/components/Button';
 import {
-	selectAsyncStatus,
-	selectTargetObject,
 	statusSet,
 	updateCollectionItem
 } from 'features/collection/collectionSlice';
@@ -17,34 +15,36 @@ import {
 } from 'common/components/EditInputs';
 import parseItemName from 'common/utils/parsing/parseItemName';
 import { langOptions } from 'assets/cardData';
-import { LangVariant } from 'types';
+import { LangVariant, AsyncStatus, CollectionItem } from 'types';
 
 //  ======================================== COMPONENT
-const EditModalContent = () => {
+interface EditModalContentProps {
+	status: AsyncStatus
+	target: CollectionItem<any>
+}
+const EditModalContent = ({status, target}: EditModalContentProps) => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 
 	//  ======================================== STATE
-	const initialValues = useSelector(selectTargetObject);
-	const [language, setLanguage] = React.useState(initialValues.language)
+	const [language, setLanguage] = React.useState(target.language)
 
 	const [owned, setOwned] = React.useState<string>(
-		initialValues.quantity.toString()
+		target.quantity.toString()
 	);
 	const [buyPrice, setBuyPrice] = React.useState<string>(
-		initialValues.buyPrice.toString()
+		target.buyPrice.toString()
 	);
 	const [targetPrice, setTargetPrice] = React.useState<string>(
-		initialValues.targetPrice.toString()
+		target.targetPrice.toString()
 	);
-	const [isFoil, setIsFoil] = React.useState(initialValues.foil);
-	const asyncStatus = useSelector(selectAsyncStatus)
+	const [isFoil, setIsFoil] = React.useState(target.foil);
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({ status: 'idle' }));
 	const handleEdit = () =>
 		dispatch(
 			updateCollectionItem({
-				id: initialValues.id,
+				id: target.id,
 				quantity: parseFloat(owned),
 				buyPrice:parseFloat(buyPrice),
 				targetPrice: parseFloat(targetPrice),
@@ -56,8 +56,8 @@ const EditModalContent = () => {
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className='flex flex-col'>
-			<ModalTitle>{parseItemName(initialValues)}</ModalTitle>
+		<div aria-label='edit-modal' className='flex flex-col'>
+			<ModalTitle>{parseItemName(target)}</ModalTitle>
 			<div className='mb-6'>
 			<SelectInput options={langOptions} value={language} setValue={setLanguage}>Language</SelectInput>
 
@@ -76,10 +76,10 @@ const EditModalContent = () => {
 			</div>
 
 			<ModalButtonDiv>
-				<Button variant='danger' disabled={asyncStatus === 'pending'} onClick={handleCancel}>
+				<Button variant='danger' disabled={status === 'pending'} onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' disabled={asyncStatus === 'pending'} onClick={handleEdit}>
+				<Button variant='primary' disabled={status === 'pending'} onClick={handleEdit}>
 					Save
 				</Button>
 			</ModalButtonDiv>

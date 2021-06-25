@@ -1,4 +1,4 @@
-import { CollectionItem, MagicCard } from "types";
+import { CollectionItem, MagicCard, CollectionSummary } from "types";
 
 export const testMock = '1';
 export const generateCardMock = (index:number) : CollectionItem<MagicCard> => ({
@@ -22,3 +22,16 @@ export const generateCardMock = (index:number) : CollectionItem<MagicCard> => ({
 	set: 'ICE',
 	targetPrice: 111
 });
+
+export const collectionSummaryMock : CollectionSummary = {
+	maxUsd: 1,
+	minUsd: 1,
+	maxEur: 1,
+	minEur: 1,
+	totalUsd: 1,
+	totalEur: 1,
+	cardsQuantity: 20,
+	expansions: ['SOM'],
+	languages: ['EN'],
+	isLoaded: true
+}

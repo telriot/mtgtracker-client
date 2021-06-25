@@ -2,7 +2,7 @@
 import React from 'react';
 import Select from 'react-select';
 import { customStyles } from 'styles/reactSelectStyles';
-import { ThemeContext } from 'index';
+import ThemeContext from 'themeContext';
 import NumInput from 'common/components/NumInput';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';

@@ -5,14 +5,12 @@ import App from './App';
 import store from 'store';
 import 'assets/index.css'
 import { Provider } from 'react-redux';
-const theme = require('./theme.js')
+import ThemeContext, {theme} from 'themeContext'
+// if (process.env.NODE_ENV === 'test') {
+// 	const { worker } = require('./mocks/browser')
+// 	worker.start()
+//   }
 
-if (process.env.NODE_ENV === 'test') {
-	const { worker } = require('./mocks/browser')
-	worker.start()
-  }
-
-export const ThemeContext = createContext(theme)
 ReactDOM.render(
 	<React.StrictMode>
 		<ThemeContext.Provider value={theme}>

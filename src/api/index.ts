@@ -5,7 +5,7 @@ import formatCards from 'common/utils/api/formatAPICardResults';
 
 // CONSTANTS
 const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
-const SERVER_API = 'http://localhost:5000/api';
+export const SERVER_API = 'http://localhost:5000/api';
 export const TEST_COLLECTION_ID = '60d0559479086231e711cd19';
 
 // API CALLS

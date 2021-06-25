@@ -1,31 +1,34 @@
 //  ======================================== IMPORTS
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteCollectionItem, selectAsyncStatus, selectTargetObject, statusSet } from 'features/collection/collectionSlice';
+import { useDispatch } from 'react-redux';
+import { deleteCollectionItem, statusSet } from 'features/collection/collectionSlice';
 import Button from 'common/components/Button';
 import { ModalButtonDiv, ModalTitle } from 'common/components/Modal';
 import parseItemName from 'common/utils/parsing/parseItemName';
+import { AsyncStatus, CollectionItem } from 'types';
 //  ======================================== COMPONENT
-const DeleteModalContent = () => {
+interface DeleteModalContentProps {
+	status: AsyncStatus
+	target: CollectionItem<any>
+}
+const DeleteModalContent = ({status, target}: DeleteModalContentProps) => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
-	const asyncStatus = useSelector(selectAsyncStatus)
-	const targetItem = useSelector(selectTargetObject)
 	//  ======================================== HANDLERS
 	const handleCancel = () => dispatch(statusSet({status:'idle'}));
 	const handleDelete = () => dispatch(deleteCollectionItem())
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className='flex flex-col'>
+		<div aria-label='delete-modal' className='flex flex-col'>
 			<ModalTitle>
-				Confirm deleting {parseItemName(targetItem)} from your collection?
+				Confirm deleting {parseItemName(target)} from your collection?
 			</ModalTitle>
 			<ModalButtonDiv>
-				<Button disabled={asyncStatus==='pending'}variant='danger' onClick={handleCancel}>
+				<Button disabled={status==='pending'} variant='danger' onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button disabled={asyncStatus==='pending'} variant='primary' onClick={handleDelete}>
+				<Button disabled={status==='pending'} variant='primary' onClick={handleDelete}>
 					Confirm
 				</Button>
 			</ModalButtonDiv>

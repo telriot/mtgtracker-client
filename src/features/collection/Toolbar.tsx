@@ -39,7 +39,7 @@ const Toolbar = () => {
 	//  ======================================== JSX
 	return (
 		<div className='py-2 bg-body-bg sticky z-10 top-0 left-0 right-0 shadow-md'>
-			<CollectionSummary className='mb-3 justify-end' />
+			<CollectionSummary className='mb-3 justify-end' summary={collectionSummary} />
 
 			<div className='flex justify-between mb-4'>
 				<div className='flex'>

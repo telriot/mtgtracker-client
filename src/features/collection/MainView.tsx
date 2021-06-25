@@ -17,7 +17,8 @@ import {
 	selectSearchBarInput,
 	selectSelectedCardIds,
 	selectCollectionSummary,
-	selectFilters
+	selectFilters,
+	selectTargetObject
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
 import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent';
@@ -45,6 +46,7 @@ const CollectionView = () => {
 	const isMultiSelecting = selectedCardIds.length > 1;
 	const { expansion, language, minEur, maxEur, minUsd, maxUsd } =
 		useSelector(selectFilters);
+	const targetItem = useSelector(selectTargetObject);
 
 	//  ======================================== HANDLERS
 	const handleBulkDelete = () =>
@@ -61,10 +63,10 @@ const CollectionView = () => {
 	}, 300);
 	//  ======================================== EFFECTS
 	React.useEffect(() => {
-		!collectionSummary && dispatch(fetchCollectionSummary());
+		!collectionSummary.isLoaded && dispatch(fetchCollectionSummary());
 	}, [collectionSummary, dispatch]);
 	React.useEffect(() => {
-		if (!collectionSummary) return;
+		if (!collectionSummary.isLoaded) return;
 		debouncedUpdate();
 	}, [
 		searchBarInput,
@@ -74,17 +76,16 @@ const CollectionView = () => {
 		maxEur,
 		minUsd,
 		maxUsd,
-		debouncedUpdate,
+		debouncedUpdate
 		// collectionSummary
 	]);
 	React.useEffect(() => {
-		if (!collectionSummary) return;
-		if(currentPage > pages)
-		{
-			dispatch(currentPageSet(pages || 1))
-			dispatch(fetchCollection({id:'123'}))
-		} 
-	}, [currentPage, dispatch, pages, collectionSummary])
+		if (!collectionSummary.isLoaded) return;
+		if (currentPage > pages) {
+			dispatch(currentPageSet(pages || 1));
+			dispatch(fetchCollection({ id: '123' }));
+		}
+	}, [currentPage, dispatch, pages, collectionSummary]);
 	//  ======================================== JSX
 	return (
 		<>
@@ -121,11 +122,17 @@ const CollectionView = () => {
 				{status === 'creating' ? (
 					<CreateModalContent />
 				) : status === 'deleting' ? (
-					<DeleteModalContent />
+					<DeleteModalContent
+						status={asyncStatus}
+						target={targetItem}
+					/>
 				) : status === 'bulkDeleting' ? (
-					<BulkDeleteModalContent />
+					<BulkDeleteModalContent status={asyncStatus} ids={selectedCardIds} />
 				) : status === 'editing' ? (
-					<EditModalContent />
+					<EditModalContent
+						status={asyncStatus}
+						target={targetItem}
+					/>
 				) : null}
 			</Modal>
 		</>

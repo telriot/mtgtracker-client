@@ -1,7 +1,8 @@
-import React, { createContext, FC, ReactElement } from 'react';
+import { createContext, FC, ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import store from 'store';
+import '@testing-library/jest-dom/extend-expect';
 
 const theme = require('../../theme.js');
 export const ThemeContext = createContext(theme);

@@ -2,7 +2,7 @@
 
 import Checkbox from 'common/components/Checkbox';
 import React from 'react';
-import { ThemeContext } from 'index';
+import ThemeContext from 'themeContext';
 import NumberInput from 'common/components/NumInput';
 import Select from 'react-select';
 import { customStyles } from 'styles/reactSelectStyles';

@@ -1,7 +1,7 @@
 //  ======================================== IMPORTS
 import { useContext } from 'react';
 import Loader from 'react-loader-spinner';
-import { ThemeContext } from 'index';
+import ThemeContext from 'themeContext';
 
 //  ======================================== COMPONENT
 const LoadingOverlay = () => {

@@ -200,7 +200,18 @@ export const bulkDeleteCollectionItems = createAsyncThunk<
 
 const initialState = collectionAdapter.getInitialState({
 	currentPage: 1,
-	collectionSummary: null,
+	collectionSummary: {
+		maxUsd: 0,
+		minUsd: 0,
+		maxEur: 0,
+		minEur: 0,
+		totalUsd: 0,
+		totalEur: 0,
+		cardsQuantity: 0,
+		expansions: [],
+		languages: [],
+		isLoaded: false
+	},
 	summaryStatus: 'idle',
 	status: 'idle',
 	asyncError: null,
@@ -296,7 +307,7 @@ const collection = createSlice({
 			fetchCollectionSummary.fulfilled,
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
-					state.collectionSummary = data.collectionSummary;
+					state.collectionSummary = {...data.collectionSummary, isLoaded:true};
 					state.summaryStatus = 'fulfilled';
 					state.filters.minUsd =
 						data.collectionSummary.minUsd.toString();

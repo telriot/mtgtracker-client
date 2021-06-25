@@ -64,6 +64,7 @@ export interface CollectionSummary {
 	cardsQuantity: number;
 	expansions: string[];
 	languages: LangVariant[];
+	isLoaded?: boolean
 }
 export interface CollectionFilters {
 	expansion: string;
