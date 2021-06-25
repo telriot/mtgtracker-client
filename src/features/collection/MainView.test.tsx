@@ -1,6 +1,5 @@
 import {
 	fireEvent,
-	getByLabelText,
 	render,
 	screen,
 	waitFor,
@@ -61,29 +60,38 @@ describe('Renders correctly on loaded data', () => {
 		await waitFor(
 			() => expect(screen.getByText(collection[0].name)).toBeInTheDocument
 		);
-		expect(screen.queryByLabelText('create-modal')).not.toBeInTheDocument;
+    const createModal = screen.queryByLabelText('create-modal')
+		expect(createModal).not.toBeInTheDocument;
 		fireEvent.click(screen.getByText('Add'));
-		expect(screen.getByLabelText('create-modal')).toBeInTheDocument;
+		expect(createModal).toBeInTheDocument;
 		fireEvent.click(screen.getByText('Cancel'));
+    expect(createModal).not.toBeInTheDocument;
 	});
 	test('Opens edit modal on edit button click', async () => {
 		await waitFor(
 			() => expect(screen.getByText(collection[0].name)).toBeInTheDocument
 		);
-		expect(screen.queryByLabelText('edit-modal')).not.toBeInTheDocument;
+    const editModal = screen.queryByLabelText('edit-modal')
+		expect(editModal).not.toBeInTheDocument;
 		fireEvent.click(screen.getAllByLabelText('expand-button')[0]);
 		fireEvent.click(screen.getAllByLabelText('edit-button')[0]);
-		expect(screen.getByLabelText('edit-modal')).toBeInTheDocument;
+		expect(editModal).toBeInTheDocument;
 		fireEvent.click(screen.getByText('Cancel'));
+    expect(editModal).not.toBeInTheDocument;
+
 	});
 	test('Opens delete modal on delete button click', async () => {
 		await waitFor(
 			() => expect(screen.getByText(collection[0].name)).toBeInTheDocument
 		);
-		expect(screen.queryByLabelText('delete-modal')).not.toBeInTheDocument;
+    const deleteModal = screen.queryByLabelText('delete-modal')
+
+		expect(deleteModal).not.toBeInTheDocument;
 		fireEvent.click(screen.getAllByLabelText('expand-button')[0]);
 		fireEvent.click(screen.getAllByLabelText('delete-button')[0]);
-		expect(screen.getByLabelText('delete-modal')).toBeInTheDocument;
+		expect(deleteModal).toBeInTheDocument;
 		fireEvent.click(screen.getByText('Cancel'));
+    expect(deleteModal).not.toBeInTheDocument;
+
 	});
 });
