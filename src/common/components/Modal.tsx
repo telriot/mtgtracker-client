@@ -25,6 +25,7 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
 	//  ======================================== JSX
 	return (
 		<div
+			aria-label='modal-overlay'
 			className={clsx(
 				'fixed top-0 left-0 w-screen h-screen flex items-center justify-center p-1 sm:p-3 transition-color duration-100 z-50',
 				{

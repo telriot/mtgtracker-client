@@ -10,7 +10,7 @@ const CollectionSummary = ({ className, summary }: { className?: string, summary
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return summary.isLoaded ? (
-		<div className={clsx('flex text-text-primary', className)}>
+		<div aria-label='collection-summary' className={clsx('flex text-text-primary', className)}>
 			<div className='flex items-center mr-1'>
 				<FaBuffer />
 				<div aria-label='cards-total-quantity' className='mr-1'>{summary.cardsQuantity}</div>

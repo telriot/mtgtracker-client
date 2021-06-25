@@ -84,7 +84,7 @@ const Pagination = ({
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div className='flex flex-row gap-x-1'>
+		<div className='flex flex-row gap-x-1' aria-label='pagination'>
 			{showBack && (
 				<PaginationButton
 					id='pagination-prev-button'

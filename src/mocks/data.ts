@@ -22,16 +22,51 @@ export const generateCardMock = (index:number) : CollectionItem<MagicCard> => ({
 	set: 'ICE',
 	targetPrice: 111
 });
+export const generateCardCollection = (length:number) => {
+	const items = new Array(length).fill('card')
+	return items.map((_, index)=> generateCardMock(index))
+}
 
+const randomInt = (max:number) => Math.floor(Math.random()* max)
+const randomBool = () => Math.random() > .5
+
+export const generateServerSideCardMock = (index:number) => ({
+	_id: `123${index}`,
+    oracleId:`OracleID${index}`,
+    scryfallId: `ScryfallID${index}`,
+    name: `TestCard${index}`,
+    buyPrice: randomInt(100),
+    targetPrice: randomInt(100),
+    quantity: randomInt(100),
+    language: 'EN',
+    expansion: `SOM`,
+    scryfallPrices:{
+		eur: randomInt(10),
+		usd: randomInt(10),
+		eurFoil: randomInt(50),
+		usdFoil: randomInt(50),
+		tix: randomInt(20)
+	},
+    foil: randomBool(),
+    image: `https://www.google.com`,
+    owner: '12345678',
+    cardCollection: '123455667',
+    lastUpdated: '10 May 2021',
+    tcgplayerId: `TcgId${index}`,
+}) 
+
+export const generateServerSideCollection = (length: number) => {
+	const items = new Array(length).fill('card')
+	return items.map((_, index)=> generateServerSideCardMock(index))
+}
 export const collectionSummaryMock : CollectionSummary = {
-	maxUsd: 1,
+	maxUsd: 500,
 	minUsd: 1,
-	maxEur: 1,
-	minEur: 1,
-	totalUsd: 1,
-	totalEur: 1,
-	cardsQuantity: 20,
-	expansions: ['SOM'],
-	languages: ['EN'],
-	isLoaded: true
+	maxEur: 400,
+	minEur: .5,
+	totalUsd: 3500,
+	totalEur: 2100,
+	cardsQuantity: 10,
+	expansions: ['SOM', 'MOR', "MH1"],
+	languages: ['EN', 'CN']
 }

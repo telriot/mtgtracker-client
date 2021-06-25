@@ -10,10 +10,10 @@ describe('Renders correctly', () => {
         expect(screen.getByLabelText('loading-indicator')).toBeInTheDocument
 	});
     test('Renders correct data if summary is loaded', async () => {
-		render(<CollectionSummary summary={{...collectionSummaryMock}}/>);
+		render(<CollectionSummary summary={{...collectionSummaryMock, isLoaded:true}}/>);
         expect(screen.findByLabelText('loading-indicator')).not.toBeInTheDocument
         expect(screen.getByLabelText('cards-total-quantity')).toHaveTextContent(collectionSummaryMock.cardsQuantity.toString())
         expect(screen.getByLabelText('cards-total-usd')).toHaveTextContent(collectionSummaryMock.totalUsd.toString())
-        expect(screen.getByLabelText('cards-total-eur')).toHaveTextContent(collectionSummaryMock.totalUsd.toString())
+        expect(screen.getByLabelText('cards-total-eur')).toHaveTextContent(collectionSummaryMock.totalEur.toString())
 	});
 });
