@@ -11,13 +11,13 @@ interface CardTextBlockProps {
 	children?: React.ReactNode;
 }
 
-export const CardTextBlock = ({
+export const CardTextBlock : React.FC<CardTextBlockProps>= ({
 	header,
 	position = 'end',
 	size,
 	span = 1,
 	children
-}: CardTextBlockProps) => {
+}) => {
 	const textAlignment = position === 'end' ? 'right' : 'left';
 	return (
 		<div
@@ -49,7 +49,7 @@ export interface CardActionBlockProps {
 	onEdit: () => void;
 	onDelete: () => void;
 }
-export const CardActionBlock = ({ onEdit, onDelete }: CardActionBlockProps) => {
+export const CardActionBlock : React.FC<CardActionBlockProps> = ({ onEdit, onDelete }) => {
 	const iconSize = 20;
 	return (
 		<div className='flex flex-row items-center justify-end col-span-1'>

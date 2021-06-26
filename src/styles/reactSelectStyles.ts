@@ -1,4 +1,9 @@
-export const customStyles = (theme: any) => ({
+import { Theme } from "react-select";
+
+interface ProvidedStyles {
+	[x: string]: {[x: string]:unknown};
+}
+export const customStyles = (theme: Theme): Record<string, unknown> => ({
 	control: () => ({
 		border: `solid 2px ${theme.colors['secondary-light']}`,
 		display: 'flex',
@@ -6,20 +11,23 @@ export const customStyles = (theme: any) => ({
 		backgroundColor: theme.colors['card-bg'],
 		color: theme.colors['text-primary']
 	}),
-	input: (provided: any) => ({
+	input: (provided: ProvidedStyles) => ({
 		...provided,
 		color: theme.colors['text-primary']
 	}),
-	singleValue: (provided: any) => ({
+	singleValue: (provided: ProvidedStyles) => ({
 		...provided,
 		color: theme.colors['text-primary']
 	}),
-	menuList: (provided: any) => ({
+	menuList: (provided: ProvidedStyles) => ({
 		...provided,
 		backgroundColor: theme.colors['card-bg'],
 		borderRadius: '.125rem'
 	}),
-	option: (provided: any, { isFocused, isSelected }: any) => ({
+	option: (
+		provided: ProvidedStyles,
+		{ isFocused, isSelected }: Record<string, unknown>
+	) => ({
 		...provided,
 		color: theme.colors['text-primary'],
 		backgroundColor: isFocused
@@ -28,7 +36,7 @@ export const customStyles = (theme: any) => ({
 			? theme.colors['secondary-dark']
 			: theme.colors['card-bg'],
 		':active': {
-			...provided[':active'],
+			...(provided[':active']),
 			backgroundColor: isSelected
 				? theme.colors['primary-dark']
 				: theme.colors['primary-dark']

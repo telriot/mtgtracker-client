@@ -12,7 +12,7 @@ interface ButtonProps {
 	variant?: 'primary' | 'secondary' | 'danger';
 	id?: string;
 }
-const Button = ({
+const Button : React.FC<ButtonProps> = ({
 	block,
 	className = '',
 	children,
@@ -21,7 +21,7 @@ const Button = ({
 	size,
 	variant = 'primary',
 	disabled
-}: ButtonProps) => {
+}) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	const bgBase = disabled ? `${variant}-light` : variant;

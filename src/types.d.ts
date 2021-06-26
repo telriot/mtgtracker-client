@@ -1,5 +1,29 @@
 import { RootState } from 'reducers';
 
+export type ServerSideCard = {
+	_id: string,
+    oracleId:string,
+    scryfallId: string,
+    name: string,
+    buyPrice:number,
+    targetPrice:number,
+    quantity:number,
+    language: LangVariant,
+    expansion: string,
+    scryfallPrices:{
+		eur: number,
+		usd: number,
+		eurFoil: number,
+		usdFoil: number,
+		tix: number
+	},
+    foil: boolean,
+    image:string,
+    owner:string,
+    cardCollection: string,
+    lastUpdated: string,
+    tcgplayerId: string,
+};
 export type LangVariant =
 	| 'EN'
 	| 'CN'
@@ -12,7 +36,7 @@ export type LangVariant =
 	| 'PT'
 	| 'RU'
 	| 'ES'
-	|'';
+	| '';
 export type MagicCard = {
 	cardName: string;
 	//TODO: download list and parse it
@@ -64,7 +88,7 @@ export interface CollectionSummary {
 	cardsQuantity: number;
 	expansions: string[];
 	languages: LangVariant[];
-	isLoaded?: boolean
+	isLoaded?: boolean;
 }
 export interface CollectionFilters {
 	expansion: string;
@@ -76,7 +100,6 @@ export interface CollectionFilters {
 	priceGroup: 'scr' | 'tcg';
 }
 export type FilterKey = Partial<keyof CollectionFilters>;
-const dog: FilterKey = '';
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
@@ -88,7 +111,7 @@ export interface CollectionState {
 	searchBarInput: string;
 	selectedCardIds: string[];
 	status: ActionStatus;
-	targetObject: CollectionItem<any> | null;
+	targetObject: CollectionItem<MagicCard> | null;
 }
 
 export type CardUpdate = {
@@ -102,15 +125,16 @@ export type CardCreationPayload = {
 	targetPrice: number;
 	quantity: number;
 	isFoil: boolean;
-	language: LangVariant
+	language: LangVariant;
 };
 export type SearchFilters = {
 	cardName: string;
 	expansion: string;
 	language: LangVariant;
 	minEur: string;
+	maxEur: string;
 	minUsd: string;
 	maxUsd: string;
 };
 
-export type SelectOption =  { label: string, value: string }
+export type SelectOption = { label: string; value: string };

@@ -1,4 +1,5 @@
 //  ======================================== IMPORTS
+import React from 'react'
 import clsx from 'clsx'
 //  ======================================== COMPONENT
 export interface NumInputProps {
@@ -8,7 +9,7 @@ export interface NumInputProps {
     className?:string
 }
 
-const NumInput = ({ value, setValue, id, className }: NumInputProps) => {
+const NumInput: React.FC<NumInputProps> = ({ value, setValue, id, className }) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	//  ======================================== HANDLERS

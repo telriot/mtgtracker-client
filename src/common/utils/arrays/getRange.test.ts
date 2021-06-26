@@ -1,5 +1,4 @@
 import getRange from 'common/utils/arrays/getRange'
-import { assert } from 'console'
 
 test('Produces the requested range by increments of one', ()=>{
     const range = getRange(3)

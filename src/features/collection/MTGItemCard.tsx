@@ -1,4 +1,5 @@
 //  ======================================== IMPORTS
+import React, { FC } from 'react';
 import { CollectionItem, MagicCard } from 'types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,7 +9,6 @@ import {
 	selectSelectedCardIds,
 	statusSet
 } from './collectionSlice';
-import React from 'react';
 import { Popover } from 'react-tiny-popover';
 import CardImage from 'common/components/CardImage';
 import { useMediaQuery } from 'react-responsive';
@@ -22,7 +22,7 @@ interface MTGItemCardProps {
 	card: CollectionItem<MagicCard>;
 }
 
-const MTGItemCard = ({ card }: MTGItemCardProps) => {
+const MTGItemCard: FC<MTGItemCardProps> = ({ card }) => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	const isMd = useMediaQuery({
@@ -125,16 +125,16 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 						{mainInfoBlock.map(({ header, content }) => (
 							<CardTextBlock
 								key={`${id}-${header}`}
-								header={header}
-								children={content}
-							/>
+								header={header}>
+								{content}
+							</CardTextBlock>
 						))}
 						{detailBlock.map(({ header, content }) => (
 							<CardTextBlock
 								key={`${id}-${header}`}
-								header={header}
-								children={content}
-							/>
+								header={header}>
+								{content}
+							</CardTextBlock>
 						))}
 
 						<CardActionBlock
@@ -160,9 +160,9 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 							<CardTextBlock
 								key={`${id}-${header}`}
 								header={header}
-								span={2}
-								children={content}
-							/>
+								span={2}>
+								{content}
+							</CardTextBlock>
 						))}
 						<div className='col-start-11 col-span-2 flex items-center justify-end'>
 							<Button
@@ -183,10 +183,10 @@ const MTGItemCard = ({ card }: MTGItemCardProps) => {
 									<CardTextBlock
 										key={`${id}-${header}`}
 										header={header}
-										children={content}
 										size='sm'
-										span={2}
-									/>
+										span={2}>
+										{content}
+									</CardTextBlock>
 								))}
 								<Button
 									id='delete-button'

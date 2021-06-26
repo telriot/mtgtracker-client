@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import React from 'react';
+import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from 'common/components/Button';
 import {
@@ -11,23 +11,22 @@ import {
 	NumInput,
 	CheckInput,
 	SelectInput
-
 } from 'common/components/EditInputs';
 import parseItemName from 'common/utils/parsing/parseItemName';
 import { langOptions } from 'assets/cardData';
-import { LangVariant, AsyncStatus, CollectionItem } from 'types';
+import { LangVariant, AsyncStatus, CollectionItem, MagicCard } from 'types';
 
 //  ======================================== COMPONENT
 interface EditModalContentProps {
-	status: AsyncStatus
-	target: CollectionItem<any>
+	status: AsyncStatus;
+	target: CollectionItem<MagicCard>;
 }
-const EditModalContent = ({status, target}: EditModalContentProps) => {
+const EditModalContent: FC<EditModalContentProps> = ({ status, target }) => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 
 	//  ======================================== STATE
-	const [language, setLanguage] = React.useState(target.language)
+	const [language, setLanguage] = React.useState(target.language);
 
 	const [owned, setOwned] = React.useState<string>(
 		target.quantity.toString()
@@ -46,7 +45,7 @@ const EditModalContent = ({status, target}: EditModalContentProps) => {
 			updateCollectionItem({
 				id: target.id,
 				quantity: parseFloat(owned),
-				buyPrice:parseFloat(buyPrice),
+				buyPrice: parseFloat(buyPrice),
 				targetPrice: parseFloat(targetPrice),
 				language: language as LangVariant,
 				foil: isFoil
@@ -59,7 +58,12 @@ const EditModalContent = ({status, target}: EditModalContentProps) => {
 		<div aria-label='edit-modal' className='flex flex-col'>
 			<ModalTitle>{parseItemName(target)}</ModalTitle>
 			<div className='mb-6'>
-			<SelectInput options={langOptions} value={language} setValue={setLanguage}>Language</SelectInput>
+				<SelectInput
+					options={langOptions}
+					value={language}
+					setValue={setLanguage}>
+					Language
+				</SelectInput>
 
 				<NumInput value={owned} setValue={setOwned}>
 					Copies Owned
@@ -76,10 +80,16 @@ const EditModalContent = ({status, target}: EditModalContentProps) => {
 			</div>
 
 			<ModalButtonDiv>
-				<Button variant='danger' disabled={status === 'pending'} onClick={handleCancel}>
+				<Button
+					variant='danger'
+					disabled={status === 'pending'}
+					onClick={handleCancel}>
 					Cancel
 				</Button>
-				<Button variant='primary' disabled={status === 'pending'} onClick={handleEdit}>
+				<Button
+					variant='primary'
+					disabled={status === 'pending'}
+					onClick={handleEdit}>
 					Save
 				</Button>
 			</ModalButtonDiv>

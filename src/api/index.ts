@@ -8,6 +8,8 @@ const SCRYFALL_SEARCH_API = 'https://api.scryfall.com/cards/search';
 export const SERVER_API = 'http://localhost:5000/api';
 export const TEST_COLLECTION_ID = '60d0559479086231e711cd19';
 
+
+export interface CardDataReturnValue {cards:CollectionItem<MagicCard>[], pages: number}
 // API CALLS
 export const getCardsFromCollection = async (
 	id: string,
@@ -35,7 +37,7 @@ export const postCollectionItem = async (
 	currentPage: number,
 	filters: SearchFilters,
 	payload: CardCreationPayload
-) => {
+) : Promise<CardDataReturnValue> => {
 	const response = await axios.post(
 		`${SERVER_API}/collections/${collectionId}/cards`,
 		{
@@ -57,7 +59,7 @@ export const patchCollectionItem = async (
 	currentPage: number,
 	filters: SearchFilters,
 	update: CardUpdate
-) => {
+) : Promise<CardDataReturnValue> => {
 	const response = await axios.put(
 		`${SERVER_API}/collections/${collectionId}/${id}`,
 		{
@@ -77,7 +79,7 @@ export const destroyCollectionItem = async (
 	id: string,
 	currentPage: number,
 	filters?: SearchFilters
-) => {
+) : Promise<CardDataReturnValue> => {
 	const response = await axios.delete(
 		`${SERVER_API}/collections/${collectionId}/${id}`,
 		{
@@ -97,7 +99,7 @@ export const destroyManyCollectionItems = async (
 	ids: string[],
 	currentPage: number,
 	filters?: SearchFilters
-): Promise<{ cards: any; pages: number }> => {
+): Promise<CardDataReturnValue> => {
 	const response = await axios.delete(
 		`${SERVER_API}/collections/${collectionId}/bulk/delete`,
 		{

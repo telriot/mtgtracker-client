@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import React from 'react';
+import React,{ FC } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from 'common/components/Button';
 import {
@@ -21,7 +21,7 @@ import parseItemName from 'common/utils/parsing/parseItemName';
 import { langOptions } from 'assets/cardData';
 import { LangVariant } from 'types';
 //  ======================================== COMPONENT
-const CreateModalContent = () => {
+const CreateModalContent: FC<unknown> = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
@@ -52,7 +52,7 @@ const CreateModalContent = () => {
 				isFoil
 			})
 		);
-	const handleSelectChange = (card: Record<string, string>) =>
+	const handleSelectChange = (card: Record<string, any>) =>
 		setSelectedCard({
 			cardName: card.name,
 			set: card.set,

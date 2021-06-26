@@ -1,3 +1,4 @@
+import React from 'react'
 import {fireEvent, render, screen} from 'common/utils/test-utils'
 import Card from './MTGItemCard'
 import {generateCardMock} from '../../mocks/data'

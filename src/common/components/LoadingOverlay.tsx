@@ -1,10 +1,11 @@
 //  ======================================== IMPORTS
+import React from 'react'
 import { useContext } from 'react';
 import Loader from 'react-loader-spinner';
 import ThemeContext from 'themeContext';
 
 //  ======================================== COMPONENT
-const LoadingOverlay = () => {
+const LoadingOverlay : React.FC<unknown> = () => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	const { colors } = useContext(ThemeContext);

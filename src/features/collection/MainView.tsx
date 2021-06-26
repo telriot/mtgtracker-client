@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import React from 'react';
+import React, {FC} from 'react';
 import MTGItemCard from 'features/collection/MTGItemCard';
 import Button from 'common/components/Button';
 import Pagination from 'common/components/Pagination';
@@ -30,7 +30,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import Toolbar from 'features/collection/Toolbar';
 //  ======================================== COMPONENT
-const CollectionView = () => {
+const CollectionView : FC<unknown> = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE

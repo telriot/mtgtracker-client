@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import React from 'react';
+import React, { FC }  from 'react';
 import Select from 'react-select';
 import { customStyles } from 'styles/reactSelectStyles';
 import ThemeContext from 'themeContext';
@@ -22,7 +22,7 @@ interface FilterInputProps {
 	id: string;
 }
 
-const FilterInput = ({ children, label, id }: FilterInputProps) => {
+const FilterInput: FC<FilterInputProps> = ({ children, label, id }) => {
 	return (
 		<div className='flex flex-col mr-3'>
 			<label
@@ -38,7 +38,7 @@ const FilterInput = ({ children, label, id }: FilterInputProps) => {
 interface FilterSectionProps {
 	isOpen: boolean;
 }
-const FilterSection = ({ isOpen }: FilterSectionProps) => {
+const FilterSection : FC<FilterSectionProps> = ({ isOpen }) => {
 	//  ======================================== HOOKS
 	const theme = React.useContext(ThemeContext);
 	const customSelectStyles = customStyles(theme);

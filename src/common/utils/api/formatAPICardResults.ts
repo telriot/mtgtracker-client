@@ -1,15 +1,15 @@
-import { CollectionItem, MagicCard } from 'types';
+import { CollectionItem, MagicCard, ServerSideCard } from 'types';
 
 /**
  * 
  * @param docs Paginated docs from express API
  * @returns A collection of consumable CollectionItems
  */
-const formatAPICardResults = (docs:any[]) : CollectionItem<MagicCard>[] => {
+const formatAPICardResults = (docs:ServerSideCard[]) : CollectionItem<MagicCard>[] => {
 	return docs.map((card) =>({
 		id: card._id,
-		minPrice: parseFloat(card.scryfallPrices.eur) || 0,
-		medianPrice:  parseFloat(card.scryfallPrices.eur) || 0,
+		minPrice: card.scryfallPrices.eur || 0,
+		medianPrice:  card.scryfallPrices.eur || 0,
 		buyPrice: card.buyPrice,
 		targetPrice: card.targetPrice,
 		quantity: card.quantity,

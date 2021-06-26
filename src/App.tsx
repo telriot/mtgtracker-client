@@ -1,6 +1,7 @@
+import React from 'react'
 import MainView from 'features/collection/MainView';
 
-function App() {
+const App : React.FC<unknown> = () => {
   return (
     <MainView/>
   );

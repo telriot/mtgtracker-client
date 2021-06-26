@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import React from 'react';
+import React, {FC} from 'react';
 import Button from 'common/components/Button';
 import SearchBar from 'common/components/SearchBar';
 import FilterSection from 'features/collection/FilterSection';
@@ -16,7 +16,7 @@ import { FaFilter } from 'react-icons/fa';
 import CollectionSummary from './CollectionSummary';
 
 //  ======================================== COMPONENT
-const Toolbar = () => {
+const Toolbar : FC<unknown> = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	const isMd = useMediaQuery({ query: '(min-width: 640px)' });

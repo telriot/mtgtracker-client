@@ -13,7 +13,11 @@ export interface NumInputProps {
 	value: string | number;
 	setValue: (value: string) => void;
 }
-export const NumInput = ({ children, value, setValue }: NumInputProps) => {
+export const NumInput : React.FC<NumInputProps> = ({
+	children,
+	value,
+	setValue
+}) => {
 	// const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 	// 	const { value } = event.target;
 	// 	const parsed = parseFloat(value) > 0 ? value :'0' as string;
@@ -30,16 +34,16 @@ export const NumInput = ({ children, value, setValue }: NumInputProps) => {
 export interface SelectInputProps {
 	children: string;
 	value: string;
-	setValue: (value: string) => void;
-	options:SelectOption[]
+	setValue: (value: any) => void;
+	options: SelectOption[];
 }
 
-export const SelectInput = ({
+export const SelectInput: React.FC<SelectInputProps> = ({
 	children,
 	value,
 	setValue,
 	options
-}: SelectInputProps) => {
+}) => {
 	//  ======================================== HOOKS
 	const theme = React.useContext(ThemeContext);
 	const customSelectStyles = customStyles(theme);
@@ -50,7 +54,7 @@ export const SelectInput = ({
 		<div className='flex justify-between items-center mb-3  '>
 			<label htmlFor={children}>{children}</label>
 			<Select
-			className='w-20'
+				className='w-20'
 				id={children}
 				defaultValue={options[0]}
 				value={{ label: value || 'All', value }}
@@ -69,11 +73,11 @@ export interface CheckInputProps {
 	checked: boolean;
 	setValue: (value: boolean) => void;
 }
-export const CheckInput = ({
+export const CheckInput: React.FC<CheckInputProps> = ({
 	children,
 	checked,
 	setValue
-}: CheckInputProps) => {
+}) => {
 	return (
 		<div className='flex justify-between items-center mb-3'>
 			<label htmlFor={children}>{children}</label>

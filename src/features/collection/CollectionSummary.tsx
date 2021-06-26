@@ -1,9 +1,14 @@
 //  ======================================== IMPORTS
+import React from 'react'
 import { FaBuffer, FaEuroSign, FaDollarSign } from 'react-icons/fa';
 import clsx from 'clsx';
 import { CollectionSummary as TSummary} from 'types';
+import { FC } from 'react';
 //  ======================================== COMPONENT
-const CollectionSummary = ({ className, summary }: { className?: string, summary:TSummary }) => {
+interface CollectionSummaryProps {
+	className?: string, summary:TSummary
+}
+const CollectionSummary : FC<CollectionSummaryProps>= ({ className, summary }) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	//  ======================================== HANDLERS

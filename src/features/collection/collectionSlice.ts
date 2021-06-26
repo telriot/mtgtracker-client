@@ -14,7 +14,10 @@ import {
 	CollectionItem,
 	CollectionState,
 	MagicCard,
-	ReducerPayload
+	ReducerPayload,
+	AsyncStatus,
+	SearchFilters,
+	Prices
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
 import {
@@ -31,7 +34,7 @@ import stdSuccessHandler from 'common/utils/redux/stdSuccessHandler';
 
 //  ======================================== UTILS
 const getPrice = (
-	prices: Record<string, string>,
+	prices: Prices,
 	key: 'usd' | 'eur',
 	isFoil: boolean
 ) => {
@@ -47,7 +50,7 @@ export const collectionAdapter = createEntityAdapter<CollectionItem<MagicCard>>(
 );
 //  ======================================== THUNKS
 export const fetchCollection = createAsyncThunk<
-	ThunkReturnValue<{ cards: any[]; pages: number }>,
+	ThunkReturnValue<{ cards: CollectionItem<MagicCard>[]; pages: number }>,
 	{ id: string },
 	ThunkAPIReturnValue
 >('collection/fetchCollection', async ({ id }, thunkAPI) => {
@@ -55,7 +58,7 @@ export const fetchCollection = createAsyncThunk<
 		thunkAPI.getState().collection;
 	try {
 		const { cards, pages } = await getCardsFromCollection(
-			TEST_COLLECTION_ID,
+			TEST_COLLECTION_ID || id,
 			currentPage,
 			{ cardName: searchBarInput, ...filters }
 		);
@@ -80,7 +83,7 @@ export const fetchCollectionSummary = createAsyncThunk<
 });
 export const addCollectionItem = createAsyncThunk<
 	ThunkReturnValue<{
-		cards: any[];
+		cards: CollectionItem<MagicCard>[];
 		pages: number;
 		update: CardCreationPayload;
 	}>,
@@ -103,10 +106,10 @@ export const addCollectionItem = createAsyncThunk<
 });
 export const updateCollectionItem = createAsyncThunk<
 	ThunkReturnValue<{
-		cards: any[];
+		cards: CollectionItem<MagicCard>[];
 		pages: number;
 		update: CardUpdate;
-		target: CollectionItem<any>;
+		target: CollectionItem<MagicCard>;
 	}>,
 	CardUpdate,
 	ThunkAPIReturnValue
@@ -135,9 +138,9 @@ export const updateCollectionItem = createAsyncThunk<
 export const deleteCollectionItem = createAsyncThunk<
 	ThunkReturnValue<{
 		id: string;
-		cards: any[];
+		cards: CollectionItem<MagicCard>[];
 		pages: number;
-		target: CollectionItem<any>;
+		target: CollectionItem<MagicCard>;
 	}>,
 	null,
 	ThunkAPIReturnValue
@@ -164,9 +167,9 @@ export const deleteCollectionItem = createAsyncThunk<
 export const bulkDeleteCollectionItems = createAsyncThunk<
 	ThunkReturnValue<{
 		ids: string[];
-		cards: any[];
+		cards: CollectionItem<MagicCard>[];
 		pages: number;
-		targets: CollectionItem<any>[];
+		targets: CollectionItem<MagicCard>[];
 	}>,
 	null,
 	ThunkAPIReturnValue
@@ -279,7 +282,7 @@ const collection = createSlice({
 				payload
 			}: ReducerPayload<{
 				status: ActionStatus;
-				target?: CollectionItem<any> | null;
+				target?: CollectionItem<MagicCard> | null;
 			}>
 		) => {
 			state.status = payload.status;
@@ -483,23 +486,23 @@ export const {
 
 const selectors = collectionAdapter.getSelectors();
 
-export const selectAllCollectionItems = ({ collection }: RootState) =>
+export const selectAllCollectionItems = ({ collection }: RootState) : CollectionItem<MagicCard>[] =>
 	selectors.selectAll(collection);
-export const selectCurrentPage = ({ collection }: RootState) =>
+export const selectCurrentPage = ({ collection }: RootState): number =>
 	collection.currentPage;
-export const selectCollectionSummary = ({ collection }: RootState) =>
+export const selectCollectionSummary = ({ collection }: RootState) : CollectionSummary =>
 	collection.collectionSummary;
-export const selectSelectedCardIds = ({ collection }: RootState) =>
+export const selectSelectedCardIds = ({ collection }: RootState) : string[] =>
 	collection.selectedCardIds;
-export const selectPages = ({ collection }: RootState) => collection.pages;
-export const selectSearchBarInput = ({ collection }: RootState) =>
+export const selectPages = ({ collection }: RootState) : number => collection.pages;
+export const selectSearchBarInput = ({ collection }: RootState) : string =>
 	collection.searchBarInput;
-export const selectStatus = ({ collection }: RootState) => collection.status;
-export const selectAsyncStatus = ({ collection }: RootState) =>
+export const selectStatus = ({ collection }: RootState) : ActionStatus => collection.status;
+export const selectAsyncStatus = ({ collection }: RootState) : AsyncStatus=>
 	collection.asyncStatus;
-export const selectTargetObject = ({ collection }: RootState) =>
+export const selectTargetObject = ({ collection }: RootState) : CollectionItem<MagicCard>=>
 	collection.targetObject;
-export const selectFilters = ({ collection }: RootState) => collection.filters;
+export const selectFilters = ({ collection }: RootState) : Omit< SearchFilters, 'cardName'> => collection.filters;
 //  ======================================== EXPORT DEFAULT
 export default collection.reducer;
 //  ========================================

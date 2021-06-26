@@ -3,15 +3,16 @@ import ThemeContext from 'themeContext';
 import React from 'react';
 import clsx from 'clsx'
 //  ======================================== COMPONENT
-const Checkbox = ({
-	id,
-	checked,
-	setValue
-}: {
+interface CheckboxProps {
 	id: string;
 	checked: boolean;
 	setValue: (value: boolean) => void;
-}) => {
+}
+const Checkbox : React.FC<CheckboxProps>= ({
+	id,
+	checked,
+	setValue
+})=> {
 	//  ======================================== HOOKS
 	const { colors } = React.useContext(ThemeContext);
 	//  ======================================== STATE

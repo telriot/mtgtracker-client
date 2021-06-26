@@ -2,12 +2,13 @@
 
 import React, { MouseEvent } from 'react';
 import clsx from 'clsx';
+interface ChildrenProps { children: React.ReactNode}
 //  ======================================== SUBCOMPONENT
-export const ModalTitle = ({ children }: { children: React.ReactNode }) => {
+export const ModalTitle : React.FC<ChildrenProps>= ({ children }) => {
 	return <div className='mb-8 text-center text-xl'>{children}</div>;
 };
 //  ======================================== SUBCOMPONENT
-export const ModalButtonDiv = ({ children }: { children: React.ReactNode }) => {
+export const ModalButtonDiv : React.FC<ChildrenProps> = ({ children }) => {
 	return <div className='flex justify-around'>{children}</div>;
 };
 //  ======================================== COMPONENT
@@ -16,7 +17,7 @@ interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 }
-const Modal = ({ children, isOpen, onClose }: ModalProps) => {
+const Modal : React.FC<ModalProps>= ({ children, isOpen, onClose }) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	//  ======================================== HANDLERS

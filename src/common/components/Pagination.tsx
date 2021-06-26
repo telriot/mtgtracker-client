@@ -12,13 +12,13 @@ export interface PaginationButtonProps {
 	id: string;
 }
 
-const PaginationButton = ({
+const PaginationButton: React.FC<PaginationButtonProps> = ({
 	children,
 	disabled,
 	onClick,
 	isActive,
 	id
-}: PaginationButtonProps) => {
+}) => {
 	return (
 		<div
 			aria-label={id}
@@ -61,7 +61,7 @@ export interface PaginationProps {
 	maxButtons?: number;
 	setPage: (page: number) => void;
 }
-const Pagination = ({
+const Pagination : React.FC<PaginationProps> = ({
 	activePage,
 	disabled,
 	pages,

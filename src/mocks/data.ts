@@ -1,4 +1,4 @@
-import { CollectionItem, MagicCard, CollectionSummary } from "types";
+import { CollectionItem, MagicCard, CollectionSummary, ServerSideCard } from "types";
 
 export const testMock = '1';
 export const generateCardMock = (index:number) : CollectionItem<MagicCard> => ({
@@ -22,7 +22,7 @@ export const generateCardMock = (index:number) : CollectionItem<MagicCard> => ({
 	set: 'ICE',
 	targetPrice: 111
 });
-export const generateCardCollection = (length:number) => {
+export const generateCardCollection = (length:number) : CollectionItem<MagicCard>[]=> {
 	const items = new Array(length).fill('card')
 	return items.map((_, index)=> generateCardMock(index))
 }
@@ -30,7 +30,7 @@ export const generateCardCollection = (length:number) => {
 const randomInt = (max:number) => Math.floor(Math.random()* max)
 const randomBool = () => Math.random() > .5
 
-export const generateServerSideCardMock = (index:number) => ({
+export const generateServerSideCardMock = (index:number) : ServerSideCard => ({
 	_id: `123${index}`,
     oracleId:`OracleID${index}`,
     scryfallId: `ScryfallID${index}`,
@@ -55,7 +55,7 @@ export const generateServerSideCardMock = (index:number) => ({
     tcgplayerId: `TcgId${index}`,
 }) 
 
-export const generateServerSideCollection = (length: number) => {
+export const generateServerSideCollection = (length: number) : ServerSideCard[]=> {
 	const items = new Array(length).fill('card')
 	return items.map((_, index)=> generateServerSideCardMock(index))
 }

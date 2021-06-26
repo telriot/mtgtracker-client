@@ -1,4 +1,5 @@
 //  ======================================== IMPORTS
+import React from 'react'
 import cardBack from 'assets/images/card-back.jpg'
 import useFallbackImg from 'common/hooks/useFallbackImg'
 //  ======================================== COMPONENT
@@ -11,7 +12,7 @@ export interface CardImageProps {
 	className?: string;
 }
 
-const CardImage = ({ zoom = 4, src, alt, className = '' }: CardImageProps) => {
+const CardImage : React.FC<CardImageProps>= ({ zoom = 4, src, alt, className = '' }) => {
 	//  ======================================== HOOKS
     const { imgSrc, handleError } = useFallbackImg(src, cardBack)
 

@@ -9,12 +9,12 @@ export interface SearchBarProps {
 	value: string;
 	id?: string;
 }
-const SearchBar = ({
+const SearchBar: React.FC<SearchBarProps> = ({
 	className,
 	onChange,
 	value,
 	id = 'search-bar'
-}: SearchBarProps) => {
+}) => {
 	//  ======================================== HOOKS
 	//  ======================================== STATE
 	//  ======================================== HANDLERS

@@ -1,3 +1,4 @@
+import React from 'react'
 import {
 	fireEvent,
 	render,
@@ -32,10 +33,10 @@ describe('Renders correctly on loaded data', () => {
 		await waitFor(()=>expect(screen.queryByLabelText('total-quantity')).toBeInTheDocument)
         const filterSection = screen.getByLabelText('filter-section')
         const toggleBtn = screen.getByLabelText('filters-toggle-button')
-        expect(filterSection).toHaveClass('hidden')
+        expect(filterSection.className).toBe('hidden')
         fireEvent.click(toggleBtn)
-        expect(filterSection).not.toHaveClass('hidden')
+        expect(filterSection.className).not.toBe('hidden')
         fireEvent.click(toggleBtn)
-        expect(filterSection).toHaveClass('hidden')
+        expect(filterSection.className).toBe('hidden')
     });
 });

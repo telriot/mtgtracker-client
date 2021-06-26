@@ -1,4 +1,5 @@
 //  ======================================== IMPORTS
+import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import {
 	bulkDeleteCollectionItems,
@@ -12,10 +13,10 @@ interface BulkDeleteModalContentProps {
 	status: AsyncStatus;
 	ids: string[];
 }
-const BulkDeleteModalContent = ({
+const BulkDeleteModalContent: FC<BulkDeleteModalContentProps> = ({
 	status,
 	ids
-}: BulkDeleteModalContentProps) => {
+}) => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
