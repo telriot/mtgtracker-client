@@ -29,7 +29,7 @@ const BulkAddButton: React.FC<BulkAddButtonProps> = ({ className }) => {
 				.toString()
 				.split('\n')
 				.map((line) => {
-					const [main, expansion, lang] = line.split(',');
+					const [main, expansion, lang, foil] = line.split(',');
 					let quantity: number, cardName: string;
 					const mainBlock = main.split(' ');
 					if (isNaN(parseInt(mainBlock[0]))) {
@@ -43,7 +43,8 @@ const BulkAddButton: React.FC<BulkAddButtonProps> = ({ className }) => {
 						name: parseInput(cardName),
 						quantity,
 						expansion: parseInput(expansion),
-						lang: parseInput(lang, 'EN')
+						lang: parseInput(lang, 'EN'),
+                        foil: foil === 'foil'
 					};
 					return cardObj;
 				})

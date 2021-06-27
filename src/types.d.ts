@@ -127,6 +127,14 @@ export type CardCreationPayload = {
 	isFoil: boolean;
 	language: LangVariant;
 };
+export type BulkCardCreationPayload = {
+	name: string;
+	quantity: number;
+	expansion: string;
+	lang: string;
+	foil: boolean;
+}[];
+
 export type SearchFilters = {
 	cardName: string;
 	expansion: string;
@@ -151,13 +159,13 @@ export type ScryfallCard = {
 		normal?: string;
 		small?: string;
 	};
-	prices:{
-		eur:string,
-		usd:string,
-		usd_foil:string,
-		eur_foil:string,
-		tix:string,
-	}
+	prices: {
+		eur: string;
+		usd: string;
+		usd_foil: string;
+		eur_foil: string;
+		tix: string;
+	};
 	set: string;
 	set_name: string;
 };

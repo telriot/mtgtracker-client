@@ -17,7 +17,8 @@ import {
 	ReducerPayload,
 	AsyncStatus,
 	SearchFilters,
-	Prices
+	Prices,
+	BulkCardCreationPayload
 } from 'types';
 import { CardUpdate, ThunkReturnValue, ThunkAPIReturnValue } from 'types';
 import {
@@ -26,6 +27,7 @@ import {
 	destroyCollectionItem,
 	patchCollectionItem,
 	postCollectionItem,
+	postBulkCards,
 	destroyManyCollectionItems,
 	TEST_COLLECTION_ID
 } from 'api';
@@ -96,6 +98,30 @@ export const addCollectionItem = createAsyncThunk<
 			payload
 		);
 		return stdSuccessHandler({ cards, pages, update: payload });
+	} catch (error) {
+		return stdErrorHandler(error);
+	}
+});
+
+export const bulkAddCollectionItem = createAsyncThunk<
+	ThunkReturnValue<{
+		cards: CollectionItem<MagicCard>[];
+		pages: number;
+		summary: CollectionSummary;
+	}>,
+	BulkCardCreationPayload,
+	ThunkAPIReturnValue
+>('collection/bulkAddCollectionItem', async (payload, thunkAPI) => {
+	try {
+		const { currentPage, searchBarInput, filters } =
+			thunkAPI.getState().collection;
+		const { cards, pages, collectionSummary } = await postBulkCards(
+			TEST_COLLECTION_ID,
+			currentPage,
+			{ cardName: searchBarInput, ...filters },
+			payload
+		);
+		return stdSuccessHandler({ cards, pages, collectionSummary });
 	} catch (error) {
 		return stdErrorHandler(error);
 	}
