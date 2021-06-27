@@ -13,6 +13,7 @@ import {
 	selectFilters
 } from './collectionSlice';
 import Button from 'common/components/Button';
+import BulkAddButton from './BulkAddButton';
 
 const DEFAULT_OPTION = { label: 'All', value: '' };
 //  ======================================== COMPONENT
@@ -166,9 +167,10 @@ const FilterSection : FC<FilterSectionProps> = ({ isOpen }) => {
 					/>
 				</FilterInput>
 			</div>
-			<Button className='flex mb-1 self-end' onClick={resetFilters}>
+			<Button className='flex mb-1 self-end mr-3' onClick={resetFilters}>
 				Reset
 			</Button>
+			<BulkAddButton className='flex mb-1 self-end'/>
 
 			{/* <div className='w-36'>
 				<FilterInput id='price-group-filter' label='Price Group'>
