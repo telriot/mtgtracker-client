@@ -26,7 +26,7 @@ const EditModalContent: FC<EditModalContentProps> = ({ status, target }) => {
 	const dispatch = useDispatch();
 
 	//  ======================================== STATE
-	const [language, setLanguage] = React.useState(target.language);
+	const [language, setLanguage] = React.useState<string>(target.language);
 
 	const [owned, setOwned] = React.useState<string>(
 		target.quantity.toString()

@@ -1,6 +1,6 @@
 import axios from 'axios';
 // import mockTimeout from 'common/utils/timers/mockTimeout';
-import { CardCreationPayload, CardUpdate, CollectionSummary, CollectionItem, MagicCard, SearchFilters } from 'types';
+import { CardCreationPayload, CardUpdate, CollectionSummary, CollectionItem, MagicCard, SearchFilters, ScryfallCard } from 'types';
 import formatCards from 'common/utils/api/formatAPICardResults';
 
 // CONSTANTS
@@ -118,7 +118,7 @@ export const destroyManyCollectionItems = async (
 // NON-THUNK-HANDLED CALLS
 export const getCardsByNameViaScf = async (
 	cardName: string
-): Promise<{ [x: string]: any }[]> => {
+): Promise<ScryfallCard[]> => {
 	try {
 		const { data } = await axios.get(`${SCRYFALL_SEARCH_API}`, {
 			params: { q: cardName, unique: 'prints' }

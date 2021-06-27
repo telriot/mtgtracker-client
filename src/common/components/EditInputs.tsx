@@ -34,7 +34,7 @@ export const NumInput : React.FC<NumInputProps> = ({
 export interface SelectInputProps {
 	children: string;
 	value: string;
-	setValue: (value: any) => void;
+	setValue: (value: string ) => void;
 	options: SelectOption[];
 }
 

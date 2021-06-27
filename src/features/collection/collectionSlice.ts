@@ -33,11 +33,7 @@ import stdErrorHandler from 'common/utils/redux/stdErrorHandler';
 import stdSuccessHandler from 'common/utils/redux/stdSuccessHandler';
 
 //  ======================================== UTILS
-const getPrice = (
-	prices: Prices,
-	key: 'usd' | 'eur',
-	isFoil: boolean
-) => {
+const getPrice = (prices: Prices, key: 'usd' | 'eur', isFoil: boolean) => {
 	const price = parseFloat(prices[`${key}${isFoil ? 'Foil' : ''}`]);
 	return isNaN(price) ? 0 : price;
 };
@@ -310,7 +306,10 @@ const collection = createSlice({
 			fetchCollectionSummary.fulfilled,
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
-					state.collectionSummary = {...data.collectionSummary, isLoaded:true};
+					state.collectionSummary = {
+						...data.collectionSummary,
+						isLoaded: true
+					};
 					state.summaryStatus = 'fulfilled';
 					state.filters.minUsd =
 						data.collectionSummary.minUsd.toString();
@@ -339,14 +338,20 @@ const collection = createSlice({
 				if (success) {
 					const { update } = data;
 					const { quantity } = update;
-
+					const { eur, eur_foil, usd, usd_foil, tix } =
+						update.card.prices;
+					const priceObj = {
+						eur: parseFloat(eur),
+						usd: parseFloat(usd),
+						eurFoil: parseFloat(eur_foil),
+						usdFoil: parseFloat(usd_foil),
+						tix: parseFloat(tix)
+					};
 					collectionSummary.cardsQuantity += quantity;
 					collectionSummary.totalEur +=
-						quantity *
-						getPrice(update.card.prices, 'eur', update.isFoil);
+						quantity * getPrice(priceObj, 'eur', update.isFoil);
 					collectionSummary.totalUsd +=
-						quantity *
-						getPrice(update.card.prices, 'usd', update.isFoil);
+						quantity * getPrice(priceObj, 'usd', update.isFoil);
 					if (
 						!collectionSummary.languages.includes(update.language)
 					) {
@@ -486,23 +491,30 @@ export const {
 
 const selectors = collectionAdapter.getSelectors();
 
-export const selectAllCollectionItems = ({ collection }: RootState) : CollectionItem<MagicCard>[] =>
-	selectors.selectAll(collection);
+export const selectAllCollectionItems = ({
+	collection
+}: RootState): CollectionItem<MagicCard>[] => selectors.selectAll(collection);
 export const selectCurrentPage = ({ collection }: RootState): number =>
 	collection.currentPage;
-export const selectCollectionSummary = ({ collection }: RootState) : CollectionSummary =>
-	collection.collectionSummary;
-export const selectSelectedCardIds = ({ collection }: RootState) : string[] =>
+export const selectCollectionSummary = ({
+	collection
+}: RootState): CollectionSummary => collection.collectionSummary;
+export const selectSelectedCardIds = ({ collection }: RootState): string[] =>
 	collection.selectedCardIds;
-export const selectPages = ({ collection }: RootState) : number => collection.pages;
-export const selectSearchBarInput = ({ collection }: RootState) : string =>
+export const selectPages = ({ collection }: RootState): number =>
+	collection.pages;
+export const selectSearchBarInput = ({ collection }: RootState): string =>
 	collection.searchBarInput;
-export const selectStatus = ({ collection }: RootState) : ActionStatus => collection.status;
-export const selectAsyncStatus = ({ collection }: RootState) : AsyncStatus=>
+export const selectStatus = ({ collection }: RootState): ActionStatus =>
+	collection.status;
+export const selectAsyncStatus = ({ collection }: RootState): AsyncStatus =>
 	collection.asyncStatus;
-export const selectTargetObject = ({ collection }: RootState) : CollectionItem<MagicCard>=>
-	collection.targetObject;
-export const selectFilters = ({ collection }: RootState) : Omit< SearchFilters, 'cardName'> => collection.filters;
+export const selectTargetObject = ({
+	collection
+}: RootState): CollectionItem<MagicCard> => collection.targetObject;
+export const selectFilters = ({
+	collection
+}: RootState): Omit<SearchFilters, 'cardName'> => collection.filters;
 //  ======================================== EXPORT DEFAULT
 export default collection.reducer;
 //  ========================================

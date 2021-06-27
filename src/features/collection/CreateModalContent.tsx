@@ -19,13 +19,13 @@ import ThemeContext from 'themeContext';
 import { customStyles } from 'styles/reactSelectStyles';
 import parseItemName from 'common/utils/parsing/parseItemName';
 import { langOptions } from 'assets/cardData';
-import { LangVariant } from 'types';
+import { LangVariant, ScryfallCard } from 'types';
 //  ======================================== COMPONENT
 const CreateModalContent: FC<unknown> = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
-	const [language, setLanguage] = React.useState('EN');
+	const [language, setLanguage] = React.useState<string>('EN');
 	const [quantity, setQuantity] = React.useState('');
 	const [buyPrice, setBuyPrice] = React.useState('');
 	const [targetPrice, setTargetPrice] = React.useState('');
@@ -34,7 +34,7 @@ const CreateModalContent: FC<unknown> = () => {
 		cardName: string;
 		set: string;
 		cardmarket_id: string;
-		cardObject: Record<string, any>;
+		cardObject: ScryfallCard;
 	} | null>(null);
 	const theme = React.useContext(ThemeContext);
 	const customSelectStyles = customStyles(theme);
@@ -52,7 +52,7 @@ const CreateModalContent: FC<unknown> = () => {
 				isFoil
 			})
 		);
-	const handleSelectChange = (card: Record<string, any>) =>
+	const handleSelectChange = (card:ScryfallCard ) =>
 		setSelectedCard({
 			cardName: card.name,
 			set: card.set,

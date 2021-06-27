@@ -1,11 +1,16 @@
 import React, { createContext, FC, ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import {
+	Queries,
+	render,
+	RenderOptions,
+	RenderResult
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import store from 'store';
 const theme = require('../../theme.js');
 export const ThemeContext = createContext(theme);
 
-const AllTheProviders : FC<{ children?: React.ReactNode }> = ({ children }) => {
+const AllTheProviders: FC<{ children?: React.ReactNode }> = ({ children }) => {
 	return (
 		<ThemeContext.Provider value={theme}>
 			<Provider store={store}>{children}</Provider>
@@ -16,7 +21,8 @@ const AllTheProviders : FC<{ children?: React.ReactNode }> = ({ children }) => {
 const customRender = (
 	ui: ReactElement,
 	options?: Omit<RenderOptions, 'queries'>
-) => render(ui, { wrapper: AllTheProviders, ...options });
+): RenderResult<Queries, HTMLElement> =>
+	render(ui, { wrapper: AllTheProviders, ...options });
 
 export * from '@testing-library/react';
 

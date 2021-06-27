@@ -1,28 +1,28 @@
 import { RootState } from 'reducers';
 
 export type ServerSideCard = {
-	_id: string,
-    oracleId:string,
-    scryfallId: string,
-    name: string,
-    buyPrice:number,
-    targetPrice:number,
-    quantity:number,
-    language: LangVariant,
-    expansion: string,
-    scryfallPrices:{
-		eur: number,
-		usd: number,
-		eurFoil: number,
-		usdFoil: number,
-		tix: number
-	},
-    foil: boolean,
-    image:string,
-    owner:string,
-    cardCollection: string,
-    lastUpdated: string,
-    tcgplayerId: string,
+	_id: string;
+	oracleId: string;
+	scryfallId: string;
+	name: string;
+	buyPrice: number;
+	targetPrice: number;
+	quantity: number;
+	language: LangVariant;
+	expansion: string;
+	scryfallPrices: {
+		eur: number;
+		usd: number;
+		eurFoil: number;
+		usdFoil: number;
+		tix: number;
+	};
+	foil: boolean;
+	image: string;
+	owner: string;
+	cardCollection: string;
+	lastUpdated: string;
+	tcgplayerId: string;
 };
 export type LangVariant =
 	| 'EN'
@@ -120,7 +120,7 @@ export type CardUpdate = {
 } & Partial<Omit<CollectionItem, 'id' | 'minPrice' | 'medianPrice'>>;
 
 export type CardCreationPayload = {
-	card: Record<string, any>;
+	card: ScryfallCard;
 	buyPrice: number;
 	targetPrice: number;
 	quantity: number;
@@ -138,3 +138,26 @@ export type SearchFilters = {
 };
 
 export type SelectOption = { label: string; value: string };
+
+export type ScryfallCard = {
+	name: string;
+	set: string;
+	cardmarket_id: string;
+	tcgplayer_id: string;
+	oracle_id: string;
+	id: string;
+	image_uris: {
+		large?: string;
+		normal?: string;
+		small?: string;
+	};
+	prices:{
+		eur:string,
+		usd:string,
+		usd_foil:string,
+		eur_foil:string,
+		tix:string,
+	}
+	set: string;
+	set_name: string;
+};
