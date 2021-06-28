@@ -241,7 +241,6 @@ const initialState = collectionAdapter.getInitialState({
 	status: 'idle',
 	asyncError: null,
 	asyncStatus: 'idle',
-	isBulkAdding: false,
 	pages: 0,
 	searchBarInput: '',
 	filters: {
@@ -426,19 +425,23 @@ const collection = createSlice({
 						quantity * getPrice(prices, 'usd', foil);
 				}
 			}
-			);
+		);
 		//BULK ADD ITEMS
-		builder.addCase(bulkAddCollectionItems.pending, (state)=>{
-			state.isBulkAdding = true
-		})
+		builder.addCase(bulkAddCollectionItems.pending, (state) => {
+			state.status = 'bulkAdding';
+		});
 		builder.addCase(
 			bulkAddCollectionItems.fulfilled,
 			(state, { payload: { data, error, success } }) => {
-				state.isBulkAdding = false
+				state.status = 'idle';
 				if (success && data) {
-					state.collectionSummary = data.collectionSummary
+					state.collectionSummary = {
+						...state.collectionSummary,
+						maxEur: data.collectionSummary.maxEur,
+						maxUsd: data.collectionSummary.maxUsd,
+						cardsQuantity: data.collectionSummary.cardsQuantity
+					};
 					state.asyncStatus = 'idle';
-					state.status = 'idle';
 					state.pages = data.pages;
 					collectionAdapter.setAll(state, data.cards);
 				} else {
@@ -447,9 +450,6 @@ const collection = createSlice({
 				}
 			}
 		);
-		builder.addCase(bulkAddCollectionItems.rejected, (state)=>{
-			state.isBulkAdding = false
-		})
 		// BULK DELETE ITEMS
 		builder.addCase(
 			bulkDeleteCollectionItems.fulfilled,
@@ -488,14 +488,14 @@ const collection = createSlice({
 			),
 			(state) => {
 				state.asyncStatus = 'rejected';
-				state.asyncError = 'Something went wrong with our server'
+				state.asyncError = 'Something went wrong with our server';
 			}
 		);
 		builder.addMatcher(
 			isAnyOf(
 				addCollectionItem.fulfilled,
 				updateCollectionItem.fulfilled,
-				deleteCollectionItem.fulfilled,
+				deleteCollectionItem.fulfilled
 			),
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
@@ -568,6 +568,7 @@ export const selectTargetObject = ({
 export const selectFilters = ({
 	collection
 }: RootState): Omit<SearchFilters, 'cardName'> => collection.filters;
+
 //  ======================================== EXPORT DEFAULT
 export default collection.reducer;
 //  ========================================

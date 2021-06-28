@@ -76,7 +76,8 @@ export type ActionStatus =
 	| 'editing'
 	| 'creating'
 	| 'deleting'
-	| 'bulkDeleting';
+	| 'bulkDeleting'
+	| 'bulkAdding'
 
 export interface CollectionSummary {
 	maxUsd: number;
@@ -103,7 +104,6 @@ export type FilterKey = Partial<keyof CollectionFilters>;
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
-	isBulkAdding: boolean;
 	currentPage: number;
 	filters: CollectionFilters;
 	collectionSummary: CollectionSummary | null;

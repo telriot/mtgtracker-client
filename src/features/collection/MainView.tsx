@@ -29,6 +29,7 @@ import LoadingOverlay from 'common/components/LoadingOverlay';
 import { useDebouncedCallback } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import Toolbar from 'features/collection/Toolbar';
+import BulkAddModalContent from './BulkAddModalContent';
 //  ======================================== COMPONENT
 const CollectionView: FC<unknown> = () => {
 	//  ======================================== HOOKS
@@ -118,8 +119,12 @@ const CollectionView: FC<unknown> = () => {
 					) : null}
 				</div>
 			</div>
-			<Modal onClose={handleCloseModal} isOpen={status !== 'idle'}>
-				{status === 'creating' ? (
+			<Modal
+				onClose={status === 'bulkAdding' ? null : handleCloseModal}
+				isOpen={status !== 'idle'}>
+				{status === 'bulkAdding' ? (
+					<BulkAddModalContent />
+				) : status === 'creating' ? (
 					<CreateModalContent />
 				) : status === 'deleting' ? (
 					<DeleteModalContent
