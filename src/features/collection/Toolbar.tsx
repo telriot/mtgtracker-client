@@ -38,7 +38,7 @@ const Toolbar : FC<unknown> = () => {
 	//  ======================================== EFFECTS
 	//  ======================================== JSX
 	return (
-		<div aria-label='toolbar' className='py-2 bg-body-bg sticky z-10 top-0 left-0 right-0 shadow-md'>
+		<div aria-label='toolbar' className='p-2 bg-body-bg sticky z-10 top-0 left-0 right-0 shadow-md'>
 			<CollectionSummary className='mb-3 justify-end' summary={collectionSummary} />
 
 			<div className='flex justify-between mb-4'>

@@ -1,5 +1,5 @@
 //  ======================================== IMPORTS
-import React, {FC} from 'react';
+import React, { FC } from 'react';
 import MTGItemCard from 'features/collection/MTGItemCard';
 import Button from 'common/components/Button';
 import Pagination from 'common/components/Pagination';
@@ -30,7 +30,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import Toolbar from 'features/collection/Toolbar';
 //  ======================================== COMPONENT
-const CollectionView : FC<unknown> = () => {
+const CollectionView: FC<unknown> = () => {
 	//  ======================================== HOOKS
 	const dispatch = useDispatch();
 	//  ======================================== STATE
@@ -97,26 +97,26 @@ const CollectionView : FC<unknown> = () => {
 				</div>
 			)}
 
-			<div className='container px-2 sm:mx-auto py-8'>
+			<div className='container sm:mx-auto py-8'>
 				<Toolbar />
-				<div className='relative'>
+				<div className='relative px-2'>
 					{status === 'idle' && asyncStatus === 'pending' && (
 						<LoadingOverlay />
 					)}
 					{collection.map((card) => (
 						<MTGItemCard key={card.id} card={card} />
 					))}
+					{pages ? (
+						<div className='flex justify-end'>
+							<Pagination
+								pages={pages}
+								activePage={currentPage}
+								setPage={handleSetPage}
+								maxButtons={5}
+							/>
+						</div>
+					) : null}
 				</div>
-				{pages ? (
-					<div className='flex justify-end'>
-						<Pagination
-							pages={pages}
-							activePage={currentPage}
-							setPage={handleSetPage}
-							maxButtons={5}
-						/>
-					</div>
-				) : null}
 			</div>
 			<Modal onClose={handleCloseModal} isOpen={status !== 'idle'}>
 				{status === 'creating' ? (
@@ -127,7 +127,10 @@ const CollectionView : FC<unknown> = () => {
 						target={targetItem}
 					/>
 				) : status === 'bulkDeleting' ? (
-					<BulkDeleteModalContent status={asyncStatus} ids={selectedCardIds} />
+					<BulkDeleteModalContent
+						status={asyncStatus}
+						ids={selectedCardIds}
+					/>
 				) : status === 'editing' ? (
 					<EditModalContent
 						status={asyncStatus}
