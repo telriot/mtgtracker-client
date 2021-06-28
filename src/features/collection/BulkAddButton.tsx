@@ -18,13 +18,12 @@ const BulkAddButton: React.FC<BulkAddButtonProps> = ({ className }) => {
 	//  ======================================== HANDLERS
 	const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files[0]) {
-			console.log('Could not load any file');
+			console.log('No file to load');
 			return;
 		}
 		const reader = new FileReader();
 		reader.onload = async (e) => {
 			const cards = parseCardsFromFile(e.target.result);
-			console.log(cards)
 			dispatch(bulkAddCollectionItems(cards));
 		};
 		reader.onerror = (err) => {

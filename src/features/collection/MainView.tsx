@@ -21,15 +21,15 @@ import {
 	selectTargetObject
 } from './collectionSlice';
 import Modal from 'common/components/Modal';
-import BulkDeleteModalContent from 'features/collection/BulkDeleteModalContent';
-import CreateModalContent from 'features/collection/CreateModalContent';
-import DeleteModalContent from 'features/collection/DeleteModalContent';
-import EditModalContent from 'features/collection/EditModalContent';
+import BulkDeleteModalContent from 'features/collection/modals/BulkDeleteModalContent';
+import CreateModalContent from 'features/collection/modals/CreateModalContent';
+import DeleteModalContent from 'features/collection/modals/DeleteModalContent';
+import EditModalContent from 'features/collection/modals/EditModalContent';
 import LoadingOverlay from 'common/components/LoadingOverlay';
 import { useDebouncedCallback } from 'use-debounce';
 import { useMediaQuery } from 'react-responsive';
 import Toolbar from 'features/collection/Toolbar';
-import BulkAddModalContent from './BulkAddModalContent';
+import BulkAddModalContent from './modals/BulkAddModalContent';
 //  ======================================== COMPONENT
 const CollectionView: FC<unknown> = () => {
 	//  ======================================== HOOKS
@@ -108,7 +108,7 @@ const CollectionView: FC<unknown> = () => {
 						<MTGItemCard key={card.id} card={card} />
 					))}
 					{pages ? (
-						<div className='flex justify-end'>
+						<div className='flex justify-end mt-2'>
 							<Pagination
 								pages={pages}
 								activePage={currentPage}
