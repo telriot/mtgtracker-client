@@ -103,6 +103,7 @@ export type FilterKey = Partial<keyof CollectionFilters>;
 export interface CollectionState {
 	asyncError: string | null;
 	asyncStatus: AsyncStatus;
+	isBulkAdding: boolean;
 	currentPage: number;
 	filters: CollectionFilters;
 	collectionSummary: CollectionSummary | null;
@@ -127,13 +128,16 @@ export type CardCreationPayload = {
 	isFoil: boolean;
 	language: LangVariant;
 };
-export type BulkCardCreationPayload = {
+export type BulkCardCreationObject = {
 	name: string;
 	quantity: number;
 	expansion: string;
-	lang: string;
+	language: string;
 	foil: boolean;
-}[];
+	buyPrice: number;
+	targetPrice: number;
+};
+export type BulkCardCreationPayload = BulkCardCreationObject[];
 
 export type SearchFilters = {
 	cardName: string;

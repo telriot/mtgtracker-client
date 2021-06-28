@@ -19,7 +19,7 @@ export const FileInputButton: React.FC<FileInputButtonProps> = ({
 	block,
 	className = '',
 	children,
-	id = '',
+	id = 'file-input-button',
 	onClick,
 	size,
 	variant = 'primary',
@@ -48,7 +48,7 @@ export const FileInputButton: React.FC<FileInputButtonProps> = ({
 				className
 			)}>
 			{children}
-			<input onChange={onClick} type='file' className='hidden' />
+			<input aria-label={id} onChange={onClick} type='file' className='hidden' />
 		</label>
 	);
 };

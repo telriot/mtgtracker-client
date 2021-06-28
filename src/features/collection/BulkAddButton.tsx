@@ -2,22 +2,34 @@
 import React from 'react';
 import { FileInputButton } from 'common/components/Button';
 import clsx from 'clsx';
+import { useDispatch } from 'react-redux'
+import { bulkAddCollectionItems } from './collectionSlice';
+// ======================================== UTILS
+
+const parseInput = (
+	input: string | null | undefined,
+	defaultValue: string | null = null,
+): string | null => {
+	if (!input || !input.trim()) return defaultValue;
+	else return input.trim();
+};
+const parseInputToFloat = (input: string | null | undefined, defaultValue = 0) : number | null => {
+	if(!input || isNaN(parseFloat(input.trim()))){
+		return defaultValue
+	}
+	else return parseFloat(input.trim())
+}
 //  ======================================== COMPONENT
 interface BulkAddButtonProps {
 	className?: string;
 }
 const BulkAddButton: React.FC<BulkAddButtonProps> = ({ className }) => {
 	//  ======================================== HOOKS
+	const dispatch = useDispatch()
 	//  ======================================== STATE
 	//  ======================================== HANDLERS
 	const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const parseInput = (
-			input: string | null | undefined,
-			def: string | null = null
-		): string | null => {
-			if (!input || !input.trim()) return def;
-			else return input.trim();
-		};
+
 		if (!event.target.files[0]) {
 			console.log('Could not load any file');
 			return;
@@ -29,7 +41,7 @@ const BulkAddButton: React.FC<BulkAddButtonProps> = ({ className }) => {
 				.toString()
 				.split('\n')
 				.map((line) => {
-					const [main, expansion, lang, foil] = line.split(',');
+					const [main, expansion, lang, foil, buyPrice, targetPrice] = line.split(',');
 					let quantity: number, cardName: string;
 					const mainBlock = main.split(' ');
 					if (isNaN(parseInt(mainBlock[0]))) {
@@ -43,13 +55,16 @@ const BulkAddButton: React.FC<BulkAddButtonProps> = ({ className }) => {
 						name: parseInput(cardName),
 						quantity,
 						expansion: parseInput(expansion),
-						lang: parseInput(lang, 'EN'),
-                        foil: foil === 'foil'
+						language: parseInput(lang, 'EN'),
+                        foil: parseInput(foil) === 'foil',
+						buyPrice:parseInputToFloat(buyPrice),
+						targetPrice: parseInputToFloat(targetPrice)
 					};
 					return cardObj;
 				})
 				.filter((card) => card.name);
-			console.log(cards, 'Card Object');
+				dispatch(bulkAddCollectionItems(cards))
+			// console.log(cards, 'Card Object');
 		};
 		reader.onerror = (err) => {
 			console.log(err);

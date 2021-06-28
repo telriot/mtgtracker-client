@@ -27,7 +27,7 @@ import {
 	destroyCollectionItem,
 	patchCollectionItem,
 	postCollectionItem,
-	postBulkCards,
+	postManyCardsFromList,
 	destroyManyCollectionItems,
 	TEST_COLLECTION_ID
 } from 'api';
@@ -103,19 +103,19 @@ export const addCollectionItem = createAsyncThunk<
 	}
 });
 
-export const bulkAddCollectionItem = createAsyncThunk<
+export const bulkAddCollectionItems = createAsyncThunk<
 	ThunkReturnValue<{
 		cards: CollectionItem<MagicCard>[];
 		pages: number;
-		summary: CollectionSummary;
+		collectionSummary: CollectionSummary;
 	}>,
 	BulkCardCreationPayload,
 	ThunkAPIReturnValue
->('collection/bulkAddCollectionItem', async (payload, thunkAPI) => {
+>('collection/bulkAddCollectionItems', async (payload, thunkAPI) => {
 	try {
 		const { currentPage, searchBarInput, filters } =
 			thunkAPI.getState().collection;
-		const { cards, pages, collectionSummary } = await postBulkCards(
+		const { cards, pages, collectionSummary } = await postManyCardsFromList(
 			TEST_COLLECTION_ID,
 			currentPage,
 			{ cardName: searchBarInput, ...filters },
@@ -241,6 +241,7 @@ const initialState = collectionAdapter.getInitialState({
 	status: 'idle',
 	asyncError: null,
 	asyncStatus: 'idle',
+	isBulkAdding: false,
 	pages: 0,
 	searchBarInput: '',
 	filters: {
@@ -425,7 +426,30 @@ const collection = createSlice({
 						quantity * getPrice(prices, 'usd', foil);
 				}
 			}
+			);
+		//BULK ADD ITEMS
+		builder.addCase(bulkAddCollectionItems.pending, (state)=>{
+			state.isBulkAdding = true
+		})
+		builder.addCase(
+			bulkAddCollectionItems.fulfilled,
+			(state, { payload: { data, error, success } }) => {
+				state.isBulkAdding = false
+				if (success && data) {
+					state.collectionSummary = data.collectionSummary
+					state.asyncStatus = 'idle';
+					state.status = 'idle';
+					state.pages = data.pages;
+					collectionAdapter.setAll(state, data.cards);
+				} else {
+					state.asyncStatus = 'rejected';
+					state.asyncError = error;
+				}
+			}
 		);
+		builder.addCase(bulkAddCollectionItems.rejected, (state)=>{
+			state.isBulkAdding = false
+		})
 		// BULK DELETE ITEMS
 		builder.addCase(
 			bulkDeleteCollectionItems.fulfilled,
@@ -451,6 +475,7 @@ const collection = createSlice({
 				}
 			}
 		);
+
 		// MATCHERS
 		builder.addMatcher(
 			isAnyOf(
@@ -458,18 +483,19 @@ const collection = createSlice({
 				updateCollectionItem.rejected,
 				deleteCollectionItem.rejected,
 				bulkDeleteCollectionItems.rejected,
+				bulkAddCollectionItems.rejected,
 				fetchCollection.rejected
 			),
 			(state) => {
 				state.asyncStatus = 'rejected';
-				state.targetObject = null;
+				state.asyncError = 'Something went wrong with our server'
 			}
 		);
 		builder.addMatcher(
 			isAnyOf(
 				addCollectionItem.fulfilled,
 				updateCollectionItem.fulfilled,
-				deleteCollectionItem.fulfilled
+				deleteCollectionItem.fulfilled,
 			),
 			(state, { payload: { data, error, success } }) => {
 				if (success && data) {
@@ -492,6 +518,7 @@ const collection = createSlice({
 				updateCollectionItem.pending,
 				deleteCollectionItem.pending,
 				bulkDeleteCollectionItems.pending,
+				bulkAddCollectionItems.pending,
 				fetchCollection.pending
 			),
 			(state) => {

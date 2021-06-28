@@ -64,7 +64,7 @@ export const postCollectionItem = async (
 	const cards = formatCards(response.data.cards.docs);
 	return { cards, pages: response.data.cards.totalPages };
 };
-export const postBulkCards = async (
+export const postManyCardsFromList = async (
 	collectionId: string,
 	currentPage: number,
 	filters: SearchFilters,
